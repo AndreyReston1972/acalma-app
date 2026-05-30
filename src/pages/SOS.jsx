@@ -41,11 +41,18 @@ function Respira({ onAvancar, onSair }) {
 
   return (
     <div
-      className="fixed inset-0 flex flex-col items-center justify-between px-6 pt-14 pb-10"
-      style={{ background: 'linear-gradient(180deg, #2C5040 0%, #1A3020 100%)' }}
+      className="fixed inset-0 flex flex-col items-center justify-between px-6 pb-10"
+      style={{
+        background: 'linear-gradient(180deg, #2C5040 0%, #1A3020 100%)',
+        paddingTop: 'calc(env(safe-area-inset-top) + 56px)',
+      }}
     >
       {/* Fechar */}
-      <button onClick={onSair} className="absolute top-12 right-6 text-white/50 text-2xl leading-none">✕</button>
+      <button
+        onClick={onSair}
+        className="absolute right-6 text-white/50 text-2xl leading-none"
+        style={{ top: 'calc(env(safe-area-inset-top) + 48px)' }}
+      >✕</button>
 
       {/* Cabeçalho */}
       <div className="text-center">

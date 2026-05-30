@@ -86,7 +86,7 @@ const FAQ = [
 function FaqItem({ pergunta, resposta }) {
   const [aberto, setAberto] = useState(false)
   return (
-    <div className="bg-white rounded-2xl overflow-hidden" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+    <div className="bg-white rounded-2xl overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
       <button
         onClick={() => setAberto(p => !p)}
         className="w-full flex items-center justify-between px-4 py-4 text-left gap-3"
@@ -188,8 +188,11 @@ export default function Nina() {
 
       {/* ── Hero ── */}
       <div
-        className="px-6 pt-12 pb-8 relative overflow-hidden"
-        style={{ background: 'linear-gradient(155deg, #1A3020 0%, #2C5040 60%, #3D6B55 100%)' }}
+        className="px-6 pb-8 relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(155deg, #1A3020 0%, #2C5040 60%, #3D6B55 100%)',
+          paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
+        }}
       >
         {/* Decoração */}
         <div className="absolute top-8 right-8 text-4xl opacity-20 select-none">✨</div>
@@ -237,7 +240,7 @@ export default function Nina() {
         {/* ── Depoimento ── */}
         <div
           className="rounded-2xl p-5"
-          style={{ background: 'white', boxShadow: '0 1px 6px rgba(0,0,0,0.07)' }}
+          style={{ background: 'white', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
         >
           <div className="flex gap-1 mb-3" aria-label="5 estrelas">
             {[...Array(5)].map((_, i) => (

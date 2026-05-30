@@ -48,9 +48,10 @@ function saudacao() {
 }
 
 function dataFormatada() {
-  return new Date().toLocaleDateString('pt-BR', {
+  const s = new Date().toLocaleDateString('pt-BR', {
     weekday: 'long', day: 'numeric', month: 'long',
   })
+  return s.replace(/^\w/, c => c.toUpperCase())
 }
 
 function diaDoAno() {
@@ -104,19 +105,25 @@ export default function Home() {
     >
       {/* ── Header ── */}
       <div
-        className="px-6 pt-12 pb-6"
-        style={{ background: 'var(--color-verde)', borderRadius: '0 0 28px 28px' }}
+        className="px-6 pb-6 relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(160deg, #4A7C65 0%, #3A6855 100%)',
+          borderRadius: '0 0 28px 28px',
+          paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
+        }}
       >
+        <div style={{ position: 'absolute', top: -30, right: -30, width: 160, height: 160, background: 'rgba(255,255,255,0.06)', borderRadius: '50%', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -20, left: -20, width: 100, height: 100, background: 'rgba(255,255,255,0.04)', borderRadius: '50%', pointerEvents: 'none' }} />
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2">
             <span className="text-2xl">🌿</span>
             <span className="font-lora text-lg text-white opacity-90">Acalma</span>
           </div>
-          <span className="text-white text-xs opacity-60 capitalize">{dataFormatada()}</span>
+          <span className="text-white text-xs opacity-60">{dataFormatada()}</span>
         </div>
 
-        <p className="text-white/70 text-sm mb-1">{saudacao()},</p>
-        <h1 className="font-lora text-2xl text-white leading-snug">
+        <p className="font-lora text-white/70 text-sm mb-1">{saudacao()},</p>
+        <h1 className="font-lora text-white leading-snug" style={{ fontSize: 20, fontWeight: 600 }}>
           mamãe 💚
         </h1>
 
@@ -132,17 +139,19 @@ export default function Home() {
         {/* ── Botão SOS ── */}
         <button
           onClick={() => navigate('/sos')}
-          className="sos-pulse w-full rounded-3xl text-white text-left active:scale-95 transition-transform duration-150"
+          className="sos-pulse w-full text-white text-left active:scale-95 transition-transform duration-150"
           style={{
-            background: 'linear-gradient(135deg, var(--color-coral) 0%, #C85A4A 100%)',
+            background: 'linear-gradient(135deg, #E85D4A 0%, #C94535 100%)',
+            borderRadius: 20,
             padding: '22px 24px',
+            boxShadow: '0 8px 30px rgba(232,93,74,0.4)',
           }}
         >
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-2xl">🆘</span>
-                <span className="font-lora text-xl font-semibold">Modo SOS</span>
+                <span className="font-lora text-xl font-bold">Modo SOS</span>
               </div>
               <p className="text-white/80 text-sm">Meu filho está em crise agora</p>
             </div>
@@ -153,7 +162,7 @@ export default function Home() {
         {/* ── Banner de sincronização (só aparece se não logada e não dispensada) ── */}
         {!user && !bannerDismissed && (
           <div className="bg-white rounded-2xl px-4 py-3 flex items-center gap-3"
-            style={{ boxShadow: '0 1px 6px rgba(0,0,0,0.07)' }}>
+            style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
             <span className="text-xl">☁️</span>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-gray-700">Salve seu progresso</p>
@@ -179,7 +188,7 @@ export default function Home() {
         )}
 
         {/* ── Progresso semanal ── */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm">
+        <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-lora text-base" style={{ color: 'var(--color-verde-dark)' }}>
               Esta semana
@@ -233,7 +242,7 @@ export default function Home() {
               {dica.tag}
             </span>
           </div>
-          <p className="text-sm text-gray-700 leading-relaxed">{dica.texto}</p>
+          <p className="font-lora text-sm text-gray-700 leading-relaxed italic">{dica.texto}</p>
         </div>
 
         {/* ── Atalhos rápidos ── */}
@@ -262,7 +271,7 @@ export default function Home() {
 
         {/* ── Perfil do filho ── */}
         {perfil.idade && (
-          <div className="bg-white rounded-2xl p-4 shadow-sm flex items-center gap-3">
+          <div className="bg-white rounded-2xl p-4 flex items-center gap-3" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
             <span className="text-2xl">👶</span>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-700">Perfil configurado</p>

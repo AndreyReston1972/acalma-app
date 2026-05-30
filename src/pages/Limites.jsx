@@ -44,7 +44,7 @@ function ScriptCard({ item, isOpen, onToggle }) {
   return (
     <div
       className="bg-white rounded-2xl overflow-hidden transition-shadow"
-      style={{ boxShadow: isOpen ? '0 4px 16px rgba(0,0,0,0.09)' : '0 1px 4px rgba(0,0,0,0.06)' }}
+      style={{ boxShadow: isOpen ? '0 4px 16px rgba(0,0,0,0.09)' : '0 2px 12px rgba(0,0,0,0.06)' }}
     >
       {/* Cabeçalho clicável */}
       <button
@@ -180,7 +180,7 @@ function AbaChecklist() {
     <div className="flex flex-col gap-4">
 
       {/* Progresso */}
-      <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+      <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
         <div className="flex items-center justify-between mb-3">
           <p className="font-lora text-base text-gray-800">Esta semana</p>
           <span className="font-semibold text-sm" style={{ color: corBarra }}>
@@ -272,8 +272,12 @@ export default function Limites() {
 
       {/* Header */}
       <div
-        className="px-6 pt-12 pb-6"
-        style={{ background: 'var(--color-verde)', borderRadius: '0 0 28px 28px' }}
+        className="px-6 pb-6"
+        style={{
+          background: 'linear-gradient(160deg, #4A7C65 0%, #3A6855 100%)',
+          borderRadius: '0 0 28px 28px',
+          paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
+        }}
       >
         <p className="text-white/60 text-xs uppercase tracking-widest mb-1">Acalma</p>
         <h1 className="font-lora text-2xl text-white mb-1">Guia de Limites</h1>
@@ -282,7 +286,7 @@ export default function Limites() {
 
       {/* Tab switcher */}
       <div className="px-5 mt-5 mb-4">
-        <div className="flex bg-white rounded-xl p-1 gap-1" style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+        <div className="flex bg-white rounded-xl p-1 gap-1" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
           {[
             { id: 'scripts',    label: '📋 Scripts' },
             { id: 'checklist',  label: '✅ Checklist' },

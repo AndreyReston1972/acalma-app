@@ -2,6 +2,17 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { emocoes } from '../data/emocoes'
 
+const GRADIENTES = {
+  raiva:      'linear-gradient(135deg, #E85D4A, #C94535)',
+  tristeza:   'linear-gradient(135deg, #5B8DB8, #3E6F9B)',
+  medo:       'linear-gradient(135deg, #8B6FB5, #6B4F95)',
+  alegria:    'linear-gradient(135deg, #F5A623, #D4891C)',
+  ansiedade:  'linear-gradient(135deg, #8B7BB5, #6B5F95)',
+  frustracao: 'linear-gradient(135deg, #E8844A, #C4663A)',
+  ciume:      'linear-gradient(135deg, #4A9B7F, #317A62)',
+  vergonha:   'linear-gradient(135deg, #C4785A, #A5603D)',
+}
+
 /* ── Seção reutilizável ── */
 function Secao({ titulo, children }) {
   return (
@@ -144,8 +155,12 @@ function Lista({ onAbrir }) {
 
       {/* Header */}
       <div
-        className="px-6 pt-12 pb-6"
-        style={{ background: 'var(--color-verde)', borderRadius: '0 0 28px 28px' }}
+        className="px-6 pb-6"
+        style={{
+          background: 'linear-gradient(160deg, #4A7C65 0%, #3A6855 100%)',
+          borderRadius: '0 0 28px 28px',
+          paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
+        }}
       >
         <p className="text-white/60 text-xs uppercase tracking-widest mb-1">Acalma</p>
         <h1 className="font-lora text-2xl text-white mb-1">Biblioteca de Emoções</h1>
@@ -165,18 +180,15 @@ function Lista({ onAbrir }) {
               onClick={() => onAbrir(emocao)}
               className="text-left rounded-2xl p-4 transition-all active:scale-95 duration-150"
               style={{
-                background: `${emocao.cor}14`,
-                border: `1.5px solid ${emocao.cor}30`,
+                background: GRADIENTES[emocao.id] || `linear-gradient(135deg, ${emocao.cor}, ${emocao.cor}BB)`,
+                boxShadow: '0 2px 12px rgba(0,0,0,0.12)',
               }}
             >
               <span className="text-4xl block mb-3">{emocao.emoji}</span>
-              <p
-                className="font-lora font-semibold text-base mb-1"
-                style={{ color: emocao.cor }}
-              >
+              <p className="font-lora font-semibold text-base mb-1" style={{ color: 'white' }}>
                 {emocao.nome}
               </p>
-              <p className="text-xs text-gray-500 leading-snug line-clamp-2">
+              <p className="text-xs leading-snug line-clamp-2" style={{ color: 'rgba(255,255,255,0.75)' }}>
                 {emocao.descricao}
               </p>
             </button>

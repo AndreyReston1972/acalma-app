@@ -73,10 +73,14 @@ function ModalNovoRegistro({ onSalvar, onFechar }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[60]" style={{ maxWidth: 430, margin: '0 auto' }}>
-      <div className="absolute inset-0 bg-black/40" onClick={onFechar} />
+    <>
       <div
-        className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl overflow-y-auto"
+        className="fixed inset-0 z-40"
+        style={{ background: 'rgba(0,0,0,0.45)' }}
+        onClick={onFechar}
+      />
+      <div
+        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 bg-white rounded-t-3xl overflow-y-auto"
         style={{ maxHeight: '85svh' }}
       >
         <div className="px-6 pt-5 pb-10">
@@ -138,7 +142,7 @@ function ModalNovoRegistro({ onSalvar, onFechar }) {
           </button>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
@@ -155,7 +159,7 @@ function CardRegistro({ entrada, onDeletar }) {
     <div
       className="bg-white rounded-2xl overflow-hidden"
       style={{
-        boxShadow: '0 1px 6px rgba(0,0,0,0.07)',
+        boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
         borderLeft: emocao ? `4px solid ${emocao.cor}` : '4px solid #E5E7EB',
       }}
     >
@@ -344,7 +348,7 @@ function AbaPatterns({ registros }) {
     <div className="flex flex-col gap-5">
 
       {/* Insights */}
-      <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 1px 6px rgba(0,0,0,0.07)' }}>
+      <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
         <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">💡 Insights</p>
         <div className="flex flex-col gap-2.5">
           {insights.map((txt, i) => (
@@ -355,7 +359,7 @@ function AbaPatterns({ registros }) {
 
       {/* Emoções mais frequentes */}
       {emocaoOrdenada.length > 0 && (
-        <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 1px 6px rgba(0,0,0,0.07)' }}>
+        <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
           <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">
             Emoções mais frequentes
           </p>
@@ -371,7 +375,7 @@ function AbaPatterns({ registros }) {
       )}
 
       {/* Heatmap semanal */}
-      <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 1px 6px rgba(0,0,0,0.07)' }}>
+      <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
         <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">
           Dias mais desafiadores
         </p>
@@ -401,7 +405,7 @@ function AbaPatterns({ registros }) {
 
       {/* Estratégias usadas */}
       {acaoOrdenada.length > 0 && (
-        <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 1px 6px rgba(0,0,0,0.07)' }}>
+        <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
           <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">
             Estratégias mais usadas
           </p>
@@ -435,8 +439,12 @@ export default function Diario() {
 
       {/* Header */}
       <div
-        className="px-6 pt-12 pb-6"
-        style={{ background: 'var(--color-verde)', borderRadius: '0 0 28px 28px' }}
+        className="px-6 pb-6"
+        style={{
+          background: 'linear-gradient(160deg, #4A7C65 0%, #3A6855 100%)',
+          borderRadius: '0 0 28px 28px',
+          paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
+        }}
       >
         <div className="flex items-center justify-between mb-1">
           <p className="text-white/60 text-xs uppercase tracking-widest">Acalma</p>

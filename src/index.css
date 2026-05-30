@@ -7,7 +7,7 @@
   --color-verde-dark: #2C5040;
   --color-verde-50: #EDF4F0;
   --color-verde-100: #D0E5D9;
-  --color-areia: #F5F0E8;
+  --color-areia: #FAF7F2;
   --color-areia-dark: #E8E0D0;
   --color-roxo: #7C5CBF;
   --color-coral: #E07060;
@@ -46,9 +46,9 @@ h1, h2, h3 {
 }
 
 @keyframes sos-ring {
-  0%   { box-shadow: 0 0 0 0 rgba(224, 112, 96, 0.45); }
-  70%  { box-shadow: 0 0 0 18px rgba(224, 112, 96, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(224, 112, 96, 0); }
+  0%   { box-shadow: 0 0 0 0 rgba(232, 93, 74, 0.45); }
+  70%  { box-shadow: 0 0 0 18px rgba(232, 93, 74, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(232, 93, 74, 0); }
 }
 .sos-pulse {
   animation: sos-ring 2.2s ease-out infinite;

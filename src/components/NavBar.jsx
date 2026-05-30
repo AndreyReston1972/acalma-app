@@ -5,13 +5,15 @@ const tabs = [
   { to: '/emocoes', label: 'Emoções', icon: '💚' },
   { to: '/limites', label: 'Limites', icon: '🎯' },
   { to: '/diario', label: 'Diário', icon: '📔' },
-  { to: '/nina', label: 'Nina', icon: '✨' },
 ]
 
 export default function NavBar() {
   return (
     <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-white border-t border-gray-200 z-50">
-      <div className="flex justify-around items-center py-2 px-1">
+      <div
+        className="flex justify-around items-center px-1"
+        style={{ paddingTop: 8, paddingBottom: 'calc(env(safe-area-inset-bottom) + 8px)' }}
+      >
         {tabs.map(({ to, label, icon }) => (
           <NavLink
             key={to}
