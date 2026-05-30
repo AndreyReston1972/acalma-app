@@ -1,0 +1,60 @@
+export const scripts = [
+  {
+    id: 'hora-dormir',
+    situacao: 'Hora de dormir',
+    emoji: '🌙',
+    script: 'Está quase na hora de dormir. Você pode escolher: escova os dentes agora e temos 10 min de história, ou você escolhe não escovar e dormimos sem história. O que você prefere?',
+    principio: 'Ofereça escolha dentro de limites claros',
+    erros_comuns: ['Ameaçar sem cumprir', 'Negociar após o não', 'Tom agressivo'],
+  },
+  {
+    id: 'tela',
+    situacao: 'Tempo de tela',
+    emoji: '📱',
+    script: 'Daqui a 5 minutos o tablet vai descansar. Vou te avisar quando faltar 2 minutos. Pode preparar para terminar?',
+    principio: 'Avise antes, não surpreenda',
+    erros_comuns: ['Desligar sem aviso', 'Ceder quando chora', 'Punir com o tablet'],
+  },
+  {
+    id: 'supermercado',
+    situacao: 'Supermercado / compras',
+    emoji: '🛒',
+    script: 'Hoje não vamos comprar brinquedos. Se você me ajudar a pegar as coisas da lista, você escolhe um petisco saudável no final. Combinado?',
+    principio: 'Combine antes de entrar no local',
+    erros_comuns: ['Prometer e não cumprir', 'Ceder para evitar cena', 'Brigar em público'],
+  },
+  {
+    id: 'compartilhar',
+    situacao: 'Não quer compartilhar',
+    emoji: '🤝',
+    script: 'Eu vejo que você não quer compartilhar agora. Isso é ok. Quando você terminar de brincar, pode passar para o [nome]. Ele vai esperar.',
+    principio: 'Não force o compartilhamento imediato',
+    erros_comuns: ['Forçar dividir agora', 'Envergonhar a criança', 'Comparar com outras crianças'],
+  },
+  {
+    id: 'alimentacao',
+    situacao: 'Recusa alimentar',
+    emoji: '🥦',
+    script: 'Você não precisa comer tudo, mas precisa experimentar um pouquinho. Depois de experimentar, você decide.',
+    principio: 'Divisão de responsabilidade: você oferece, ela decide quanto',
+    erros_comuns: ['Forçar comer tudo', 'Fazer ameaças', 'Criar prato especial toda vez'],
+  },
+  {
+    id: 'saida',
+    situacao: 'Resistência para sair de casa',
+    emoji: '👟',
+    script: 'Eu entendo que você está gostando de brincar. A gente precisa ir. Você prefere ir de tênis ou de sandália?',
+    principio: 'Reconheça e ofereça micro-escolha',
+    erros_comuns: ['Partir sem aviso', 'Discutir o motivo', 'Carregar a criança gritando sem tentar'],
+  },
+]
+
+export const checklistSemanal = [
+  'Mantive os combinados que estabeleci?',
+  'Cumpri o que prometi (positivo e negativo)?',
+  'Mantive consistência nos limites ao longo da semana?',
+  'Dei aviso prévio antes de transições difíceis?',
+  'Reconheci uma emoção antes de corrigir comportamento?',
+  'Tive ao menos um momento de conexão intencional com meu filho?',
+  'Pedi desculpas quando errei?',
+]

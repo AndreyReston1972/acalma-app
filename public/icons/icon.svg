@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Fundo verde arredondado -->
+  <rect width="512" height="512" rx="96" fill="#3D6B55"/>
+  <!-- Halo decorativo -->
+  <circle cx="256" cy="230" r="155" fill="#2C5040" opacity="0.5"/>
+  <!-- Letra A em serif -->
+  <text
+    x="256"
+    y="360"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="310"
+    font-weight="400"
+    fill="#EDF4F0"
+    text-anchor="middle"
+  >A</text>
+  <!-- Ponto decorativo abaixo -->
+  <circle cx="256" cy="430" r="14" fill="#EDF4F0" opacity="0.5"/>
+</svg>
