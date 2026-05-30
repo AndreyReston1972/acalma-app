@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom'
+import { AuthProvider } from './contexts/AuthContext'
 import NavBar from './components/NavBar'
 import Onboarding from './pages/Onboarding'
 import Home from './pages/Home'
@@ -29,6 +30,7 @@ function AppLayout() {
 
 export default function App() {
   return (
+    <AuthProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/onboarding" element={<OnboardingGuard />} />
@@ -42,5 +44,6 @@ export default function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+    </AuthProvider>
   )
 }

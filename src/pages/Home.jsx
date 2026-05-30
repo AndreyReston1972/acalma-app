@@ -1,4 +1,7 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
+import AuthModal from '../components/AuthModal'
 
 /* ── Dicas rotativas (1 por dia via índice do ano) ── */
 const dicas = [
@@ -83,7 +86,12 @@ function contarEntradas() {
 
 /* ── Componente ── */
 export default function Home() {
-  const navigate = useNavigate()
+  const navigate  = useNavigate()
+  const { user }  = useAuth()
+  const [authOpen, setAuthOpen]             = useState(false)
+  const [bannerDismissed, setBannerDismissed] = useState(
+    () => !!localStorage.getItem('acalma_banner_dismissed')
+  )
   const perfil = JSON.parse(localStorage.getItem('acalma_perfil') || '{}')
   const dica = dicas[diaDoAno() % dicas.length]
   const dias = semanaAtual()
@@ -141,6 +149,34 @@ export default function Home() {
             <span className="text-3xl opacity-80">→</span>
           </div>
         </button>
+
+        {/* ── Banner de sincronização (só aparece se não logada e não dispensada) ── */}
+        {!user && !bannerDismissed && (
+          <div className="bg-white rounded-2xl px-4 py-3 flex items-center gap-3"
+            style={{ boxShadow: '0 1px 6px rgba(0,0,0,0.07)' }}>
+            <span className="text-xl">☁️</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-gray-700">Salve seu progresso</p>
+              <p className="text-xs text-gray-400">Acesse de qualquer dispositivo</p>
+            </div>
+            <button
+              onClick={() => setAuthOpen(true)}
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg flex-shrink-0"
+              style={{ background: 'var(--color-verde-50)', color: 'var(--color-verde)' }}
+            >
+              Entrar
+            </button>
+            <button
+              onClick={() => {
+                setBannerDismissed(true)
+                localStorage.setItem('acalma_banner_dismissed', '1')
+              }}
+              className="text-gray-300 text-base leading-none flex-shrink-0"
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
         {/* ── Progresso semanal ── */}
         <div className="bg-white rounded-2xl p-4 shadow-sm">
@@ -228,26 +264,27 @@ export default function Home() {
         {perfil.idade && (
           <div className="bg-white rounded-2xl p-4 shadow-sm flex items-center gap-3">
             <span className="text-2xl">👶</span>
-            <div>
+            <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-700">Perfil configurado</p>
-              <p className="text-xs text-gray-400">
-                Filho de {idadeLabel[perfil.idade]} · {desafioLabel[perfil.desafio] || 'sem desafio'}
+              <p className="text-xs text-gray-400 truncate">
+                {idadeLabel[perfil.idade]} · {desafioLabel[perfil.desafio] || 'sem desafio'}
               </p>
+              {user && (
+                <p className="text-[10px] text-gray-300 mt-0.5 truncate">☁️ {user.email}</p>
+              )}
             </div>
             <button
-              onClick={() => {
-                localStorage.removeItem('acalma_onboarding')
-                localStorage.removeItem('acalma_perfil')
-                window.location.href = '/onboarding'
-              }}
-              className="ml-auto text-xs text-gray-300 hover:text-gray-500"
+              onClick={() => user ? setAuthOpen(true) : setAuthOpen(true)}
+              className="text-xs text-gray-300 hover:text-gray-500 flex-shrink-0"
             >
-              Editar
+              {user ? '☁️' : '↗'}
             </button>
           </div>
         )}
 
       </div>
+
+      {authOpen && <AuthModal onFechar={() => setAuthOpen(false)} />}
     </div>
   )
 }
