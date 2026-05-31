@@ -40,18 +40,19 @@ function Ficha({ emocao, onVoltar }) {
       >
         <button
           onClick={onVoltar}
-          className="flex items-center gap-1.5 text-white/70 text-sm mb-8 hover:text-white transition-colors"
+          className="flex items-center gap-1.5 text-sm mb-8 hover:opacity-80 transition-opacity"
+          style={{ color: 'rgba(255,255,255,0.7)' }}
         >
           ← Emoções
         </button>
 
         <div className="flex items-end justify-between">
           <div>
-            <p className="text-white/60 text-xs uppercase tracking-widest mb-1">Ficha completa</p>
-            <h1 className="font-lora text-3xl text-white mb-2">{nome}</h1>
-            <p className="text-white/80 text-sm leading-relaxed max-w-xs">{descricao}</p>
+            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: 4 }}>Ficha completa</p>
+            <h1 style={{ fontFamily: "'Lora', serif", fontSize: 30, color: 'white', marginBottom: 8 }}>{nome}</h1>
+            <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: 14, lineHeight: 1.5, maxWidth: 240 }}>{descricao}</p>
           </div>
-          <span className="text-6xl ml-4 flex-shrink-0 mb-1">{emoji}</span>
+          <span className="ml-4 flex-shrink-0 mb-1" style={{ fontSize: 60 }}>{emoji}</span>
         </div>
       </div>
 
@@ -80,7 +81,7 @@ function Ficha({ emocao, onVoltar }) {
               <div
                 key={i}
                 className="bg-white rounded-xl px-4 py-3 border-l-4"
-                style={{ borderColor: 'var(--color-verde)', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}
+                style={{ borderColor: '#4A7C65', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}
               >
                 <p className="text-sm text-gray-700 leading-relaxed">"{frase}"</p>
               </div>
@@ -151,24 +152,25 @@ function Ficha({ emocao, onVoltar }) {
 ──────────────────────────────────────────── */
 function Lista({ onAbrir }) {
   return (
-    <div className="min-h-svh pb-28" style={{ background: 'var(--fundo)' }}>
+    <div className="min-h-svh pb-28" style={{ background: '#FAF7F2' }}>
 
       {/* Header */}
       <div
-        className="relative overflow-hidden"
         style={{
-          background: 'linear-gradient(160deg, var(--verde) 0%, var(--verde-escuro) 100%)',
+          background: 'linear-gradient(160deg, #4A7C65 0%, #2E5540 100%)',
           borderRadius: '0 0 28px 28px',
           paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
           paddingLeft: 20,
           paddingRight: 20,
           paddingBottom: 20,
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
         <div style={{ position: 'absolute', top: -30, right: -30, width: 140, height: 140, background: 'rgba(255,255,255,0.07)', borderRadius: '50%', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -20, left: -20, width: 90, height: 90, background: 'rgba(255,255,255,0.04)', borderRadius: '50%', pointerEvents: 'none' }} />
         <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 10, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 4 }}>Acalma</p>
-        <h1 className="font-lora text-white mb-1" style={{ fontSize: 22, fontWeight: 600 }}>Biblioteca de Emoções</h1>
+        <h1 style={{ fontFamily: "'Lora', serif", color: 'white', fontSize: 22, fontWeight: 600, marginBottom: 4 }}>Biblioteca de Emoções</h1>
         <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 12 }}>Guia completo para reconhecer e acolher</p>
       </div>
 
@@ -196,10 +198,10 @@ function Lista({ onAbrir }) {
               }}
             >
               <span style={{ fontSize: 26, display: 'block', marginBottom: 6 }}>{emocao.emoji}</span>
-              <p className="font-lora" style={{ color: 'white', fontSize: 14, fontWeight: 600 }}>
+              <p style={{ fontFamily: "'Lora', serif", color: 'white', fontSize: 14, fontWeight: 600 }}>
                 {emocao.nome}
               </p>
-              <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: 11, marginTop: 3, lineHeight: 1.4 }} className="line-clamp-2">
+              <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: 11, marginTop: 3, lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                 {emocao.descricao}
               </p>
             </button>
@@ -209,7 +211,7 @@ function Lista({ onAbrir }) {
         {/* Rodapé informativo */}
         <div
           className="mt-6 rounded-2xl p-4 flex gap-3 items-start"
-          style={{ background: 'var(--color-verde-50)' }}
+          style={{ background: '#EDF4F0' }}
         >
           <span className="text-xl mt-0.5">💡</span>
           <p className="text-xs text-gray-600 leading-relaxed">

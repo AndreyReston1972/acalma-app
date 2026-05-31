@@ -86,7 +86,7 @@ function ModalNovoRegistro({ onSalvar, onFechar }) {
         <div className="px-6 pt-5 pb-10">
           {/* Handle */}
           <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto mb-5" />
-          <h3 className="font-lora text-xl text-gray-800 mb-5">Novo registro</h3>
+          <h3 style={{ fontFamily: "'Lora', serif", fontSize: 20, color: '#1F2937', marginBottom: 20 }}>Novo registro</h3>
 
           {/* Emoção */}
           <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">
@@ -125,7 +125,7 @@ function ModalNovoRegistro({ onSalvar, onFechar }) {
                 onChange={e => setCampos(p => ({ ...p, [campo]: e.target.value }))}
                 placeholder={placeholder}
                 className="w-full bg-gray-50 rounded-xl px-4 py-3 text-sm text-gray-700 outline-none resize-none placeholder-gray-300 border-2 border-transparent focus:border-gray-200"
-                style={{ fontFamily: 'var(--font-dm)' }}
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
               />
             </div>
           ))}
@@ -134,8 +134,8 @@ function ModalNovoRegistro({ onSalvar, onFechar }) {
             onClick={salvar}
             className="w-full py-4 rounded-2xl text-white font-semibold text-base active:scale-95 transition-transform"
             style={{
-              background: emocaoId ? 'var(--color-verde)' : '#C5D5CB',
-              boxShadow: emocaoId ? '0 4px 16px rgba(61,107,85,0.3)' : 'none',
+              background: emocaoId ? '#4A7C65' : '#C5D5CB',
+              boxShadow: emocaoId ? '0 4px 16px rgba(74,124,101,0.3)' : 'none',
             }}
           >
             Salvar registro
@@ -209,7 +209,7 @@ function AbaRegistros({ registros, onRecarregar, onNovo }) {
     return (
       <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
         <span className="text-5xl mb-4">🌱</span>
-        <h3 className="font-lora text-lg text-gray-700 mb-2">Sem registros ainda</h3>
+        <h3 style={{ fontFamily: "'Lora', serif", fontSize: 18, color: '#374151', marginBottom: 8 }}>Sem registros ainda</h3>
         <p className="text-sm text-gray-400 leading-relaxed mb-6">
           Quando você usar o Modo SOS, os episódios aparecem aqui automaticamente.
           Ou adicione um registro manualmente.
@@ -218,14 +218,14 @@ function AbaRegistros({ registros, onRecarregar, onNovo }) {
           <button
             onClick={() => navigate('/sos')}
             className="py-3 rounded-2xl text-white font-semibold text-sm active:scale-95 transition-transform"
-            style={{ background: 'var(--color-coral)' }}
+            style={{ background: '#E07060' }}
           >
             🆘 Abrir Modo SOS
           </button>
           <button
             onClick={onNovo}
             className="py-3 rounded-2xl text-sm font-semibold active:scale-95 transition-transform"
-            style={{ background: 'var(--color-verde-50)', color: 'var(--color-verde)' }}
+            style={{ background: '#EDF4F0', color: '#4A7C65' }}
           >
             + Registro manual
           </button>
@@ -284,18 +284,15 @@ function AbaPatterns({ registros }) {
     return (
       <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
         <span className="text-4xl mb-3">📊</span>
-        <h3 className="font-lora text-lg text-gray-700 mb-2">Padrões em construção</h3>
+        <h3 style={{ fontFamily: "'Lora', serif", fontSize: 18, color: '#374151', marginBottom: 8 }}>Padrões em construção</h3>
         <p className="text-sm text-gray-400 leading-relaxed">
           Continue registrando episódios. Os padrões aparecem após <strong>3 registros</strong>.
           <br/>Você tem {registros.length} até agora.
         </p>
-        <div
-          className="mt-4 flex gap-1"
-          aria-hidden="true"
-        >
+        <div className="mt-4 flex gap-1" aria-hidden="true">
           {[0,1,2].map(i => (
             <div key={i} className="w-3 h-3 rounded-full"
-              style={{ background: i < registros.length ? 'var(--color-verde)' : '#E5E7EB' }} />
+              style={{ background: i < registros.length ? '#4A7C65' : '#E5E7EB' }} />
           ))}
         </div>
       </div>
@@ -304,7 +301,7 @@ function AbaPatterns({ registros }) {
 
   /* ── Cálculos ── */
   const emocaoFreq = {}
-  const diaFreq    = Array(7).fill(0)   // 0=Dom…6=Sáb
+  const diaFreq    = Array(7).fill(0)
   const acaoFreq   = {}
 
   registros.forEach(r => {
@@ -413,7 +410,7 @@ function AbaPatterns({ registros }) {
             {acaoOrdenada.map(([id, count]) => {
               const a = ACOES_MAP[id]
               return a ? (
-                <Barra key={id} emoji={a.emoji} label={a.label} count={count} max={maxAcao} cor="var(--color-verde)" />
+                <Barra key={id} emoji={a.emoji} label={a.label} count={count} max={maxAcao} cor="#4A7C65" />
               ) : null
             })}
           </div>
@@ -435,18 +432,19 @@ export default function Diario() {
   function recarregar() { setRegistros(carregarRegistros()) }
 
   return (
-    <div className="min-h-svh pb-28" style={{ background: 'var(--fundo)' }}>
+    <div className="min-h-svh pb-28" style={{ background: '#FAF7F2' }}>
 
       {/* Header + Tabs */}
       <div
-        className="relative overflow-hidden"
         style={{
-          background: 'linear-gradient(160deg, var(--verde) 0%, var(--verde-escuro) 100%)',
+          background: 'linear-gradient(160deg, #4A7C65 0%, #2E5540 100%)',
           borderRadius: '0 0 28px 28px',
           paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
           paddingLeft: 20,
           paddingRight: 20,
           paddingBottom: 20,
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
         <div style={{ position: 'absolute', top: -30, right: -30, width: 140, height: 140, background: 'rgba(255,255,255,0.07)', borderRadius: '50%', pointerEvents: 'none' }} />
@@ -472,7 +470,7 @@ export default function Diario() {
           )}
         </div>
 
-        <h1 className="font-lora text-white mb-1" style={{ fontSize: 22, fontWeight: 600 }}>Diário de Padrões</h1>
+        <h1 style={{ fontFamily: "'Lora', serif", color: 'white', fontSize: 22, fontWeight: 600, marginBottom: 4 }}>Diário de Padrões</h1>
         <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 12, marginBottom: 16 }}>
           {registros.length > 0
             ? `${registros.length} episódio${registros.length > 1 ? 's' : ''} registrado${registros.length > 1 ? 's' : ''}`

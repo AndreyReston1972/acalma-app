@@ -76,13 +76,13 @@ function ScriptCard({ item, isOpen, onToggle }) {
             <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">💬 Script</p>
             <div
               className="rounded-xl p-4 relative"
-              style={{ background: 'var(--color-verde-50)', border: '1px solid var(--color-verde-100)' }}
+              style={{ background: '#EDF4F0', border: '1px solid #D0E5D9' }}
             >
               <p className="text-sm text-gray-700 leading-relaxed italic">"{item.script}"</p>
               <button
                 onClick={copiar}
                 className="mt-3 flex items-center gap-1.5 text-xs font-medium transition-colors"
-                style={{ color: copiado ? 'var(--color-verde)' : '#9CA3AF' }}
+                style={{ color: copiado ? '#4A7C65' : '#9CA3AF' }}
               >
                 {copiado ? '✓ Copiado!' : '📋 Copiar script'}
               </button>
@@ -139,7 +139,7 @@ function AbaScripts() {
       {/* Dica bottom */}
       <div
         className="rounded-2xl p-4 flex gap-3 mt-2"
-        style={{ background: 'var(--color-verde-50)' }}
+        style={{ background: '#EDF4F0' }}
       >
         <span className="text-lg mt-0.5">💡</span>
         <p className="text-xs text-gray-600 leading-relaxed">
@@ -174,7 +174,7 @@ function AbaChecklist() {
   const pct = Math.round((n / total) * 100)
   const msg = mensagensProgresso[n]
 
-  const corBarra = n <= 2 ? '#E07060' : n <= 4 ? '#F0C040' : '#3D6B55'
+  const corBarra = n <= 2 ? '#E07060' : n <= 4 ? '#F0C040' : '#4A7C65'
 
   return (
     <div className="flex flex-col gap-4">
@@ -182,7 +182,7 @@ function AbaChecklist() {
       {/* Progresso */}
       <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
         <div className="flex items-center justify-between mb-3">
-          <p className="font-lora text-base text-gray-800">Esta semana</p>
+          <p style={{ fontFamily: "'Lora', serif", fontSize: 16, color: '#2D2D2D' }}>Esta semana</p>
           <span className="font-semibold text-sm" style={{ color: corBarra }}>
             {n} / {total}
           </span>
@@ -209,23 +209,23 @@ function AbaChecklist() {
               onClick={() => toggle(i)}
               className="flex items-start gap-3 bg-white rounded-2xl px-4 py-4 text-left transition-all active:scale-95"
               style={{
-                border: `1.5px solid ${ativo ? 'var(--color-verde)' : 'transparent'}`,
-                boxShadow: ativo ? '0 2px 8px rgba(61,107,85,0.12)' : '0 1px 4px rgba(0,0,0,0.06)',
+                border: `1.5px solid ${ativo ? '#4A7C65' : 'transparent'}`,
+                boxShadow: ativo ? '0 2px 8px rgba(74,124,101,0.12)' : '0 1px 4px rgba(0,0,0,0.06)',
               }}
             >
               {/* Checkbox customizado */}
               <div
                 className="w-6 h-6 rounded-full border-2 flex-shrink-0 flex items-center justify-center mt-0.5 transition-all duration-200"
                 style={{
-                  borderColor: ativo ? 'var(--color-verde)' : '#D1D5DB',
-                  background: ativo ? 'var(--color-verde)' : 'transparent',
+                  borderColor: ativo ? '#4A7C65' : '#D1D5DB',
+                  background: ativo ? '#4A7C65' : 'transparent',
                 }}
               >
                 {ativo && <span className="text-white text-xs font-bold">✓</span>}
               </div>
               <p
                 className="text-sm leading-relaxed transition-colors"
-                style={{ color: ativo ? 'var(--color-verde-dark)' : '#374151' }}
+                style={{ color: ativo ? '#2C5040' : '#374151' }}
               >
                 {item}
               </p>
@@ -238,10 +238,10 @@ function AbaChecklist() {
       {n === total && (
         <div
           className="rounded-2xl p-4 text-center"
-          style={{ background: 'var(--color-verde)', color: 'white' }}
+          style={{ background: '#4A7C65', color: 'white' }}
         >
-          <p className="font-lora text-lg mb-1">Semana completa! 🌿</p>
-          <p className="text-sm opacity-80">
+          <p style={{ fontFamily: "'Lora', serif", fontSize: 18, marginBottom: 4 }}>Semana completa! 🌿</p>
+          <p className="text-sm" style={{ opacity: 0.8 }}>
             Guarde esse sentimento. Ele é o combustível da próxima semana.
           </p>
         </div>
@@ -268,25 +268,26 @@ export default function Limites() {
   const [aba, setAba] = useState('scripts')
 
   return (
-    <div className="min-h-svh pb-28" style={{ background: 'var(--fundo)' }}>
+    <div className="min-h-svh pb-28" style={{ background: '#FAF7F2' }}>
 
       {/* Header + Tabs */}
       <div
-        className="relative overflow-hidden"
         style={{
-          background: 'linear-gradient(160deg, var(--verde) 0%, var(--verde-escuro) 100%)',
+          background: 'linear-gradient(160deg, #4A7C65 0%, #2E5540 100%)',
           borderRadius: '0 0 28px 28px',
           paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
           paddingLeft: 20,
           paddingRight: 20,
           paddingBottom: 20,
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
         <div style={{ position: 'absolute', top: -30, right: -30, width: 140, height: 140, background: 'rgba(255,255,255,0.07)', borderRadius: '50%', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -20, left: -20, width: 90, height: 90, background: 'rgba(255,255,255,0.04)', borderRadius: '50%', pointerEvents: 'none' }} />
 
         <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 10, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 4 }}>Acalma</p>
-        <h1 className="font-lora text-white mb-1" style={{ fontSize: 22, fontWeight: 600 }}>Guia de Limites</h1>
+        <h1 style={{ fontFamily: "'Lora', serif", color: 'white', fontSize: 22, fontWeight: 600, marginBottom: 4 }}>Guia de Limites</h1>
         <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 12, marginBottom: 16 }}>Scripts práticos + reflexão semanal</p>
 
         {/* Tab switcher dentro do header */}

@@ -101,18 +101,19 @@ export default function Home() {
   return (
     <div
       className="flex flex-col min-h-svh"
-      style={{ background: 'var(--fundo)', paddingBottom: 'calc(80px + env(safe-area-inset-bottom))' }}
+      style={{ background: '#FAF7F2', paddingBottom: 'calc(80px + env(safe-area-inset-bottom))' }}
     >
       {/* ── Header ── */}
       <div
-        className="relative overflow-hidden"
         style={{
-          background: 'linear-gradient(160deg, var(--verde) 0%, var(--verde-escuro) 100%)',
+          background: 'linear-gradient(160deg, #4A7C65 0%, #2E5540 100%)',
           borderRadius: '0 0 28px 28px',
           paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
           paddingLeft: 20,
           paddingRight: 20,
           paddingBottom: 20,
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
         <div style={{ position: 'absolute', top: -30, right: -30, width: 140, height: 140, background: 'rgba(255,255,255,0.07)', borderRadius: '50%', pointerEvents: 'none' }} />
@@ -120,8 +121,8 @@ export default function Home() {
 
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2">
-            <span className="text-2xl">🌿</span>
-            <span className="font-lora text-white" style={{ fontSize: 18, fontWeight: 600 }}>Acalma</span>
+            <span style={{ fontSize: 24 }}>🌿</span>
+            <span style={{ fontFamily: "'Lora', serif", color: 'white', fontSize: 18, fontWeight: 600 }}>Acalma</span>
           </div>
           <span style={{
             background: 'rgba(255,255,255,0.15)',
@@ -135,8 +136,8 @@ export default function Home() {
           </span>
         </div>
 
-        <p className="text-white/70 mb-1" style={{ fontSize: 12 }}>{saudacao()},</p>
-        <h1 className="font-lora text-white leading-snug" style={{ fontSize: 22, fontWeight: 600 }}>
+        <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, marginBottom: 4 }}>{saudacao()},</p>
+        <h1 style={{ fontFamily: "'Lora', serif", fontSize: 22, fontWeight: 600, color: 'white', lineHeight: 1.3 }}>
           mamãe 💚
         </h1>
 
@@ -161,22 +162,26 @@ export default function Home() {
         {/* ── Botão SOS ── */}
         <button
           onClick={() => navigate('/sos')}
-          className="sos-pulse w-full text-white text-left active:scale-95 transition-transform duration-150"
+          className="sos-pulse active:scale-95 transition-transform duration-150"
           style={{
-            background: 'linear-gradient(135deg, var(--sos) 0%, var(--sos-escuro) 100%)',
+            background: 'linear-gradient(135deg, #D9503E 0%, #B83D2D 100%)',
             borderRadius: 18,
             padding: '18px 20px',
             boxShadow: '0 8px 24px rgba(217,80,62,0.40)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            cursor: 'pointer',
+            width: '100%',
+            textAlign: 'left',
+            color: 'white',
           }}
         >
           <div>
             <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 10, letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: 600, marginBottom: 4 }}>
               SOS · Emergência
             </p>
-            <p className="font-lora" style={{ fontSize: 18, fontWeight: 700, color: 'white', marginBottom: 2 }}>
+            <p style={{ fontFamily: "'Lora', serif", fontSize: 18, fontWeight: 700, color: 'white', marginBottom: 2 }}>
               Modo SOS
             </p>
             <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 11, marginTop: 2 }}>
@@ -188,16 +193,15 @@ export default function Home() {
 
         {/* ── Banner de sincronização (só aparece se não logada e não dispensada) ── */}
         {!user && !bannerDismissed && (
-          <div style={{ background: '#FFFFFF', borderRadius: 'var(--radius-card)', padding: '12px 16px', boxShadow: 'var(--shadow-card)', display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span className="text-xl">☁️</span>
+          <div style={{ background: '#FFFFFF', borderRadius: 16, padding: '12px 16px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ fontSize: 20 }}>☁️</span>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-gray-700">Salve seu progresso</p>
-              <p className="text-xs text-gray-400">Acesse de qualquer dispositivo</p>
+              <p style={{ fontSize: 14, fontWeight: 600, color: '#374151' }}>Salve seu progresso</p>
+              <p style={{ fontSize: 12, color: '#9CA3AF' }}>Acesse de qualquer dispositivo</p>
             </div>
             <button
               onClick={() => setAuthOpen(true)}
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg flex-shrink-0"
-              style={{ background: 'var(--color-verde-50)', color: 'var(--color-verde)' }}
+              style={{ fontSize: 12, fontWeight: 600, padding: '6px 12px', borderRadius: 8, background: '#EDF4F0', color: '#4A7C65', flexShrink: 0 }}
             >
               Entrar
             </button>
@@ -206,7 +210,7 @@ export default function Home() {
                 setBannerDismissed(true)
                 localStorage.setItem('acalma_banner_dismissed', '1')
               }}
-              className="text-gray-300 text-base leading-none flex-shrink-0"
+              style={{ color: '#D1D5DB', fontSize: 16, lineHeight: 1, flexShrink: 0 }}
             >
               ✕
             </button>
@@ -214,10 +218,10 @@ export default function Home() {
         )}
 
         {/* ── Progresso semanal ── */}
-        <div style={{ background: '#FFFFFF', borderRadius: 'var(--radius-card)', padding: 16, boxShadow: 'var(--shadow-card)' }}>
+        <div style={{ background: '#FFFFFF', borderRadius: 16, padding: 16, boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
           <div className="flex items-center justify-between mb-4">
             <p style={{ fontSize: 13, fontWeight: 600, color: '#2D2D2D' }}>Esta semana</p>
-            <span className="text-xs text-gray-400">
+            <span style={{ fontSize: 12, color: '#9CA3AF' }}>
               {totalEntradas === 0
                 ? 'Nenhum registro ainda'
                 : `${totalEntradas} registro${totalEntradas > 1 ? 's' : ''}`}
@@ -227,19 +231,22 @@ export default function Home() {
           <div className="flex justify-between">
             {dias.map(({ label, isHoje, isFuturo, temEntrada }) => (
               <div key={label} className="flex flex-col items-center gap-1.5">
-                <span className="text-[10px] text-gray-400">{label}</span>
+                <span style={{ fontSize: 10, color: '#9CA3AF' }}>{label}</span>
                 <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium transition-all"
+                  className="flex items-center justify-center"
                   style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: '50%',
+                    fontSize: 12,
+                    fontWeight: 500,
                     background: isHoje
-                      ? 'var(--color-verde)'
+                      ? '#4A7C65'
                       : temEntrada
-                        ? 'var(--color-verde-100)'
-                        : isFuturo
-                          ? '#F3F4F6'
-                          : '#F3F4F6',
-                    color: isHoje ? 'white' : temEntrada ? 'var(--color-verde-dark)' : '#D1D5DB',
-                    border: isHoje ? '2px solid var(--color-verde-dark)' : '2px solid transparent',
+                        ? '#D0E5D9'
+                        : '#F3F4F6',
+                    color: isHoje ? 'white' : temEntrada ? '#2C5040' : '#D1D5DB',
+                    border: isHoje ? '2px solid #2C5040' : '2px solid transparent',
                   }}
                 >
                   {temEntrada ? '✓' : '·'}
@@ -260,17 +267,18 @@ export default function Home() {
             <span style={{ fontSize: 12, fontWeight: 600, color: '#4A7C65', letterSpacing: '0.5px' }}>
               💡 Dica do dia
             </span>
-            <span className="ml-auto" style={{
+            <span style={{
               fontSize: 10,
               padding: '2px 8px',
               borderRadius: 20,
               background: 'rgba(74,124,101,0.12)',
               color: '#2E5540',
+              marginLeft: 'auto',
             }}>
               {dica.tag}
             </span>
           </div>
-          <p className="font-lora" style={{ fontStyle: 'italic', fontSize: 13, color: '#2D2D2D', lineHeight: 1.6 }}>
+          <p style={{ fontFamily: "'Lora', serif", fontStyle: 'italic', fontSize: 13, color: '#2D2D2D', lineHeight: 1.6 }}>
             {dica.texto}
           </p>
         </div>
@@ -290,10 +298,11 @@ export default function Home() {
                 onClick={() => navigate(rota)}
                 className="text-left active:scale-95 transition-transform duration-150"
                 style={{
-                  background: '#FFFFFF',
+                  background: 'white',
                   borderRadius: 14,
                   padding: 14,
-                  boxShadow: 'var(--shadow-card)',
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
+                  cursor: 'pointer',
                 }}
               >
                 <span style={{ fontSize: 24, display: 'block', marginBottom: 6 }}>{icon}</span>
@@ -306,20 +315,20 @@ export default function Home() {
 
         {/* ── Perfil do filho ── */}
         {perfil.idade && (
-          <div style={{ background: '#FFFFFF', borderRadius: 'var(--radius-card)', padding: 16, boxShadow: 'var(--shadow-card)', display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span className="text-2xl">👶</span>
+          <div style={{ background: '#FFFFFF', borderRadius: 16, padding: 16, boxShadow: '0 2px 12px rgba(0,0,0,0.07)', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ fontSize: 24 }}>👶</span>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-700">Perfil configurado</p>
-              <p className="text-xs text-gray-400 truncate">
+              <p style={{ fontSize: 14, fontWeight: 500, color: '#374151' }}>Perfil configurado</p>
+              <p style={{ fontSize: 12, color: '#9CA3AF', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {idadeLabel[perfil.idade]} · {desafioLabel[perfil.desafio] || 'sem desafio'}
               </p>
               {user && (
-                <p className="text-[10px] text-gray-300 mt-0.5 truncate">☁️ {user.email}</p>
+                <p style={{ fontSize: 10, color: '#D1D5DB', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>☁️ {user.email}</p>
               )}
             </div>
             <button
-              onClick={() => user ? setAuthOpen(true) : setAuthOpen(true)}
-              className="text-xs text-gray-300 hover:text-gray-500 flex-shrink-0"
+              onClick={() => setAuthOpen(true)}
+              style={{ fontSize: 12, color: '#D1D5DB', flexShrink: 0 }}
             >
               {user ? '☁️' : '↗'}
             </button>
