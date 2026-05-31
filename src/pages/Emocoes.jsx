@@ -156,19 +156,16 @@ function Lista({ onAbrir }) {
 
       {/* Header */}
       <div
+        className="header-verde"
         style={{
           background: 'linear-gradient(160deg, #4A7C65 0%, #2E5540 100%)',
           borderRadius: '0 0 28px 28px',
-          paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
+          paddingTop: 'calc(env(safe-area-inset-top) + 28px)',
           paddingLeft: 20,
           paddingRight: 20,
           paddingBottom: 20,
-          position: 'relative',
-          overflow: 'hidden',
         }}
       >
-        <div style={{ position: 'absolute', top: -30, right: -30, width: 140, height: 140, background: 'rgba(255,255,255,0.07)', borderRadius: '50%', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: -20, left: -20, width: 90, height: 90, background: 'rgba(255,255,255,0.04)', borderRadius: '50%', pointerEvents: 'none' }} />
         <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 10, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 4 }}>Acalma</p>
         <h1 style={{ fontFamily: "'Lora', serif", color: 'white', fontSize: 22, fontWeight: 600, marginBottom: 4 }}>Biblioteca de Emoções</h1>
         <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 12 }}>Guia completo para reconhecer e acolher</p>

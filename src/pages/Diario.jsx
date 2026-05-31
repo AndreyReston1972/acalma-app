@@ -436,19 +436,16 @@ export default function Diario() {
 
       {/* Header + Tabs */}
       <div
+        className="header-verde"
         style={{
           background: 'linear-gradient(160deg, #4A7C65 0%, #2E5540 100%)',
           borderRadius: '0 0 28px 28px',
-          paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
+          paddingTop: 'calc(env(safe-area-inset-top) + 28px)',
           paddingLeft: 20,
           paddingRight: 20,
           paddingBottom: 20,
-          position: 'relative',
-          overflow: 'hidden',
         }}
       >
-        <div style={{ position: 'absolute', top: -30, right: -30, width: 140, height: 140, background: 'rgba(255,255,255,0.07)', borderRadius: '50%', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: -20, left: -20, width: 90, height: 90, background: 'rgba(255,255,255,0.04)', borderRadius: '50%', pointerEvents: 'none' }} />
 
         <div className="flex items-center justify-between" style={{ marginBottom: 4 }}>
           <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 10, letterSpacing: '2px', textTransform: 'uppercase' }}>Acalma</p>

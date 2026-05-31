@@ -105,19 +105,16 @@ export default function Home() {
     >
       {/* ── Header ── */}
       <div
+        className="header-verde"
         style={{
           background: 'linear-gradient(160deg, #4A7C65 0%, #2E5540 100%)',
           borderRadius: '0 0 28px 28px',
-          paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
+          paddingTop: 'calc(env(safe-area-inset-top) + 28px)',
           paddingLeft: 20,
           paddingRight: 20,
           paddingBottom: 20,
-          position: 'relative',
-          overflow: 'hidden',
         }}
       >
-        <div style={{ position: 'absolute', top: -30, right: -30, width: 140, height: 140, background: 'rgba(255,255,255,0.07)', borderRadius: '50%', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: -20, left: -20, width: 90, height: 90, background: 'rgba(255,255,255,0.04)', borderRadius: '50%', pointerEvents: 'none' }} />
 
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2">
@@ -146,13 +143,14 @@ export default function Home() {
             marginTop: 12,
             display: 'inline-flex',
             alignItems: 'center',
-            gap: 6,
-            background: 'rgba(255,255,255,0.12)',
-            border: '1px solid rgba(255,255,255,0.2)',
-            padding: '4px 12px',
-            borderRadius: 20,
+            background: 'rgba(255,255,255,0.14)',
+            border: '1px solid rgba(255,255,255,0.22)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            padding: '5px 12px',
+            borderRadius: '20px',
           }}>
-            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.85)' }}>Foco: {desafioLabel[perfil.desafio]}</span>
+            <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.88)' }}>Foco: {desafioLabel[perfil.desafio]}</span>
           </div>
         )}
       </div>
@@ -167,7 +165,7 @@ export default function Home() {
             background: 'linear-gradient(135deg, #D9503E 0%, #B83D2D 100%)',
             borderRadius: 18,
             padding: '18px 20px',
-            boxShadow: '0 8px 24px rgba(217,80,62,0.40)',
+            boxShadow: '0 8px 28px rgba(217,80,62,0.45)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -218,7 +216,7 @@ export default function Home() {
         )}
 
         {/* ── Progresso semanal ── */}
-        <div style={{ background: '#FFFFFF', borderRadius: 16, padding: 16, boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
+        <div style={{ background: '#FFFFFF', borderRadius: '14px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)', padding: '12px 14px', margin: '12px 16px 0' }}>
           <div className="flex items-center justify-between mb-4">
             <p style={{ fontSize: 13, fontWeight: 600, color: '#2D2D2D' }}>Esta semana</p>
             <span style={{ fontSize: 12, color: '#9CA3AF' }}>
@@ -307,7 +305,7 @@ export default function Home() {
               >
                 <span style={{ fontSize: 24, display: 'block', marginBottom: 6 }}>{icon}</span>
                 <p style={{ fontSize: 13, fontWeight: 600, color: '#2D2D2D' }}>{label}</p>
-                <p style={{ fontSize: 11, color: '#7A7A7A', marginTop: 2 }}>{sub}</p>
+                <p style={{ fontSize: '11px', color: '#7A7A7A', marginTop: '4px' }}>{sub}</p>
               </button>
             ))}
           </div>
