@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import { emocoes } from '../data/emocoes'
 
 const GRADIENTES = {
-  raiva:      'linear-gradient(135deg, #E85D4A, #C94535)',
-  tristeza:   'linear-gradient(135deg, #5B8DB8, #3E6F9B)',
-  medo:       'linear-gradient(135deg, #8B6FB5, #6B4F95)',
-  alegria:    'linear-gradient(135deg, #F5A623, #D4891C)',
-  ansiedade:  'linear-gradient(135deg, #8B7BB5, #6B5F95)',
-  frustracao: 'linear-gradient(135deg, #E8844A, #C4663A)',
-  ciume:      'linear-gradient(135deg, #4A9B7F, #317A62)',
-  vergonha:   'linear-gradient(135deg, #C4785A, #A5603D)',
+  raiva:      'linear-gradient(135deg, #D9503E, #B83D2D)',
+  tristeza:   'linear-gradient(135deg, #4A7BB5, #2E5E96)',
+  medo:       'linear-gradient(135deg, #7B5EA7, #5D3E87)',
+  alegria:    'linear-gradient(135deg, #D4891C, #B06A0E)',
+  ansiedade:  'linear-gradient(135deg, #4A9B7F, #2E7A60)',
+  frustracao: 'linear-gradient(135deg, #D0724A, #A85432)',
+  ciume:      'linear-gradient(135deg, #5E8B6E, #3D6B50)',
+  vergonha:   'linear-gradient(135deg, #C4785A, #A05A3D)',
 }
 
 /* ── Seção reutilizável ── */
@@ -151,44 +151,55 @@ function Ficha({ emocao, onVoltar }) {
 ──────────────────────────────────────────── */
 function Lista({ onAbrir }) {
   return (
-    <div className="min-h-svh pb-28" style={{ background: 'var(--color-areia)' }}>
+    <div className="min-h-svh pb-28" style={{ background: 'var(--fundo)' }}>
 
       {/* Header */}
       <div
-        className="px-6 pb-6"
+        className="relative overflow-hidden"
         style={{
-          background: 'linear-gradient(160deg, #4A7C65 0%, #3A6855 100%)',
+          background: 'linear-gradient(160deg, var(--verde) 0%, var(--verde-escuro) 100%)',
           borderRadius: '0 0 28px 28px',
           paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
+          paddingLeft: 20,
+          paddingRight: 20,
+          paddingBottom: 20,
         }}
       >
-        <p className="text-white/60 text-xs uppercase tracking-widest mb-1">Acalma</p>
-        <h1 className="font-lora text-2xl text-white mb-1">Biblioteca de Emoções</h1>
-        <p className="text-white/70 text-sm">Guia completo para reconhecer e acolher</p>
+        <div style={{ position: 'absolute', top: -30, right: -30, width: 140, height: 140, background: 'rgba(255,255,255,0.07)', borderRadius: '50%', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -20, left: -20, width: 90, height: 90, background: 'rgba(255,255,255,0.04)', borderRadius: '50%', pointerEvents: 'none' }} />
+        <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 10, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 4 }}>Acalma</p>
+        <h1 className="font-lora text-white mb-1" style={{ fontSize: 22, fontWeight: 600 }}>Biblioteca de Emoções</h1>
+        <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 12 }}>Guia completo para reconhecer e acolher</p>
       </div>
 
-      <div className="px-5 mt-5">
-        <p className="text-xs text-gray-400 mb-4 text-center">
+      <div style={{ padding: '16px 16px 0' }}>
+        <p style={{ fontSize: 11, color: '#7A7A7A', textAlign: 'center', marginBottom: 14 }}>
           Toque em uma emoção para ver a ficha completa
         </p>
 
         {/* Grid 2×4 */}
-        <div className="grid grid-cols-2 gap-3">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
           {emocoes.map(emocao => (
             <button
               key={emocao.id}
               onClick={() => onAbrir(emocao)}
-              className="text-left rounded-2xl p-4 transition-all active:scale-95 duration-150"
+              className="text-left transition-all active:scale-95 duration-150"
               style={{
                 background: GRADIENTES[emocao.id] || `linear-gradient(135deg, ${emocao.cor}, ${emocao.cor}BB)`,
+                borderRadius: 16,
+                padding: '14px 12px',
+                minHeight: 90,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
                 boxShadow: '0 2px 12px rgba(0,0,0,0.12)',
               }}
             >
-              <span className="text-4xl block mb-3">{emocao.emoji}</span>
-              <p className="font-lora font-semibold text-base mb-1" style={{ color: 'white' }}>
+              <span style={{ fontSize: 26, display: 'block', marginBottom: 6 }}>{emocao.emoji}</span>
+              <p className="font-lora" style={{ color: 'white', fontSize: 14, fontWeight: 600 }}>
                 {emocao.nome}
               </p>
-              <p className="text-xs leading-snug line-clamp-2" style={{ color: 'rgba(255,255,255,0.75)' }}>
+              <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: 11, marginTop: 3, lineHeight: 1.4 }} className="line-clamp-2">
                 {emocao.descricao}
               </p>
             </button>

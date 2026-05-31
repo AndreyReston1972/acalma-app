@@ -268,36 +268,44 @@ export default function Limites() {
   const [aba, setAba] = useState('scripts')
 
   return (
-    <div className="min-h-svh pb-28" style={{ background: 'var(--color-areia)' }}>
+    <div className="min-h-svh pb-28" style={{ background: 'var(--fundo)' }}>
 
-      {/* Header */}
+      {/* Header + Tabs */}
       <div
-        className="px-6 pb-6"
+        className="relative overflow-hidden"
         style={{
-          background: 'linear-gradient(160deg, #4A7C65 0%, #3A6855 100%)',
+          background: 'linear-gradient(160deg, var(--verde) 0%, var(--verde-escuro) 100%)',
           borderRadius: '0 0 28px 28px',
           paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
+          paddingLeft: 20,
+          paddingRight: 20,
+          paddingBottom: 20,
         }}
       >
-        <p className="text-white/60 text-xs uppercase tracking-widest mb-1">Acalma</p>
-        <h1 className="font-lora text-2xl text-white mb-1">Guia de Limites</h1>
-        <p className="text-white/70 text-sm">Scripts práticos + reflexão semanal</p>
-      </div>
+        <div style={{ position: 'absolute', top: -30, right: -30, width: 140, height: 140, background: 'rgba(255,255,255,0.07)', borderRadius: '50%', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -20, left: -20, width: 90, height: 90, background: 'rgba(255,255,255,0.04)', borderRadius: '50%', pointerEvents: 'none' }} />
 
-      {/* Tab switcher */}
-      <div className="px-5 mt-5 mb-4">
-        <div className="flex bg-white rounded-xl p-1 gap-1" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+        <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 10, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 4 }}>Acalma</p>
+        <h1 className="font-lora text-white mb-1" style={{ fontSize: 22, fontWeight: 600 }}>Guia de Limites</h1>
+        <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 12, marginBottom: 16 }}>Scripts práticos + reflexão semanal</p>
+
+        {/* Tab switcher dentro do header */}
+        <div style={{ background: 'rgba(0,0,0,0.15)', borderRadius: 10, padding: 3, display: 'flex', gap: 2 }}>
           {[
-            { id: 'scripts',    label: '📋 Scripts' },
-            { id: 'checklist',  label: '✅ Checklist' },
+            { id: 'scripts',   label: '📋 Scripts' },
+            { id: 'checklist', label: '✅ Checklist' },
           ].map(tab => (
             <button
               key={tab.id}
               onClick={() => setAba(tab.id)}
-              className="flex-1 py-2.5 rounded-lg text-sm font-medium transition-all duration-200"
+              className="flex-1 transition-all duration-200"
               style={{
-                background: aba === tab.id ? 'var(--color-verde)' : 'transparent',
-                color: aba === tab.id ? 'white' : '#9CA3AF',
+                padding: '8px 0',
+                borderRadius: 8,
+                fontSize: 13,
+                fontWeight: aba === tab.id ? 600 : 400,
+                background: aba === tab.id ? 'white' : 'transparent',
+                color: aba === tab.id ? '#2D2D2D' : 'rgba(255,255,255,0.7)',
               }}
             >
               {tab.label}
@@ -307,7 +315,7 @@ export default function Limites() {
       </div>
 
       {/* Conteúdo */}
-      <div className="px-5">
+      <div style={{ padding: '16px 16px 0' }}>
         {aba === 'scripts' ? <AbaScripts /> : <AbaChecklist />}
       </div>
 

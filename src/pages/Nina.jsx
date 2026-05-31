@@ -184,31 +184,34 @@ function CardPlano({ plano }) {
 /* ── Componente principal ── */
 export default function Nina() {
   return (
-    <div className="min-h-svh pb-28" style={{ background: 'var(--color-areia)' }}>
+    <div className="min-h-svh pb-28" style={{ background: 'var(--fundo)' }}>
 
       {/* ── Hero ── */}
       <div
-        className="px-6 pb-8 relative overflow-hidden"
+        className="relative overflow-hidden"
         style={{
-          background: 'linear-gradient(155deg, #1A3020 0%, #2C5040 60%, #3D6B55 100%)',
+          background: 'linear-gradient(160deg, #1A3020 0%, #2C5040 60%, var(--verde) 100%)',
+          borderRadius: '0 0 28px 28px',
           paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
+          paddingLeft: 20,
+          paddingRight: 20,
+          paddingBottom: 24,
         }}
       >
-        {/* Decoração */}
-        <div className="absolute top-8 right-8 text-4xl opacity-20 select-none">✨</div>
-        <div className="absolute bottom-6 left-10 text-2xl opacity-10 select-none">🌿</div>
+        <div style={{ position: 'absolute', top: -30, right: -30, width: 140, height: 140, background: 'rgba(255,255,255,0.07)', borderRadius: '50%', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -20, left: -20, width: 90, height: 90, background: 'rgba(255,255,255,0.04)', borderRadius: '50%', pointerEvents: 'none' }} />
 
         {/* Avatar */}
         <div
-          className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5"
-          style={{ background: 'rgba(255,255,255,0.12)', border: '1.5px solid rgba(255,255,255,0.25)' }}
+          className="flex items-center justify-center mb-5"
+          style={{ width: 64, height: 64, borderRadius: 16, background: 'rgba(255,255,255,0.12)', border: '1.5px solid rgba(255,255,255,0.25)' }}
         >
-          <span className="text-3xl">✨</span>
+          <span style={{ fontSize: 28 }}>✨</span>
         </div>
 
-        <p className="text-white/50 text-xs uppercase tracking-widest mb-1">NexoEdu</p>
-        <h1 className="font-lora text-3xl text-white mb-2">Conheça a Nina</h1>
-        <p className="text-white/80 text-sm leading-relaxed max-w-xs">
+        <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 10, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 4 }}>NexoEdu</p>
+        <h1 className="font-lora text-white mb-2" style={{ fontSize: 22, fontWeight: 600 }}>Conheça a Nina</h1>
+        <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: 13, lineHeight: 1.6, maxWidth: 280 }}>
           Sua parceira de parentalidade consciente, disponível via WhatsApp quando você mais precisa.
         </p>
       </div>

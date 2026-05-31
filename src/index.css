@@ -18,6 +18,22 @@
   --font-dm: 'DM Sans', system-ui, sans-serif;
 }
 
+:root {
+  --verde:        #4A7C65;
+  --verde-escuro: #2E5540;
+  --verde-suave:  #E8F2ED;
+  --fundo:        #FAF7F2;
+  --fundo-card:   #FFFFFF;
+  --texto:        #2D2D2D;
+  --texto-suave:  #7A7A7A;
+  --sos:          #D9503E;
+  --sos-escuro:   #B83D2D;
+  --linha:        #EAE6DF;
+  --radius-card:  16px;
+  --radius-sm:    10px;
+  --shadow-card:  0 2px 12px rgba(0,0,0,0.07);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -26,8 +42,8 @@
 
 body {
   font-family: var(--font-dm);
-  background-color: var(--color-areia);
-  color: #333;
+  background-color: var(--fundo);
+  color: var(--texto);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   max-width: 430px;

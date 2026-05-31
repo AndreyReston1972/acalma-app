@@ -100,69 +100,95 @@ export default function Home() {
 
   return (
     <div
-      className="flex flex-col pb-28 min-h-svh"
-      style={{ background: 'var(--color-areia)' }}
+      className="flex flex-col min-h-svh"
+      style={{ background: 'var(--fundo)', paddingBottom: 'calc(80px + env(safe-area-inset-bottom))' }}
     >
       {/* ── Header ── */}
       <div
-        className="px-6 pb-6 relative overflow-hidden"
+        className="relative overflow-hidden"
         style={{
-          background: 'linear-gradient(160deg, #4A7C65 0%, #3A6855 100%)',
+          background: 'linear-gradient(160deg, var(--verde) 0%, var(--verde-escuro) 100%)',
           borderRadius: '0 0 28px 28px',
           paddingTop: 'calc(env(safe-area-inset-top) + 16px)',
+          paddingLeft: 20,
+          paddingRight: 20,
+          paddingBottom: 20,
         }}
       >
-        <div style={{ position: 'absolute', top: -30, right: -30, width: 160, height: 160, background: 'rgba(255,255,255,0.06)', borderRadius: '50%', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: -20, left: -20, width: 100, height: 100, background: 'rgba(255,255,255,0.04)', borderRadius: '50%', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: -30, right: -30, width: 140, height: 140, background: 'rgba(255,255,255,0.07)', borderRadius: '50%', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -20, left: -20, width: 90, height: 90, background: 'rgba(255,255,255,0.04)', borderRadius: '50%', pointerEvents: 'none' }} />
+
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2">
             <span className="text-2xl">🌿</span>
-            <span className="font-lora text-lg text-white opacity-90">Acalma</span>
+            <span className="font-lora text-white" style={{ fontSize: 18, fontWeight: 600 }}>Acalma</span>
           </div>
-          <span className="text-white text-xs opacity-60">{dataFormatada()}</span>
+          <span style={{
+            background: 'rgba(255,255,255,0.15)',
+            padding: '4px 10px',
+            borderRadius: 20,
+            color: 'rgba(255,255,255,0.9)',
+            fontSize: 11,
+            backdropFilter: 'blur(10px)',
+          }}>
+            {dataFormatada()}
+          </span>
         </div>
 
-        <p className="font-lora text-white/70 text-sm mb-1">{saudacao()},</p>
-        <h1 className="font-lora text-white leading-snug" style={{ fontSize: 20, fontWeight: 600 }}>
+        <p className="text-white/70 mb-1" style={{ fontSize: 12 }}>{saudacao()},</p>
+        <h1 className="font-lora text-white leading-snug" style={{ fontSize: 22, fontWeight: 600 }}>
           mamãe 💚
         </h1>
 
         {perfil.desafio && (
-          <div className="mt-3 inline-flex items-center gap-1.5 bg-white/15 rounded-full px-3 py-1">
-            <span className="text-xs text-white/90">Foco: {desafioLabel[perfil.desafio]}</span>
+          <div style={{
+            marginTop: 12,
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            background: 'rgba(255,255,255,0.12)',
+            border: '1px solid rgba(255,255,255,0.2)',
+            padding: '4px 12px',
+            borderRadius: 20,
+          }}>
+            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.85)' }}>Foco: {desafioLabel[perfil.desafio]}</span>
           </div>
         )}
       </div>
 
-      <div className="px-5 mt-5 flex flex-col gap-4">
+      <div className="mt-3 flex flex-col" style={{ gap: 12, padding: '0 16px' }}>
 
         {/* ── Botão SOS ── */}
         <button
           onClick={() => navigate('/sos')}
           className="sos-pulse w-full text-white text-left active:scale-95 transition-transform duration-150"
           style={{
-            background: 'linear-gradient(135deg, #E85D4A 0%, #C94535 100%)',
-            borderRadius: 20,
-            padding: '22px 24px',
-            boxShadow: '0 8px 30px rgba(232,93,74,0.4)',
+            background: 'linear-gradient(135deg, var(--sos) 0%, var(--sos-escuro) 100%)',
+            borderRadius: 18,
+            padding: '18px 20px',
+            boxShadow: '0 8px 24px rgba(217,80,62,0.40)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
         >
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-2xl">🆘</span>
-                <span className="font-lora text-xl font-bold">Modo SOS</span>
-              </div>
-              <p className="text-white/80 text-sm">Meu filho está em crise agora</p>
-            </div>
-            <span className="text-3xl opacity-80">→</span>
+          <div>
+            <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 10, letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: 600, marginBottom: 4 }}>
+              SOS · Emergência
+            </p>
+            <p className="font-lora" style={{ fontSize: 18, fontWeight: 700, color: 'white', marginBottom: 2 }}>
+              Modo SOS
+            </p>
+            <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 11, marginTop: 2 }}>
+              Meu filho está em crise agora
+            </p>
           </div>
+          <span style={{ fontSize: 24, opacity: 0.8 }}>→</span>
         </button>
 
         {/* ── Banner de sincronização (só aparece se não logada e não dispensada) ── */}
         {!user && !bannerDismissed && (
-          <div className="bg-white rounded-2xl px-4 py-3 flex items-center gap-3"
-            style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+          <div style={{ background: '#FFFFFF', borderRadius: 'var(--radius-card)', padding: '12px 16px', boxShadow: 'var(--shadow-card)', display: 'flex', alignItems: 'center', gap: 12 }}>
             <span className="text-xl">☁️</span>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-gray-700">Salve seu progresso</p>
@@ -188,11 +214,9 @@ export default function Home() {
         )}
 
         {/* ── Progresso semanal ── */}
-        <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+        <div style={{ background: '#FFFFFF', borderRadius: 'var(--radius-card)', padding: 16, boxShadow: 'var(--shadow-card)' }}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-lora text-base" style={{ color: 'var(--color-verde-dark)' }}>
-              Esta semana
-            </h2>
+            <p style={{ fontSize: 13, fontWeight: 600, color: '#2D2D2D' }}>Esta semana</p>
             <span className="text-xs text-gray-400">
               {totalEntradas === 0
                 ? 'Nenhum registro ainda'
@@ -226,44 +250,55 @@ export default function Home() {
         </div>
 
         {/* ── Dica do dia ── */}
-        <div
-          className="rounded-2xl p-4"
-          style={{ background: 'var(--color-verde-50)' }}
-        >
+        <div style={{
+          background: 'linear-gradient(135deg, #F0F7F3 0%, #E8F2ED 100%)',
+          borderRadius: 14,
+          padding: '14px 16px',
+          borderLeft: '3px solid #4A7C65',
+        }}>
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-base">💡</span>
-            <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--color-verde)' }}>
-              Dica do dia
+            <span style={{ fontSize: 12, fontWeight: 600, color: '#4A7C65', letterSpacing: '0.5px' }}>
+              💡 Dica do dia
             </span>
-            <span
-              className="ml-auto text-[10px] px-2 py-0.5 rounded-full"
-              style={{ background: 'var(--color-verde-100)', color: 'var(--color-verde-dark)' }}
-            >
+            <span className="ml-auto" style={{
+              fontSize: 10,
+              padding: '2px 8px',
+              borderRadius: 20,
+              background: 'rgba(74,124,101,0.12)',
+              color: '#2E5540',
+            }}>
               {dica.tag}
             </span>
           </div>
-          <p className="font-lora text-sm text-gray-700 leading-relaxed italic">{dica.texto}</p>
+          <p className="font-lora" style={{ fontStyle: 'italic', fontSize: 13, color: '#2D2D2D', lineHeight: 1.6 }}>
+            {dica.texto}
+          </p>
         </div>
 
         {/* ── Atalhos rápidos ── */}
         <div>
-          <h2 className="font-lora text-base text-gray-700 mb-3">Explorar</h2>
-          <div className="grid grid-cols-2 gap-3">
+          <p style={{ fontSize: 13, fontWeight: 600, color: '#2D2D2D', marginBottom: 8 }}>Explorar</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             {[
-              { icon: '💚', label: 'Emoções', sub: '8 fichas completas', rota: '/emocoes', bg: '#EDF4F0', cor: '#3D6B55' },
-              { icon: '🎯', label: 'Limites', sub: '6 scripts práticos', rota: '/limites', bg: '#F0EDF5', cor: '#7C5CBF' },
-              { icon: '📔', label: 'Diário', sub: 'Registre episódios', rota: '/diario', bg: '#FDF3F1', cor: '#E07060' },
-              { icon: '✨', label: 'Nina', sub: 'Planos e suporte', rota: '/nina', bg: '#FEF9EC', cor: '#C09030' },
-            ].map(({ icon, label, sub, rota, bg, cor }) => (
+              { icon: '💚', label: 'Emoções', sub: '8 fichas completas', rota: '/emocoes' },
+              { icon: '🎯', label: 'Limites', sub: '6 scripts práticos', rota: '/limites' },
+              { icon: '📔', label: 'Diário', sub: 'Registre episódios', rota: '/diario' },
+              { icon: '✨', label: 'Nina', sub: 'Planos e suporte', rota: '/nina' },
+            ].map(({ icon, label, sub, rota }) => (
               <button
                 key={rota}
                 onClick={() => navigate(rota)}
-                className="text-left rounded-2xl p-4 active:scale-95 transition-transform duration-150"
-                style={{ background: bg }}
+                className="text-left active:scale-95 transition-transform duration-150"
+                style={{
+                  background: '#FFFFFF',
+                  borderRadius: 14,
+                  padding: 14,
+                  boxShadow: 'var(--shadow-card)',
+                }}
               >
-                <span className="text-2xl block mb-2">{icon}</span>
-                <p className="font-semibold text-sm" style={{ color: cor }}>{label}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{sub}</p>
+                <span style={{ fontSize: 24, display: 'block', marginBottom: 6 }}>{icon}</span>
+                <p style={{ fontSize: 13, fontWeight: 600, color: '#2D2D2D' }}>{label}</p>
+                <p style={{ fontSize: 11, color: '#7A7A7A', marginTop: 2 }}>{sub}</p>
               </button>
             ))}
           </div>
@@ -271,7 +306,7 @@ export default function Home() {
 
         {/* ── Perfil do filho ── */}
         {perfil.idade && (
-          <div className="bg-white rounded-2xl p-4 flex items-center gap-3" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+          <div style={{ background: '#FFFFFF', borderRadius: 'var(--radius-card)', padding: 16, boxShadow: 'var(--shadow-card)', display: 'flex', alignItems: 'center', gap: 12 }}>
             <span className="text-2xl">👶</span>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-700">Perfil configurado</p>
