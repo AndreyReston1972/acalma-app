@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { emocoes } from '../data/emocoes'
+import PageContainer from '../components/PageContainer'
 
 const GRADIENTES = {
   raiva:      'linear-gradient(135deg, #D9503E, #B83D2D)',
@@ -152,7 +153,7 @@ function Ficha({ emocao, onVoltar }) {
 ──────────────────────────────────────────── */
 function Lista({ onAbrir }) {
   return (
-    <div className="min-h-svh pb-28" style={{ background: '#FAF7F2' }}>
+    <PageContainer style={{ background: '#FAF7F2' }}>
 
       {/* Header */}
       <div
@@ -177,7 +178,7 @@ function Lista({ onAbrir }) {
         </p>
 
         {/* Grid 2×4 */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
           {emocoes.map(emocao => (
             <button
               key={emocao.id}
@@ -217,7 +218,7 @@ function Lista({ onAbrir }) {
           </p>
         </div>
       </div>
-    </div>
+    </PageContainer>
   )
 }
 

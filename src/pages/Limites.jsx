@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { scripts, checklistSemanal } from '../data/limites'
+import PageContainer from '../components/PageContainer'
 
 /* Chave da semana = segunda-feira da semana atual (YYYY-MM-DD) */
 function semanaKey() {
@@ -268,7 +269,7 @@ export default function Limites() {
   const [aba, setAba] = useState('scripts')
 
   return (
-    <div className="min-h-svh pb-28" style={{ background: '#FAF7F2' }}>
+    <PageContainer style={{ background: '#FAF7F2' }}>
 
       {/* Header + Tabs */}
       <div
@@ -317,6 +318,6 @@ export default function Limites() {
         {aba === 'scripts' ? <AbaScripts /> : <AbaChecklist />}
       </div>
 
-    </div>
+    </PageContainer>
   )
 }

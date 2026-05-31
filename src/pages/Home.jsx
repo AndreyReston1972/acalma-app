@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import AuthModal from '../components/AuthModal'
+import PageContainer from '../components/PageContainer'
 
 /* ── Dicas rotativas (1 por dia via índice do ano) ── */
 const dicas = [
@@ -99,10 +100,8 @@ export default function Home() {
   const totalEntradas = contarEntradas()
 
   return (
-    <div
-      className="flex flex-col min-h-svh"
-      style={{ background: '#FAF7F2', paddingBottom: 'calc(80px + env(safe-area-inset-bottom))' }}
-    >
+    <PageContainer style={{ background: '#FAF7F2' }}>
+      <div className="flex flex-col">
       {/* ── Header ── */}
       <div
         className="header-verde"
@@ -336,6 +335,7 @@ export default function Home() {
       </div>
 
       {authOpen && <AuthModal onFechar={() => setAuthOpen(false)} />}
-    </div>
+      </div>
+    </PageContainer>
   )
 }

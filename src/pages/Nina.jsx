@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import PageContainer from '../components/PageContainer'
 
 /* ── Dados dos planos — substitua os links Hotmart ── */
 const PLANOS = [
@@ -184,7 +185,7 @@ function CardPlano({ plano }) {
 /* ── Componente principal ── */
 export default function Nina() {
   return (
-    <div className="min-h-svh pb-28" style={{ background: 'var(--fundo)' }}>
+    <PageContainer style={{ background: 'var(--fundo)' }}>
 
       {/* ── Hero ── */}
       <div
@@ -326,6 +327,6 @@ export default function Nina() {
         </p>
 
       </div>
-    </div>
+    </PageContainer>
   )
 }

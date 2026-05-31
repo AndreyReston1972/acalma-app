@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { emocoes } from '../data/emocoes'
+import PageContainer from '../components/PageContainer'
 
 /* ── Constantes ── */
 const ACOES_MAP = {
@@ -432,7 +433,7 @@ export default function Diario() {
   function recarregar() { setRegistros(carregarRegistros()) }
 
   return (
-    <div className="min-h-svh pb-28" style={{ background: '#FAF7F2' }}>
+    <PageContainer style={{ background: '#FAF7F2' }}>
 
       {/* Header + Tabs */}
       <div
@@ -515,6 +516,6 @@ export default function Diario() {
         />
       )}
 
-    </div>
+    </PageContainer>
   )
 }
