@@ -10,20 +10,16 @@ const tabs = [
 export default function NavBar() {
   return (
     <nav
-      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50"
+      className="navbar-glass fixed left-1/2 -translate-x-1/2 z-50"
       style={{
-        background: 'rgba(255,255,255,0.88)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderTop: '1px solid rgba(0,0,0,0.08)',
+        bottom: 'calc(env(safe-area-inset-bottom) + 14px)',
+        width: 'calc(100% - 28px)',
+        maxWidth: 402,
       }}
     >
       <div
         className="flex justify-around items-center px-2"
-        style={{
-          paddingTop: 10,
-          paddingBottom: 'calc(env(safe-area-inset-bottom) + 10px)',
-        }}
+        style={{ paddingTop: 10, paddingBottom: 10 }}
       >
         {tabs.map(({ to, label, icon }) => (
           <NavLink

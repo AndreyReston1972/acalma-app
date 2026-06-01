@@ -100,3 +100,22 @@ h1, h2, h3 {
   border-radius: 50%;
   pointer-events: none;
 }
+
+/* ── Navbar flutuante — liquid glass ── */
+.navbar-glass {
+  border-radius: 30px;                                   /* dentro do alvo 28–32px */
+  border: 1px solid rgba(255, 255, 255, 0.4);            /* borda translúcida sutil */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12),            /* elevação principal */
+              0 2px 8px rgba(0, 0, 0, 0.05);             /* camada de contato (premium) */
+  /* FALLBACK (Android sem backdrop-filter): branco mais opaco, nunca retângulo cru */
+  background: rgba(255, 255, 255, 0.92);
+}
+
+/* ONDE houver suporte (iOS/Safari sempre; Chrome quando disponível): vidro real */
+@supports ((-webkit-backdrop-filter: blur(20px)) or (backdrop-filter: blur(20px))) {
+  .navbar-glass {
+    background: rgba(255, 255, 255, 0.72);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);  /* prefixo obrigatório p/ iOS */
+    backdrop-filter: blur(20px) saturate(180%);
+  }
+}

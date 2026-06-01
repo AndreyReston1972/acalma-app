@@ -5,7 +5,7 @@ export default function PageContainer({ children, style }) {
         height: '100dvh',
         overflowY: 'auto',
         WebkitOverflowScrolling: 'touch',
-        paddingBottom: 'calc(90px + env(safe-area-inset-bottom))',
+        paddingBottom: 'calc(env(safe-area-inset-bottom) + 110px)',
         boxSizing: 'border-box',
         ...style,
       }}
