@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import AuthModal from '../components/AuthModal'
 import PageContainer from '../components/PageContainer'
+import TituloSecao from '../components/TituloSecao'
 
 /* ── Dicas rotativas (1 por dia via índice do ano) ── */
 const dicas = [
@@ -84,18 +85,6 @@ function contarEntradas() {
   return Object.keys(localStorage)
     .filter(k => k.startsWith('acalma_diario_'))
     .length
-}
-
-/* ── Título de seção (padrão único de hierarquia) ── */
-function TituloSecao({ children, meta }) {
-  return (
-    <div className="flex items-center justify-between mb-sm">
-      <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#6B7280' }}>
-        {children}
-      </p>
-      {meta && <span style={{ fontSize: 12, color: '#6B7280' }}>{meta}</span>}
-    </div>
-  )
 }
 
 /* ── Componente ── */

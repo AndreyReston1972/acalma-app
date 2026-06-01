@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { emocoes } from '../data/emocoes'
 import PageContainer from '../components/PageContainer'
+import TituloSecao from '../components/TituloSecao'
 
 const GRADIENTES = {
   raiva:      'linear-gradient(135deg, #D9503E, #B83D2D)',
@@ -18,7 +19,7 @@ const GRADIENTES = {
 function Secao({ titulo, children }) {
   return (
     <div className="mb-6">
-      <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">{titulo}</p>
+      <TituloSecao>{titulo}</TituloSecao>
       {children}
     </div>
   )
@@ -99,7 +100,7 @@ function Ficha({ emocao, onVoltar }) {
                 className="bg-white rounded-xl p-md border-l-4 border-red-300"
                 style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}
               >
-                <p className="text-sm text-gray-400 italic">"{frase}"</p>
+                <p className="text-sm text-gray-500 italic">"{frase}"</p>
               </div>
             ))}
           </div>

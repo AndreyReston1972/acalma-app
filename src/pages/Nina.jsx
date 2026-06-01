@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import PageContainer from '../components/PageContainer'
+import TituloSecao from '../components/TituloSecao'
 
 /* ── Dados dos planos — substitua os links Hotmart ── */
 const PLANOS = [
@@ -135,14 +136,14 @@ function CardPlano({ plano }) {
           <span className="text-2xl">{plano.emoji}</span>
           <span className="font-lora text-xl text-gray-800">{plano.nome}</span>
         </div>
-        <p className="text-xs text-gray-400 mb-4">{plano.descricao}</p>
+        <p className="text-xs text-gray-500 mb-4">{plano.descricao}</p>
 
         {/* Preço */}
         <div className="flex items-end gap-1 mb-5">
           <span className="font-lora text-3xl font-bold" style={{ color: plano.corBorda }}>
             {plano.preco}
           </span>
-          <span className="text-sm text-gray-400 mb-1">{plano.periodo}</span>
+          <span className="text-sm text-gray-500 mb-1">{plano.periodo}</span>
         </div>
 
         {/* Itens */}
@@ -221,7 +222,7 @@ export default function Nina() {
 
         {/* ── Como funciona ── */}
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">Como funciona</p>
+          <TituloSecao>Como funciona</TituloSecao>
           <div className="grid grid-cols-3 gap-2">
             {[
               { emoji: '📱', titulo: 'Você envia', desc: 'Manda a situação que está vivendo' },
@@ -264,16 +265,14 @@ export default function Nina() {
             </div>
             <div>
               <p className="text-xs font-semibold text-gray-800">Camila R.</p>
-              <p className="text-[10px] text-gray-400">Mãe do Theo, 4 anos • Plano Pro</p>
+              <p className="text-[10px] text-gray-500">Mãe do Theo, 4 anos • Plano Pro</p>
             </div>
           </div>
         </div>
 
         {/* ── Planos ── */}
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">
-            Escolha seu plano
-          </p>
+          <TituloSecao>Escolha seu plano</TituloSecao>
           <div className="flex flex-col gap-4">
             {PLANOS.map(plano => (
               <CardPlano key={plano.id} plano={plano} />
@@ -311,9 +310,7 @@ export default function Nina() {
 
         {/* ── FAQ ── */}
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">
-            Perguntas frequentes
-          </p>
+          <TituloSecao>Perguntas frequentes</TituloSecao>
           <div className="flex flex-col gap-2">
             {FAQ.map((item, i) => (
               <FaqItem key={i} pergunta={item.pergunta} resposta={item.resposta} />
@@ -322,7 +319,7 @@ export default function Nina() {
         </div>
 
         {/* ── Footer ── */}
-        <p className="text-center text-xs text-gray-400 pb-2">
+        <p className="text-center text-xs text-gray-500 pb-2">
           NexoEdu · Acalma App · Todos os direitos reservados
         </p>
 

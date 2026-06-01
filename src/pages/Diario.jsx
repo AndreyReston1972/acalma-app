@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { emocoes } from '../data/emocoes'
 import PageContainer from '../components/PageContainer'
+import TituloSecao from '../components/TituloSecao'
 
 /* ── Constantes ── */
 const ACOES_MAP = {
@@ -90,7 +91,7 @@ function ModalNovoRegistro({ onSalvar, onFechar }) {
           <h3 style={{ fontFamily: "'Lora', serif", fontSize: 20, color: '#1F2937', marginBottom: 20 }}>Novo registro</h3>
 
           {/* Emoção */}
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-2">
             Emoção da criança
           </p>
           <div className="grid grid-cols-4 gap-2 mb-5">
@@ -117,7 +118,7 @@ function ModalNovoRegistro({ onSalvar, onFechar }) {
             { campo: 'terminou', label: 'Como terminou?',           placeholder: 'Desfecho...' },
           ].map(({ campo, label, placeholder }) => (
             <div key={campo} className="mb-4">
-              <label className="text-xs font-semibold uppercase tracking-widest text-gray-400 block mb-1.5">
+              <label className="text-xs font-semibold uppercase tracking-widest text-gray-500 block mb-1.5">
                 {label}
               </label>
               <textarea
@@ -170,12 +171,12 @@ function CardRegistro({ entrada, onDeletar }) {
             {emocao
               ? <><span className="text-xl">{emocao.emoji}</span>
                   <span className="font-semibold text-sm text-gray-800">{emocao.nome}</span></>
-              : <span className="text-sm text-gray-400 italic">Emoção não identificada</span>
+              : <span className="text-sm text-gray-500 italic">Emoção não identificada</span>
             }
           </div>
           <div className="flex items-center gap-3">
-            {hora && <span className="text-xs text-gray-400">{hora}</span>}
-            <button onClick={onDeletar} className="text-gray-300 hover:text-red-400 transition-colors text-base leading-none">✕</button>
+            {hora && <span className="text-xs text-gray-500">{hora}</span>}
+            <button onClick={onDeletar} className="text-gray-400 hover:text-red-400 transition-colors text-base leading-none">✕</button>
           </div>
         </div>
 
@@ -211,7 +212,7 @@ function AbaRegistros({ registros, onRecarregar, onNovo }) {
       <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
         <span className="text-5xl mb-4">🌱</span>
         <h3 style={{ fontFamily: "'Lora', serif", fontSize: 18, color: '#374151', marginBottom: 8 }}>Sem registros ainda</h3>
-        <p className="text-sm text-gray-400 leading-relaxed mb-6">
+        <p className="text-sm text-gray-500 leading-relaxed mb-6">
           Quando você usar o Modo SOS, os episódios aparecem aqui automaticamente.
           Ou adicione um registro manualmente.
         </p>
@@ -239,7 +240,7 @@ function AbaRegistros({ registros, onRecarregar, onNovo }) {
     <div className="flex flex-col gap-lg">
       {grupos.map(([dataKey, entradas]) => (
         <div key={dataKey}>
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2 capitalize">
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-2 capitalize">
             {formatarDataLabel(dataKey)}
             <span className="ml-2 font-normal normal-case">· {entradas.length} episódio{entradas.length > 1 ? 's' : ''}</span>
           </p>
@@ -286,7 +287,7 @@ function AbaPatterns({ registros }) {
       <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
         <span className="text-4xl mb-3">📊</span>
         <h3 style={{ fontFamily: "'Lora', serif", fontSize: 18, color: '#374151', marginBottom: 8 }}>Padrões em construção</h3>
-        <p className="text-sm text-gray-400 leading-relaxed">
+        <p className="text-sm text-gray-500 leading-relaxed">
           Continue registrando episódios. Os padrões aparecem após <strong>3 registros</strong>.
           <br/>Você tem {registros.length} até agora.
         </p>
@@ -347,7 +348,7 @@ function AbaPatterns({ registros }) {
 
       {/* Insights */}
       <div className="bg-white rounded-2xl p-md" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
-        <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">💡 Insights</p>
+        <TituloSecao>💡 Insights</TituloSecao>
         <div className="flex flex-col gap-2.5">
           {insights.map((txt, i) => (
             <p key={i} className="text-sm text-gray-700 leading-relaxed">{txt}</p>
@@ -358,9 +359,7 @@ function AbaPatterns({ registros }) {
       {/* Emoções mais frequentes */}
       {emocaoOrdenada.length > 0 && (
         <div className="bg-white rounded-2xl p-md" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">
-            Emoções mais frequentes
-          </p>
+          <TituloSecao>Emoções mais frequentes</TituloSecao>
           <div className="flex flex-col gap-3">
             {emocaoOrdenada.map(([id, count]) => {
               const e = emocoes.find(x => x.id === id)
@@ -374,9 +373,7 @@ function AbaPatterns({ registros }) {
 
       {/* Heatmap semanal */}
       <div className="bg-white rounded-2xl p-md" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
-        <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">
-          Dias mais desafiadores
-        </p>
+        <TituloSecao>Dias mais desafiadores</TituloSecao>
         <div className="flex justify-between">
           {DIAS_CURTO.map((dia, i) => {
             const count = diaFreq[i]
@@ -385,7 +382,7 @@ function AbaPatterns({ registros }) {
             const txtCores = ['#D1D5DB','#5A8A72','white','white']
             return (
               <div key={dia} className="flex flex-col items-center gap-1.5">
-                <span className="text-[10px] text-gray-400">{dia}</span>
+                <span className="text-[10px] text-gray-500">{dia}</span>
                 <div
                   className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-semibold transition-colors"
                   style={{ background: cores[intensity], color: txtCores[intensity] }}
@@ -396,7 +393,7 @@ function AbaPatterns({ registros }) {
             )
           })}
         </div>
-        <p className="text-[10px] text-gray-400 text-center mt-3">
+        <p className="text-[10px] text-gray-500 text-center mt-3">
           Número de episódios por dia da semana (total acumulado)
         </p>
       </div>
@@ -404,9 +401,7 @@ function AbaPatterns({ registros }) {
       {/* Estratégias usadas */}
       {acaoOrdenada.length > 0 && (
         <div className="bg-white rounded-2xl p-md" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">
-            Estratégias mais usadas
-          </p>
+          <TituloSecao>Estratégias mais usadas</TituloSecao>
           <div className="flex flex-col gap-3">
             {acaoOrdenada.map(([id, count]) => {
               const a = ACOES_MAP[id]

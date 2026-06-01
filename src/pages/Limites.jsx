@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { scripts, checklistSemanal } from '../data/limites'
 import PageContainer from '../components/PageContainer'
+import TituloSecao from '../components/TituloSecao'
 
 /* Chave da semana = segunda-feira da semana atual (YYYY-MM-DD) */
 function semanaKey() {
@@ -74,7 +75,7 @@ function ScriptCard({ item, isOpen, onToggle }) {
 
           {/* Script */}
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">💬 Script</p>
+            <TituloSecao>💬 Script</TituloSecao>
             <div
               className="rounded-xl p-md relative"
               style={{ background: '#EDF4F0', border: '1px solid #D0E5D9' }}
@@ -92,7 +93,7 @@ function ScriptCard({ item, isOpen, onToggle }) {
 
           {/* Princípio */}
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">🔑 Princípio</p>
+            <TituloSecao>🔑 Princípio</TituloSecao>
             <div className="flex items-start gap-2 bg-amber-50 rounded-xl px-4 py-3 border border-amber-100">
               <p className="text-sm text-amber-800 font-medium leading-relaxed">{item.principio}</p>
             </div>
@@ -100,7 +101,7 @@ function ScriptCard({ item, isOpen, onToggle }) {
 
           {/* Erros comuns */}
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">⚠️ Evite</p>
+            <TituloSecao>⚠️ Evite</TituloSecao>
             <div className="flex flex-wrap gap-2">
               {item.erros_comuns.map((e, i) => (
                 <span
@@ -125,7 +126,7 @@ function AbaScripts() {
 
   return (
     <div className="flex flex-col gap-md">
-      <p className="text-xs text-gray-400 text-center mb-1">
+      <p className="text-xs text-gray-500 text-center mb-1">
         Toque em uma situação para ver o script completo
       </p>
       {scripts.map(item => (
@@ -252,7 +253,7 @@ function AbaChecklist() {
       {n > 0 && n < total && (
         <button
           onClick={() => setMarcados([])}
-          className="text-xs text-gray-300 text-center py-2 hover:text-gray-400 transition-colors"
+          className="text-xs text-gray-500 text-center py-2 hover:text-gray-600 transition-colors"
         >
           Limpar checklist
         </button>
