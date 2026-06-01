@@ -164,7 +164,7 @@ function CardRegistro({ entrada, onDeletar }) {
         borderLeft: emocao ? `4px solid ${emocao.cor}` : '4px solid #E5E7EB',
       }}
     >
-      <div className="px-4 py-3">
+      <div className="px-md py-3">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             {emocao
@@ -236,7 +236,7 @@ function AbaRegistros({ registros, onRecarregar, onNovo }) {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-lg">
       {grupos.map(([dataKey, entradas]) => (
         <div key={dataKey}>
           <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2 capitalize">
@@ -343,10 +343,10 @@ function AbaPatterns({ registros }) {
   insights.push(`📝 ${registros.length} episódio${registros.length > 1 ? 's' : ''} registrado${registros.length > 1 ? 's' : ''} no total`)
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-lg">
 
       {/* Insights */}
-      <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+      <div className="bg-white rounded-2xl p-md" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
         <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">💡 Insights</p>
         <div className="flex flex-col gap-2.5">
           {insights.map((txt, i) => (
@@ -357,7 +357,7 @@ function AbaPatterns({ registros }) {
 
       {/* Emoções mais frequentes */}
       {emocaoOrdenada.length > 0 && (
-        <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+        <div className="bg-white rounded-2xl p-md" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
           <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">
             Emoções mais frequentes
           </p>
@@ -373,7 +373,7 @@ function AbaPatterns({ registros }) {
       )}
 
       {/* Heatmap semanal */}
-      <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+      <div className="bg-white rounded-2xl p-md" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
         <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">
           Dias mais desafiadores
         </p>
@@ -403,7 +403,7 @@ function AbaPatterns({ registros }) {
 
       {/* Estratégias usadas */}
       {acaoOrdenada.length > 0 && (
-        <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+        <div className="bg-white rounded-2xl p-md" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
           <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">
             Estratégias mais usadas
           </p>

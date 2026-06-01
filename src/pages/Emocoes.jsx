@@ -81,7 +81,7 @@ function Ficha({ emocao, onVoltar }) {
             {oque_dizer.map((frase, i) => (
               <div
                 key={i}
-                className="bg-white rounded-xl px-4 py-3 border-l-4"
+                className="bg-white rounded-xl p-md border-l-4"
                 style={{ borderColor: '#4A7C65', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}
               >
                 <p className="text-sm text-gray-700 leading-relaxed">"{frase}"</p>
@@ -96,7 +96,7 @@ function Ficha({ emocao, onVoltar }) {
             {oque_nao_dizer.map((frase, i) => (
               <div
                 key={i}
-                className="bg-white rounded-xl px-4 py-3 border-l-4 border-red-300"
+                className="bg-white rounded-xl p-md border-l-4 border-red-300"
                 style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}
               >
                 <p className="text-sm text-gray-400 italic">"{frase}"</p>
@@ -109,7 +109,7 @@ function Ficha({ emocao, onVoltar }) {
         <Secao titulo="🎨 Atividades que ajudam">
           <div className="flex flex-col gap-2">
             {atividades.map((a, i) => (
-              <div key={i} className="flex items-center gap-3 bg-white rounded-xl px-4 py-3"
+              <div key={i} className="flex items-center gap-3 bg-white rounded-xl p-md"
                 style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
                 <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: cor }} />
                 <p className="text-sm text-gray-700">{a}</p>
@@ -122,7 +122,7 @@ function Ficha({ emocao, onVoltar }) {
         <Secao titulo="📚 Livros indicados">
           <div className="flex flex-col gap-2">
             {livros.map((l, i) => (
-              <div key={i} className="flex items-center gap-3 bg-white rounded-xl px-4 py-3"
+              <div key={i} className="flex items-center gap-3 bg-white rounded-xl p-md"
                 style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
                 <span className="text-lg">📖</span>
                 <p className="text-sm text-gray-700 font-medium">{l}</p>
@@ -178,16 +178,15 @@ function Lista({ onAbrir }) {
         </p>
 
         {/* Grid 2×4 */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+        <div className="gap-md" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
           {emocoes.map(emocao => (
             <button
               key={emocao.id}
               onClick={() => onAbrir(emocao)}
-              className="text-left transition-all active:scale-95 duration-150"
+              className="text-left transition-all active:scale-95 duration-150 p-md"
               style={{
                 background: GRADIENTES[emocao.id] || `linear-gradient(135deg, ${emocao.cor}, ${emocao.cor}BB)`,
                 borderRadius: 16,
-                padding: '14px 12px',
                 minHeight: 90,
                 display: 'flex',
                 flexDirection: 'column',
@@ -208,7 +207,7 @@ function Lista({ onAbrir }) {
 
         {/* Rodapé informativo */}
         <div
-          className="mt-6 rounded-2xl p-4 flex gap-3 items-start"
+          className="mt-6 rounded-2xl p-md flex gap-3 items-start"
           style={{ background: '#EDF4F0' }}
         >
           <span className="text-xl mt-0.5">💡</span>

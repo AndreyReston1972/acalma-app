@@ -76,7 +76,7 @@ function ScriptCard({ item, isOpen, onToggle }) {
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">💬 Script</p>
             <div
-              className="rounded-xl p-4 relative"
+              className="rounded-xl p-md relative"
               style={{ background: '#EDF4F0', border: '1px solid #D0E5D9' }}
             >
               <p className="text-sm text-gray-700 leading-relaxed italic">"{item.script}"</p>
@@ -124,7 +124,7 @@ function AbaScripts() {
   const [aberto, setAberto] = useState(null)
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-md">
       <p className="text-xs text-gray-400 text-center mb-1">
         Toque em uma situação para ver o script completo
       </p>
@@ -139,7 +139,7 @@ function AbaScripts() {
 
       {/* Dica bottom */}
       <div
-        className="rounded-2xl p-4 flex gap-3 mt-2"
+        className="rounded-2xl p-md flex gap-3 mt-2"
         style={{ background: '#EDF4F0' }}
       >
         <span className="text-lg mt-0.5">💡</span>
@@ -178,10 +178,10 @@ function AbaChecklist() {
   const corBarra = n <= 2 ? '#E07060' : n <= 4 ? '#F0C040' : '#4A7C65'
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-lg">
 
       {/* Progresso */}
-      <div className="bg-white rounded-2xl p-4" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+      <div className="bg-white rounded-2xl p-md" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
         <div className="flex items-center justify-between mb-3">
           <p style={{ fontFamily: "'Lora', serif", fontSize: 16, color: '#2D2D2D' }}>Esta semana</p>
           <span className="font-semibold text-sm" style={{ color: corBarra }}>
@@ -238,7 +238,7 @@ function AbaChecklist() {
       {/* Mensagem de conclusão */}
       {n === total && (
         <div
-          className="rounded-2xl p-4 text-center"
+          className="rounded-2xl p-md text-center"
           style={{ background: '#4A7C65', color: 'white' }}
         >
           <p style={{ fontFamily: "'Lora', serif", fontSize: 18, marginBottom: 4 }}>Semana completa! 🌿</p>

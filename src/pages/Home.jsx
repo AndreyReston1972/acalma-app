@@ -154,16 +154,15 @@ export default function Home() {
         )}
       </div>
 
-      <div className="mt-3 flex flex-col" style={{ gap: 12, padding: '0 16px' }}>
+      <div className="mt-3 flex flex-col gap-lg" style={{ padding: '0 16px' }}>
 
         {/* ── Botão SOS ── */}
         <button
           onClick={() => navigate('/sos')}
-          className="sos-pulse active:scale-95 transition-transform duration-150"
+          className="sos-pulse active:scale-95 transition-transform duration-150 p-lg"
           style={{
             background: 'linear-gradient(135deg, #D9503E 0%, #B83D2D 100%)',
             borderRadius: 18,
-            padding: '18px 20px',
             boxShadow: '0 8px 28px rgba(217,80,62,0.45)',
             display: 'flex',
             alignItems: 'center',
@@ -190,7 +189,7 @@ export default function Home() {
 
         {/* ── Banner de sincronização (só aparece se não logada e não dispensada) ── */}
         {!user && !bannerDismissed && (
-          <div style={{ background: '#FFFFFF', borderRadius: 16, padding: '12px 16px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)', display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div className="p-md" style={{ background: '#FFFFFF', borderRadius: 16, boxShadow: '0 2px 12px rgba(0,0,0,0.07)', display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ fontSize: 20 }}>☁️</span>
             <div className="flex-1 min-w-0">
               <p style={{ fontSize: 14, fontWeight: 600, color: '#374151' }}>Salve seu progresso</p>
@@ -215,7 +214,7 @@ export default function Home() {
         )}
 
         {/* ── Progresso semanal ── */}
-        <div style={{ background: '#FFFFFF', borderRadius: '14px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)', padding: '12px 14px', margin: '12px 16px 0' }}>
+        <div className="p-md" style={{ background: '#FFFFFF', borderRadius: '14px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
           <div className="flex items-center justify-between mb-4">
             <p style={{ fontSize: 13, fontWeight: 600, color: '#2D2D2D' }}>Esta semana</p>
             <span style={{ fontSize: 12, color: '#9CA3AF' }}>
@@ -254,10 +253,9 @@ export default function Home() {
         </div>
 
         {/* ── Dica do dia ── */}
-        <div style={{
+        <div className="p-md" style={{
           background: 'linear-gradient(135deg, #F0F7F3 0%, #E8F2ED 100%)',
           borderRadius: 14,
-          padding: '14px 16px',
           borderLeft: '3px solid #4A7C65',
         }}>
           <div className="flex items-center gap-2 mb-2">
@@ -283,7 +281,7 @@ export default function Home() {
         {/* ── Atalhos rápidos ── */}
         <div>
           <p style={{ fontSize: 13, fontWeight: 600, color: '#2D2D2D', marginBottom: 8 }}>Explorar</p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <div className="gap-md" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             {[
               { icon: '💚', label: 'Emoções', sub: '8 fichas completas', rota: '/emocoes' },
               { icon: '🎯', label: 'Limites', sub: '6 scripts práticos', rota: '/limites' },
@@ -293,11 +291,10 @@ export default function Home() {
               <button
                 key={rota}
                 onClick={() => navigate(rota)}
-                className="text-left active:scale-95 transition-transform duration-150"
+                className="text-left active:scale-95 transition-transform duration-150 p-md"
                 style={{
                   background: 'white',
                   borderRadius: 14,
-                  padding: 14,
                   boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
                   cursor: 'pointer',
                 }}
@@ -312,7 +309,7 @@ export default function Home() {
 
         {/* ── Perfil do filho ── */}
         {perfil.idade && (
-          <div style={{ background: '#FFFFFF', borderRadius: 16, padding: 16, boxShadow: '0 2px 12px rgba(0,0,0,0.07)', display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div className="p-md" style={{ background: '#FFFFFF', borderRadius: 16, boxShadow: '0 2px 12px rgba(0,0,0,0.07)', display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ fontSize: 24 }}>👶</span>
             <div className="flex-1 min-w-0">
               <p style={{ fontSize: 14, fontWeight: 500, color: '#374151' }}>Perfil configurado</p>
