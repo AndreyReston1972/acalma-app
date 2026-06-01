@@ -86,6 +86,18 @@ function contarEntradas() {
     .length
 }
 
+/* ── Título de seção (padrão único de hierarquia) ── */
+function TituloSecao({ children, meta }) {
+  return (
+    <div className="flex items-center justify-between mb-sm">
+      <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#6B7280' }}>
+        {children}
+      </p>
+      {meta && <span style={{ fontSize: 12, color: '#6B7280' }}>{meta}</span>}
+    </div>
+  )
+}
+
 /* ── Componente ── */
 export default function Home() {
   const navigate  = useNavigate()
@@ -189,15 +201,15 @@ export default function Home() {
 
         {/* ── Banner de sincronização (só aparece se não logada e não dispensada) ── */}
         {!user && !bannerDismissed && (
-          <div className="p-md" style={{ background: '#FFFFFF', borderRadius: 16, boxShadow: '0 2px 12px rgba(0,0,0,0.07)', display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ fontSize: 20 }}>☁️</span>
+          <div className="p-md" style={{ background: 'transparent', border: '1px solid #EAE6DF', borderRadius: 14, display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ fontSize: 18, opacity: 0.85 }}>☁️</span>
             <div className="flex-1 min-w-0">
-              <p style={{ fontSize: 14, fontWeight: 600, color: '#374151' }}>Salve seu progresso</p>
-              <p style={{ fontSize: 12, color: '#9CA3AF' }}>Acesse de qualquer dispositivo</p>
+              <p style={{ fontSize: 13, fontWeight: 500, color: '#6B7280' }}>Salve seu progresso</p>
+              <p style={{ fontSize: 11, color: '#6B7280' }}>Acesse de qualquer dispositivo</p>
             </div>
             <button
               onClick={() => setAuthOpen(true)}
-              style={{ fontSize: 12, fontWeight: 600, padding: '6px 12px', borderRadius: 8, background: '#EDF4F0', color: '#4A7C65', flexShrink: 0 }}
+              style={{ fontSize: 12, fontWeight: 600, padding: '5px 12px', borderRadius: 8, background: '#EDF4F0', color: '#4A7C65', flexShrink: 0 }}
             >
               Entrar
             </button>
@@ -214,73 +226,57 @@ export default function Home() {
         )}
 
         {/* ── Progresso semanal ── */}
-        <div className="p-md" style={{ background: '#FFFFFF', borderRadius: '14px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
-          <div className="flex items-center justify-between mb-4">
-            <p style={{ fontSize: 13, fontWeight: 600, color: '#2D2D2D' }}>Esta semana</p>
-            <span style={{ fontSize: 12, color: '#9CA3AF' }}>
-              {totalEntradas === 0
-                ? 'Nenhum registro ainda'
-                : `${totalEntradas} registro${totalEntradas > 1 ? 's' : ''}`}
-            </span>
-          </div>
-
-          <div className="flex justify-between">
-            {dias.map(({ label, isHoje, isFuturo, temEntrada }) => (
-              <div key={label} className="flex flex-col items-center gap-1.5">
-                <span style={{ fontSize: 10, color: '#9CA3AF' }}>{label}</span>
-                <div
-                  className="flex items-center justify-center"
-                  style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: '50%',
-                    fontSize: 12,
-                    fontWeight: 500,
-                    background: isHoje
-                      ? '#4A7C65'
-                      : temEntrada
-                        ? '#D0E5D9'
-                        : '#F3F4F6',
-                    color: isHoje ? 'white' : temEntrada ? '#2C5040' : '#D1D5DB',
-                    border: isHoje ? '2px solid #2C5040' : '2px solid transparent',
-                  }}
-                >
-                  {temEntrada ? '✓' : '·'}
+        <div>
+          <TituloSecao meta={totalEntradas === 0 ? 'Nenhum registro ainda' : `${totalEntradas} registro${totalEntradas > 1 ? 's' : ''}`}>
+            Esta semana
+          </TituloSecao>
+          <div className="p-md" style={{ background: '#FFFFFF', borderRadius: '14px', boxShadow: '0 2px 12px rgba(0,0,0,0.07)' }}>
+            <div className="flex justify-between">
+              {dias.map(({ label, isHoje, isFuturo, temEntrada }) => (
+                <div key={label} className="flex flex-col items-center gap-1.5">
+                  <span style={{ fontSize: 10, color: '#9CA3AF' }}>{label}</span>
+                  <div
+                    className="flex items-center justify-center"
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: '50%',
+                      fontSize: 12,
+                      fontWeight: 500,
+                      background: isHoje
+                        ? '#4A7C65'
+                        : temEntrada
+                          ? '#D0E5D9'
+                          : '#F3F4F6',
+                      color: isHoje ? 'white' : temEntrada ? '#2C5040' : '#D1D5DB',
+                      border: isHoje ? '2px solid #2C5040' : '2px solid transparent',
+                    }}
+                  >
+                    {temEntrada ? '✓' : '·'}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
         {/* ── Dica do dia ── */}
-        <div className="p-md" style={{
-          background: 'linear-gradient(135deg, #F0F7F3 0%, #E8F2ED 100%)',
-          borderRadius: 14,
-          borderLeft: '3px solid #4A7C65',
-        }}>
-          <div className="flex items-center gap-2 mb-2">
-            <span style={{ fontSize: 12, fontWeight: 600, color: '#4A7C65', letterSpacing: '0.5px' }}>
-              💡 Dica do dia
-            </span>
-            <span style={{
-              fontSize: 10,
-              padding: '2px 8px',
-              borderRadius: 20,
-              background: 'rgba(74,124,101,0.12)',
-              color: '#2E5540',
-              marginLeft: 'auto',
-            }}>
-              {dica.tag}
-            </span>
+        <div>
+          <TituloSecao meta={dica.tag}>Dica de hoje</TituloSecao>
+          <div className="p-md" style={{
+            background: 'linear-gradient(135deg, #F0F7F3 0%, #E8F2ED 100%)',
+            borderRadius: 14,
+            borderLeft: '3px solid #4A7C65',
+          }}>
+            <p style={{ fontFamily: "'Lora', serif", fontStyle: 'italic', fontSize: 13, color: '#2D2D2D', lineHeight: 1.6 }}>
+              {dica.texto}
+            </p>
           </div>
-          <p style={{ fontFamily: "'Lora', serif", fontStyle: 'italic', fontSize: 13, color: '#2D2D2D', lineHeight: 1.6 }}>
-            {dica.texto}
-          </p>
         </div>
 
         {/* ── Atalhos rápidos ── */}
         <div>
-          <p style={{ fontSize: 13, fontWeight: 600, color: '#2D2D2D', marginBottom: 8 }}>Explorar</p>
+          <TituloSecao>Explorar</TituloSecao>
           <div className="gap-md" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             {[
               { icon: '💚', label: 'Emoções', sub: '8 fichas completas', rota: '/emocoes' },
@@ -309,20 +305,20 @@ export default function Home() {
 
         {/* ── Perfil do filho ── */}
         {perfil.idade && (
-          <div className="p-md" style={{ background: '#FFFFFF', borderRadius: 16, boxShadow: '0 2px 12px rgba(0,0,0,0.07)', display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ fontSize: 24 }}>👶</span>
+          <div className="p-md" style={{ background: 'transparent', border: '1px solid #EAE6DF', borderRadius: 14, display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ fontSize: 20, opacity: 0.85 }}>👶</span>
             <div className="flex-1 min-w-0">
-              <p style={{ fontSize: 14, fontWeight: 500, color: '#374151' }}>Perfil configurado</p>
-              <p style={{ fontSize: 12, color: '#9CA3AF', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <p style={{ fontSize: 13, fontWeight: 500, color: '#6B7280' }}>Perfil configurado</p>
+              <p style={{ fontSize: 11, color: '#6B7280', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {idadeLabel[perfil.idade]} · {desafioLabel[perfil.desafio] || 'sem desafio'}
               </p>
               {user && (
-                <p style={{ fontSize: 10, color: '#D1D5DB', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>☁️ {user.email}</p>
+                <p style={{ fontSize: 10, color: '#9CA3AF', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>☁️ {user.email}</p>
               )}
             </div>
             <button
               onClick={() => setAuthOpen(true)}
-              style={{ fontSize: 12, color: '#D1D5DB', flexShrink: 0 }}
+              style={{ fontSize: 12, color: '#9CA3AF', flexShrink: 0 }}
             >
               {user ? '☁️' : '↗'}
             </button>
