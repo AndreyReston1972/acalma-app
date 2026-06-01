@@ -94,13 +94,13 @@ export default function Onboarding() {
           ))}
         </div>
 
-        <p className="text-xs font-medium mb-2" style={{ color: 'var(--color-verde-light)' }}>
+        <p className="text-xs font-medium mb-2" style={{ color: 'var(--color-verde)' }}>
           PASSO {passo + 1} DE {passos.length}
         </p>
         <h2 className="font-lora text-2xl text-gray-800 leading-snug mb-2">
           {passoAtual.titulo}
         </h2>
-        <p className="text-sm text-gray-500 leading-relaxed">
+        <p className="text-sm text-gray-600 leading-relaxed">
           {passoAtual.subtitulo}
         </p>
       </div>
@@ -133,7 +133,7 @@ export default function Onboarding() {
                     >
                       {opcao.label}
                     </p>
-                    <p className="text-xs text-gray-400 leading-tight">{opcao.desc}</p>
+                    <p className="text-xs text-gray-500 leading-tight">{opcao.desc}</p>
                   </div>
                 ) : (
                   /* Layout lista */
@@ -146,7 +146,7 @@ export default function Onboarding() {
                       >
                         {opcao.label}
                       </p>
-                      <p className="text-xs text-gray-400 mt-0.5">{opcao.desc}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">{opcao.desc}</p>
                     </div>
                     {ativo && (
                       <span className="text-base font-bold" style={{ color: 'var(--color-verde)' }}>✓</span>
@@ -179,7 +179,7 @@ export default function Onboarding() {
         {passo > 0 && (
           <button
             onClick={voltar}
-            className="w-full mt-3 py-2 text-sm text-gray-400 hover:text-gray-600 transition-colors"
+            className="w-full mt-3 py-2 text-sm text-gray-600 hover:text-gray-700 transition-colors"
           >
             ← Voltar
           </button>

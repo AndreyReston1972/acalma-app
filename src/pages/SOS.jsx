@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { emocoes } from '../data/emocoes'
+import TituloSecao from '../components/TituloSecao'
 
 const ACOES = [
   { id: 'espaco',  label: 'Dar espaço',      desc: 'Fique perto sem falar. Presença sem pressão.',              emoji: '🤲' },
@@ -50,15 +51,15 @@ function Respira({ onAvancar, onSair }) {
       {/* Fechar */}
       <button
         onClick={onSair}
-        className="absolute right-6 text-white/50 text-2xl leading-none"
+        className="absolute right-6 text-white/80 text-2xl leading-none"
         style={{ top: 'calc(env(safe-area-inset-top) + 48px)' }}
       >✕</button>
 
       {/* Cabeçalho */}
       <div className="text-center">
-        <p className="text-white/50 text-xs uppercase tracking-widest mb-2">Passo 1 de 4</p>
+        <p className="text-white/70 text-xs uppercase tracking-widest mb-2">Passo 1 de 4</p>
         <h2 className="font-lora text-2xl text-white mb-1">Respira primeiro</h2>
-        <p className="text-white/60 text-sm">Você só pode acalmar ela se estiver regulada.</p>
+        <p className="text-white/70 text-sm">Você só pode acalmar ela se estiver regulada.</p>
       </div>
 
       {/* Círculo de respiração */}
@@ -85,7 +86,7 @@ function Respira({ onAvancar, onSair }) {
 
         <div className="text-center">
           <p className="font-lora text-xl text-white mb-1">{faseTxt[fase]}</p>
-          <p className="text-white/40 text-xs">4s · 4s · 6s</p>
+          <p className="text-white/55 text-xs">4s · 4s · 6s</p>
         </div>
 
         {/* Timer circular */}
@@ -143,7 +144,7 @@ function Identifica({ emocaoId, onSelecionar, onAvancar, onVoltar }) {
                 style={{ background: i <= 2 ? 'var(--color-verde)' : '#D0E5D9' }} />
             ))}
           </div>
-          <span className="text-xs text-gray-400">2 / 4</span>
+          <span className="text-xs text-gray-500">2 / 4</span>
         </div>
         <h2 className="font-lora text-xl text-gray-800 mb-1">Qual emoção você vê nela?</h2>
         <p className="text-sm text-gray-500">Toque para identificar o que está acontecendo.</p>
@@ -214,14 +215,14 @@ function Protocolo({ emocaoId, acoes, onToggleAcao, onAvancar, onVoltar }) {
                 style={{ background: i <= 3 ? 'var(--color-verde)' : '#D0E5D9' }} />
             ))}
           </div>
-          <span className="text-xs text-gray-400">3 / 4</span>
+          <span className="text-xs text-gray-500">3 / 4</span>
         </div>
 
         {emocao && (
           <div className="flex items-center gap-2 mb-3">
             <span className="text-2xl">{emocao.emoji}</span>
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wide">Emoção identificada</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">Emoção identificada</p>
               <h2 className="font-lora text-xl text-gray-800">{emocao.nome}</h2>
             </div>
           </div>
@@ -233,7 +234,7 @@ function Protocolo({ emocaoId, acoes, onToggleAcao, onAvancar, onVoltar }) {
         {/* O que dizer */}
         {emocao && (
           <div>
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">💬 Diga isso agora</p>
+            <TituloSecao>💬 Diga isso agora</TituloSecao>
             <div className="flex flex-col gap-2">
               {emocao.oque_dizer.map((frase, i) => (
                 <div key={i} className="bg-white rounded-xl px-4 py-3 border-l-4"
@@ -248,7 +249,7 @@ function Protocolo({ emocaoId, acoes, onToggleAcao, onAvancar, onVoltar }) {
         {/* O que NÃO dizer */}
         {emocao && (
           <div>
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">🚫 Evite dizer</p>
+            <TituloSecao>🚫 Evite dizer</TituloSecao>
             <div className="flex flex-col gap-2">
               {emocao.oque_nao_dizer.slice(0, 2).map((frase, i) => (
                 <div key={i} className="bg-white rounded-xl px-4 py-3 border-l-4 border-red-300">
@@ -261,7 +262,7 @@ function Protocolo({ emocaoId, acoes, onToggleAcao, onAvancar, onVoltar }) {
 
         {/* Ações práticas */}
         <div>
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">🎯 Ação — marque o que vai fazer</p>
+          <TituloSecao>🎯 Ação — marque o que vai fazer</TituloSecao>
           <div className="flex flex-col gap-2">
             {ACOES.map(acao => {
               const ativo = acoes.includes(acao.id)
@@ -286,7 +287,7 @@ function Protocolo({ emocaoId, acoes, onToggleAcao, onAvancar, onVoltar }) {
                   </div>
                   <div>
                     <p className="font-semibold text-sm text-gray-700">{acao.emoji} {acao.label}</p>
-                    <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">{acao.desc}</p>
+                    <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{acao.desc}</p>
                   </div>
                 </button>
               )
@@ -326,7 +327,7 @@ function Registra({ registro, onMudar, onSalvar, onPular, onVoltar }) {
               <div key={i} className="h-1 flex-1 rounded-full" style={{ background: 'var(--color-verde)' }} />
             ))}
           </div>
-          <span className="text-xs text-gray-400">4 / 4</span>
+          <span className="text-xs text-gray-500">4 / 4</span>
         </div>
         <h2 className="font-lora text-xl text-gray-800 mb-1">Registra o que aconteceu</h2>
         <p className="text-sm text-gray-500">Padrões só aparecem com registros. Leva 1 minuto.</p>
@@ -364,7 +365,7 @@ function Registra({ registro, onMudar, onSalvar, onPular, onVoltar }) {
         >
           Salvar registro 📔
         </button>
-        <button onClick={onPular} className="w-full py-2 text-sm text-gray-400">
+        <button onClick={onPular} className="w-full py-2 text-sm text-gray-600">
           Pular registro
         </button>
       </div>
@@ -428,7 +429,7 @@ function Sucesso({ emocaoId, navigate }) {
         <button
           onClick={() => navigate('/diario')}
           className="w-full py-3 text-sm"
-          style={{ color: 'rgba(255,255,255,0.6)' }}
+          style={{ color: 'rgba(255,255,255,0.8)' }}
         >
           Ver meu diário →
         </button>
