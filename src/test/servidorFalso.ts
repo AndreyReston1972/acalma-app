@@ -5,7 +5,7 @@
  */
 import type { EstadoServidor, ServicoConta, Sessao } from '../conta/servico'
 import { ErroDeRede } from '../conta/servico'
-import type { LinhaCombinado, LinhaFavorito, LinhaRegistro, RespostaSinc } from '../armazenamento/sincronizacao'
+import type { LinhaCombinado, LinhaFavorito, LinhaRegistro, RespostaServidorSinc, RespostaSinc } from '../armazenamento/sincronizacao'
 
 interface Conta {
   sessao: Sessao
@@ -80,7 +80,7 @@ export class ServidorFalso {
 /** Um "aparelho": serviço de conta falando com o servidor falso. */
 export function aparelho(srv: ServidorFalso) {
   let sessao: Sessao | null = null
-  const estado = { online: true, codigosEnviados: [] as string[], aceites: 0, sincronizacoes: 0 }
+  const estado = { online: true, codigosEnviados: [] as string[], aceites: 0, sincronizacoes: 0, marketing: [] as boolean[], recusadasSemAcesso: 0 }
   const exigirRede = () => {
     if (!estado.online) throw new ErroDeRede('offline')
   }
@@ -107,13 +107,32 @@ export function aparelho(srv: ServidorFalso) {
       exigirRede()
       return [...srv.contas.values()].find((c) => c.sessao.userId === sessao?.userId)?.acesso ?? 'sem_sessao'
     },
-    async sincronizar(m, desde) {
+    async sincronizar(m, desde): Promise<RespostaServidorSinc> {
       exigirRede()
       estado.sincronizacoes++
+      // Mesma regra da RPC: sem acesso ativo, nada é gravado.
+      const acesso = [...srv.contas.values()].find((c) => c.sessao.userId === sessao?.userId)?.acesso
+      if (acesso !== 'ativo') {
+        estado.recusadasSemAcesso++
+        return { sem_acesso: true, servidor_em: srv.agora() }
+      }
       return srv.sincronizar(sessao!.userId, JSON.parse(JSON.stringify(m)), desde)
     },
     async registrarAceites() {
+      exigirRede()
       estado.aceites++
+    },
+    async definirMarketing(aceita) {
+      exigirRede()
+      estado.marketing.push(aceita)
+    },
+    async marketingAtual() {
+      return estado.marketing.length ? estado.marketing[estado.marketing.length - 1] : null
+    },
+    async exportarMeusDados() {
+      exigirRede()
+      const uid = sessao!.userId
+      return { combinados: [...srv.combinados.values()].filter((c) => c.user_id === uid && !c.excluido_em).map((c) => c.nome) }
     },
     async excluirMeusDados() {
       exigirRede()

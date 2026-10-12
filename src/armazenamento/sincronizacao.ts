@@ -130,6 +130,15 @@ export interface RespostaSinc {
   rejeitados: { tipo: string; id: string; motivo: string }[]
 }
 
+/**
+ * O servidor só grava com direito de acesso (migration 20261012120000). Sem ele, responde
+ * sem_acesso e não aplica NADA: o aparelho mantém a fila intacta, sem descartar anotações
+ * ou combinados, e confere o acesso de novo.
+ */
+export type RespostaServidorSinc = RespostaSinc | { sem_acesso: true; servidor_em: string }
+export const semAcesso = (r: RespostaServidorSinc): r is { sem_acesso: true; servidor_em: string } =>
+  (r as { sem_acesso?: boolean }).sem_acesso === true
+
 /** Visão mínima do estado local que a mesclagem precisa ler e escrever. */
 export interface Local {
   combinados: { id: string; nome: string; modeloId: ModeloId | null; passos: AcaoId[]; criadoEm: string; atualizadoEm: string }[]

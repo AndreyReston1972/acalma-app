@@ -83,3 +83,24 @@ export function lerRegistrosAnteriores(armazenamento: Storage | null = typeof wi
   }
   return out.sort((a, b) => b.criadoEm.localeCompare(a.criadoEm))
 }
+
+/**
+ * Todas as chaves do app anterior ("acalma_*", com sublinhado), cruas e sem alteração,
+ * para a cópia que a pessoa baixa. Não inclui as chaves do app atual ("acalma.").
+ */
+export function lerChavesAnteriores(armazenamento: Storage | null = typeof window !== 'undefined' ? window.localStorage : null): Record<string, string> {
+  const out: Record<string, string> = {}
+  if (!armazenamento) return out
+  try {
+    for (let i = 0; i < armazenamento.length; i++) {
+      const k = armazenamento.key(i) ?? ''
+      if (k.startsWith('acalma_')) out[k] = armazenamento.getItem(k) ?? ''
+    }
+  } catch {
+    /* armazenamento indisponível */
+  }
+  return out
+}
+
+/** Há algo do app anterior neste navegador? (aviso de transição) */
+export const temDadosAnteriores = () => Object.keys(lerChavesAnteriores()).length > 0

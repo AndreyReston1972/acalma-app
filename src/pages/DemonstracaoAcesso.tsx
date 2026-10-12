@@ -31,6 +31,9 @@ export function DemonstracaoAcesso() {
         simulacao
         onTentar={() => new Promise((r) => setTimeout(r, 600))}
         onTrocarEmail={() => {}}
+        onExportar={() => new Promise((r) => setTimeout(r, 400))}
+        onExcluir={() => new Promise((r) => setTimeout(r, 400))}
+        pendentes={escolhida.id === 'revogado' ? 2 : 0}
       />
     )
   }

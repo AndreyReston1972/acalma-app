@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && tsc -p tsconfig.sw.json && vite build",
+    "build": "tsc && tsc -p tsconfig.sw.json && node scripts/verificar-publicacao.mjs && vite build",
     "lint": "eslint .",
     "test": "vitest run",
     "preview": "vite preview"

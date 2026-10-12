@@ -25,6 +25,7 @@ function abrir(servico: ServicoConta, rota = '/') {
 
 async function entrarPorCodigo(u: ReturnType<typeof userEvent.setup>, email: string) {
   await u.type(await screen.findByRole('textbox', { name: 'E-mail' }), email)
+  await u.click(screen.getByRole('checkbox', { name: /li e aceito os termos/i }))
   await u.click(screen.getByRole('button', { name: 'Receber código' }))
   await u.type(await screen.findByRole('textbox', { name: /código de 6 dígitos/i }), '123456')
   await u.click(screen.getByRole('button', { name: 'Entrar' }))
@@ -54,6 +55,7 @@ describe('entrar e acesso', () => {
     const u = userEvent.setup()
     abrir(ap.servico)
     await u.type(await screen.findByRole('textbox', { name: 'E-mail' }), 'a@teste.dev')
+    await u.click(screen.getByRole('checkbox', { name: /li e aceito os termos/i }))
     await u.click(screen.getByRole('button', { name: 'Receber código' }))
     await u.type(await screen.findByRole('textbox', { name: /código/i }), '000000')
     await u.click(screen.getByRole('button', { name: 'Entrar' }))

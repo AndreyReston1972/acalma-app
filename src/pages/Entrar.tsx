@@ -5,11 +5,17 @@ import { useAviso } from '../components/Aviso'
 import { botaoPrimario, botaoTexto, margem } from '../components/ui'
 import { Cena } from '../ilustracoes/Cena'
 import { useConta } from '../conta/Conta'
-import { ErroDeRede } from '../conta/servico'
+import { ErroDeRede, ErroLimiteDeEnvio } from '../conta/servico'
+import { temDadosAnteriores } from '../armazenamento/legado'
+import { JANELA_OFFLINE_DIAS } from '../config'
 
 /*
- * Entrada: e-mail → código de 6 dígitos. Sem senha, sem cadastro extenso, sem
- * dados da criança, sem aceite de marketing. Mesma conta da Nina, se a pessoa já tiver.
+ * Entrada: e-mail → código de 6 dígitos. Sem senha, sem cadastro extenso, sem dados da
+ * criança. Mesma conta da Nina, se a pessoa já tiver.
+ *   • Aceite dos termos e da privacidade: AÇÃO EXPLÍCITA (caixa), registrado com versão e data.
+ *   • Novidades por e-mail: caixa separada e opcional; não é condição para nada.
+ *   • Quem tem dados do app anterior neste navegador vê o aviso de transição e pode
+ *     baixá-los sem comprar (/registros-anteriores).
  */
 export function Entrar({ simulacao = false }: { simulacao?: boolean }) {
   const conta = useConta()
@@ -21,6 +27,9 @@ export function Entrar({ simulacao = false }: { simulacao?: boolean }) {
   const [erro, setErro] = useState('')
   const [enviando, setEnviando] = useState(false)
   const [reenviarEm, setReenviarEm] = useState(0)
+  const [aceite, setAceite] = useState(false)
+  const [marketing, setMarketing] = useState(false)
+  const [anteriores] = useState(temDadosAnteriores)
 
   useEffect(() => {
     if (reenviarEm <= 0) return
@@ -35,7 +44,7 @@ export function Entrar({ simulacao = false }: { simulacao?: boolean }) {
   const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())
 
   async function enviar() {
-    if (!emailValido || enviando) return
+    if (!emailValido || !aceite || enviando) return
     setEnviando(true)
     setErro('')
     try {
@@ -44,7 +53,13 @@ export function Entrar({ simulacao = false }: { simulacao?: boolean }) {
       setEtapa('codigo')
       setReenviarEm(60)
     } catch (e) {
-      setErro(e instanceof ErroDeRede ? 'Sem conexão. Confira a internet e tente de novo.' : 'Não foi possível enviar o código agora. Tente de novo em instantes.')
+      setErro(
+        e instanceof ErroDeRede
+          ? 'Sem conexão. Confira a internet e tente de novo.'
+          : e instanceof ErroLimiteDeEnvio
+            ? 'Muitos pedidos de código seguidos. Aguarde um minuto e tente de novo.'
+            : 'Não foi possível enviar o código agora. Tente de novo em instantes.',
+      )
     } finally {
       setEnviando(false)
     }
@@ -60,11 +75,16 @@ export function Entrar({ simulacao = false }: { simulacao?: boolean }) {
         navegar('/demonstracao/acesso', { replace: true })
         return
       }
-      const d = await conta.confirmarCodigo(email, codigo)
+      const d = await conta.confirmarCodigo(email, codigo, { marketing })
       if (d.tipo === 'liberado') avisar('Acesso liberado', '/')
       navegar('/', { replace: true })
     } catch (e) {
-      setErro(e instanceof ErroDeRede ? 'Sem conexão. Confira a internet e tente de novo.' : 'Código incorreto ou vencido. Confira o e-mail mais recente.')
+      // Errado, vencido ou já usado: o servidor não distingue; o caminho é o mesmo.
+      setErro(
+        e instanceof ErroDeRede
+          ? 'Sem conexão. Confira a internet e tente de novo.'
+          : 'Código incorreto, vencido ou já usado. Confira o e-mail mais recente ou peça um novo código.',
+      )
     } finally {
       setEnviando(false)
     }
@@ -93,6 +113,17 @@ export function Entrar({ simulacao = false }: { simulacao?: boolean }) {
           >
             <h1 className="font-display text-[1.875rem] font-semibold leading-[1.12] text-verde-profundo">Entrar no Acalma</h1>
             <p className="mt-2 text-texto-2">Use o e-mail da sua compra. Enviamos um código de 6 dígitos, sem senha.</p>
+            {anteriores && (
+              <div className="mt-4 rounded-[var(--radius-cartao)] bg-bege p-4 text-[0.9375rem] leading-relaxed text-texto">
+                <p className="font-semibold">O Acalma mudou</p>
+                <p className="mt-1 text-texto-2">
+                  Os registros da versão anterior continuam neste aparelho, sem alteração. Você pode baixá-los sem comprar.
+                </p>
+                <Link to="/registros-anteriores" className={`${botaoTexto} -ml-4`}>
+                  Ver e baixar meus registros antigos
+                </Link>
+              </div>
+            )}
             <label htmlFor="email" className="mt-6 block font-semibold text-texto">
               E-mail
             </label>
@@ -115,13 +146,23 @@ export function Entrar({ simulacao = false }: { simulacao?: boolean }) {
                 {erro}
               </p>
             )}
-            <button type="submit" disabled={!emailValido || enviando} className={`${botaoPrimario} mt-6`}>
+            <p className="mt-4 text-[0.875rem] leading-relaxed text-texto-2">
+              Depois de entrar, funciona sem internet. Uma conexão a cada {JANELA_OFFLINE_DIAS} dias confirma o seu acesso.
+            </p>
+            <label className="mt-4 flex min-h-12 items-start gap-3 text-[0.9375rem] leading-snug text-texto">
+              <input type="checkbox" checked={aceite} onChange={(e) => setAceite(e.target.checked)} className="mt-0.5 size-5 shrink-0 accent-verde" />
+              <span>
+                Li e aceito os <Link className="underline" to="/termos">termos de uso</Link> e a{' '}
+                <Link className="underline" to="/privacidade">política de privacidade</Link> do Acalma.
+              </span>
+            </label>
+            <label className="mt-2 flex min-h-12 items-start gap-3 text-[0.9375rem] leading-snug text-texto-2">
+              <input type="checkbox" checked={marketing} onChange={(e) => setMarketing(e.target.checked)} className="mt-0.5 size-5 shrink-0 accent-verde" />
+              <span>Quero receber novidades da NexoEdu por e-mail (opcional).</span>
+            </label>
+            <button type="submit" disabled={!emailValido || !aceite || enviando} className={`${botaoPrimario} mt-5`}>
               {enviando ? 'Enviando…' : 'Receber código'}
             </button>
-            <p className="mt-4 text-[0.8125rem] leading-relaxed text-texto-2">
-              Ao continuar, você concorda com os <Link className="underline" to="/termos">termos de uso</Link> e a{' '}
-              <Link className="underline" to="/privacidade">política de privacidade</Link> do Acalma.
-            </p>
           </form>
         ) : (
           <form

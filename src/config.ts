@@ -1,3 +1,5 @@
+import { privacidade, termos } from './content/documentos'
+
 /*
  * Dois modos, decididos no build:
  *
@@ -30,13 +32,17 @@ export const CONFIG = {
 export const emDemonstracao = () => CONFIG.modo === 'demonstracao'
 
 /*
- * Janela de uso sem conexão depois da última confirmação de acesso.
- * PROPOSTA (decisão de negócio pendente): 30 dias. Dentro dela, a ajuda e os
- * combinados abrem sem rede; depois, o app pede conexão uma vez para confirmar.
- * Um reembolso só chega ao aparelho quando ele se conectar.
+ * Janela de uso sem conexão: 30 dias (decidido em 13/10/2026 para a primeira versão),
+ * contados da última confirmação de acesso BEM-SUCEDIDA com o servidor. Falha de rede
+ * não renova o prazo. Revogação confirmada online encerra o acesso na hora.
  */
 export const JANELA_OFFLINE_DIAS = 30
 
-/** Versões dos documentos (rascunhos) que a pessoa aceita ao entrar. */
-export const VERSAO_TERMOS = '2026-10-rascunho'
-export const VERSAO_PRIVACIDADE = '2026-10-rascunho'
+/** Versões dos documentos que a pessoa aceita, com ação explícita, ao entrar. */
+export const VERSAO_TERMOS = termos.versao
+export const VERSAO_PRIVACIDADE = privacidade.versao
+/** Versão do texto do consentimento opcional de marketing por e-mail. */
+export const VERSAO_MARKETING = '2026-10-13'
+
+/** Nina (opcional). Sem ela, o convite "Conhecer a Nina" não aparece no modo integrado. */
+export const NINA_URL = (env.VITE_NINA_URL as string | undefined) ?? ''

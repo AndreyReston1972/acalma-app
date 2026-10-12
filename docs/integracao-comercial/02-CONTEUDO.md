@@ -1,4 +1,4 @@
-# Conteúdo do Acalma: inventário e revisão (12/10/2026)
+# Conteúdo do Acalma: inventário e revisão (revisado em 13/10/2026)
 
 A biblioteca **não foi ampliada** nesta rodada. Todo o conteúdo está com `estado: 'rascunho'`.
 Nenhum texto do app afirma validação por especialistas.
@@ -12,7 +12,7 @@ Cada situação tem: o que fazer agora, uma frase pronta, o que fazer depois e c
 |---|---|---|
 | Desligar a tela | Ainda está difícil · Pede "só mais um" · Não quer minha ajuda | Encerrar a tela |
 | Ouvir um "não" | Estamos em público · Quero rever o não | — |
-| Ir embora | Pede para ficar mais · Não quer andar · Estamos em público | Sair de casa |
+| Ir embora | Pede para ficar mais · Não quer andar · Estamos em público | — (sem atalho: sair do parque ou de uma visita não é a rotina "Sair de casa"; o catálogo não tem modelo adequado) |
 | Banho ou troca de roupa | Não quer entrar no banho · Parece que algo incomoda | Hora do banho |
 | Guardar brinquedos | Estava no meio da brincadeira · Ainda está difícil | — |
 | Outra situação | Ainda está difícil · Não quer minha ajuda | — |
@@ -31,9 +31,14 @@ Rascunhos de termos de uso e privacidade, escritos para corresponder ao que o ap
 Trechos entre colchetes (razão social, CNPJ, canal de suporte, foro, prazos) aguardam o jurídico.
 A tela mostra "Rascunho em revisão jurídica".
 
-## Faixa etária proposta
+### Correção desta revisão
+O inventário anterior listava por engano "Ir embora → Sair de casa". **No código, o atalho já não existia** (foi removido no refinamento, ver `docs/prototipo/LEIA-ME.md`). O erro era só deste documento. Agora a correção está presa por teste (`src/test/comercial.test.tsx`: os dados e a tela de "Ir embora" não oferecem modelo) e conferida no navegador a 360, 390 e 412 px ("Ir embora com modelo: false"). A biblioteca não foi ampliada.
 
-**2 a 6 anos** (pré-escola). Justificativa: as situações (tela, sair, banho, brinquedos, ouvir
+Preservado: ajuda em até dois toques (Início → situação), orientação curta e concreta, modelos prontos e editáveis antes de salvar. Nada de pontuação, culpa ou sequência obrigatória.
+
+## Faixa etária (DECISÃO FINAL PENDENTE)
+
+Proposta, não decidida: **2 a 6 anos** (pré-escola). Justificativa: as situações (tela, sair, banho, brinquedos, ouvir
 "não") e o formato visual do combinado (figuras, até 5 passos) servem a crianças que ainda não
 leem. Acima de 7 anos o combinado ilustrado tende a soar infantil; abaixo de 2, a frase pronta
 e a escolha entre duas opções têm pouco efeito.
@@ -41,6 +46,8 @@ O app não pede idade, nome, data de nascimento nem foto da criança, e a faixa 
 só na comunicação comercial e nos termos. **Decisão de negócio + revisão profissional.**
 
 ## Pontos para revisão profissional (psicologia infantil / pediatria)
+
+**Nenhum destes pontos foi revisado ou validado ainda.** O app não diz que foi.
 
 1. **"Parece que algo incomoda" (banho):** sugere ajustes sensoriais. Precisa de orientação de
    quando procurar avaliação, sem rotular (nada de "isso é sensorial/TEA").
@@ -63,8 +70,9 @@ Verificado em teste automatizado e em navegador (360/390/412 px):
 
 ## Aparelho × sincronização (texto para a pessoa)
 
-> **Neste aparelho:** o Acalma funciona sem internet depois da primeira entrada. O que você
-> salva fica guardado aqui primeiro.
+> **Neste aparelho:** o Acalma funciona sem internet depois da primeira entrada. Uma conexão a
+> cada 30 dias confirma o seu acesso; uma tentativa sem internet não conta. O que você salva fica
+> guardado aqui primeiro.
 >
 > **Na sua conta:** quando há internet, combinados, orientações salvas e registros vão para a sua
 > conta NexoEdu. Assim aparecem em outro celular em que você entrar com o mesmo e-mail.
@@ -72,6 +80,11 @@ Verificado em teste automatizado e em navegador (360/390/412 px):
 > **Ao sair:** você escolhe se apaga a cópia deste aparelho. O que já foi para a conta continua lá.
 >
 > **Excluir dados do Acalma:** apaga combinados, orientações salvas e registros da conta e deste
-> aparelho. Sua compra e sua conta continuam.
+> aparelho. Sua compra e sua conta continuam. Dá para baixar uma cópia antes, mesmo sem compra ativa.
+>
+> **Limites do armazenamento do navegador:** limpar os dados do site, usar outro navegador ou o
+> modo anônimo, ou o sistema liberar espaço apaga a cópia deste aparelho. O que já foi para a conta
+> volta ao entrar; o que não foi enviado se perde. A versão anterior do Acalma guardava tudo só no
+> navegador: não temos cópia desses registros e não há como identificar todos os usuários antigos.
 >
 > Não pedimos dados da criança. Evite escrever nomes ou informações de saúde nas anotações.

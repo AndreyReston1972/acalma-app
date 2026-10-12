@@ -7,11 +7,13 @@ import {
   apagarCopiaLocalDaConta,
   cursorDeSincronizacao,
   filaPendente,
+  lerEstado,
   ultimaSincronizacao,
   usarEspacoDaConta,
   usarEspacoDemonstracao,
 } from '../armazenamento/armazenamento'
-import { montarMudancas } from '../armazenamento/sincronizacao'
+import { montarMudancas, semAcesso } from '../armazenamento/sincronizacao'
+import { baixarJson, montarMeusDados, nomeArquivo } from './exportacao'
 import { decidirAcesso, esquecerAcesso, guardarAcesso, lerAcessoGuardado, type Decisao, type ResultadoServidor } from './acesso'
 import { ErroDeRede, servicoSupabase, type ServicoConta, type Sessao } from './servico'
 
@@ -22,11 +24,16 @@ interface ValorConta {
   situacao: Situacao
   sessao: Sessao | null
   enviarCodigo(email: string): Promise<void>
-  confirmarCodigo(email: string, codigo: string): Promise<Decisao>
+  /** O aceite dos termos já foi dado na tela (ação explícita); marketing é opcional. */
+  confirmarCodigo(email: string, codigo: string, opcoes?: { marketing?: boolean }): Promise<Decisao>
   verificar(): Promise<Decisao | null>
   sincronizarAgora(): Promise<void>
   sair(apagarCopiaLocal: boolean): Promise<void>
   excluirMeusDados(): Promise<void>
+  /** Baixa a cópia dos dados (conta, se houver rede, + este aparelho + não enviados). Sem compra. */
+  exportarMeusDados(): Promise<{ incluiuConta: boolean; baixou: boolean }>
+  definirMarketing(aceita: boolean): Promise<void>
+  marketingAtual(): Promise<boolean | null>
   sinc: { emAndamento: boolean; ultimaEm: string | null; pendentes: number; falhou: boolean }
 }
 
@@ -42,7 +49,35 @@ const DEMONSTRACAO: ValorConta = {
   sincronizarAgora: async () => {},
   sair: async () => {},
   excluirMeusDados: async () => {},
+  exportarMeusDados: async () => {
+    const e = lerEstado()
+    const agora = new Date()
+    const baixou = baixarJson(nomeArquivo('acalma-demonstracao', agora), montarMeusDados({
+      email: null, agora, conta: null, local: { combinados: e.combinados, favoritos: e.favoritos, registros: e.registros }, naoEnviadas: [],
+    }))
+    return { incluiuConta: false, baixou }
+  },
+  definirMarketing: async () => {},
+  marketingAtual: async () => null,
   sinc: { emAndamento: false, ultimaEm: null, pendentes: 0, falhou: false },
+}
+
+/* Aceite dado na tela que ainda não chegou ao servidor (queda de rede logo após o código). */
+const chaveAceitePendente = (uid: string) => `acalma.aceite-pendente.v1.${uid}`
+function marcarAceitePendente(uid: string, pendente: boolean) {
+  try {
+    if (pendente) localStorage.setItem(chaveAceitePendente(uid), '1')
+    else localStorage.removeItem(chaveAceitePendente(uid))
+  } catch {
+    /* sem armazenamento */
+  }
+}
+const aceitePendente = (uid: string) => {
+  try {
+    return localStorage.getItem(chaveAceitePendente(uid)) === '1'
+  } catch {
+    return false
+  }
 }
 
 export function ProvedorConta({ children, servico }: { children: ReactNode; servico?: ServicoConta }) {
@@ -60,6 +95,7 @@ function ProvedorIntegrado({ children, servico }: { children: ReactNode; servico
   const sincronizando = useRef(false)
   const sessaoRef = useRef<Sessao | null>(null)
   const liberado = useRef(false)
+  const verificarRef = useRef<(() => Promise<Decisao | null>) | null>(null)
 
   const atualizarResumo = useCallback((extra: Partial<typeof sinc> = {}) => {
     setSinc((s) => ({ ...s, ultimaEm: ultimaSincronizacao(), pendentes: filaPendente().length, ...extra }))
@@ -73,6 +109,15 @@ function ProvedorIntegrado({ children, servico }: { children: ReactNode; servico
       for (let rodada = 0; rodada < 3; rodada++) {
         const enviadas = filaPendente()
         const r = await servico.sincronizar(montarMudancas(enviadas), cursorDeSincronizacao())
+        if (semAcesso(r)) {
+          // O servidor não gravou nada. A fila fica intacta neste aparelho (entra na cópia
+          // que a pessoa pode baixar) e o acesso é conferido de novo, o que mostra a tela certa.
+          liberado.current = false
+          atualizarResumo({ emAndamento: false, falhou: false })
+          sincronizando.current = false
+          void verificarRef.current?.()
+          return
+        }
         const avisos = aplicarSincronizacao(enviadas, r)
         if (avisos.length) avisar(avisos[0])
         if (filaPendente().length === 0) break
@@ -97,8 +142,13 @@ function ProvedorIntegrado({ children, servico }: { children: ReactNode; servico
             if (e instanceof ErroDeRede) throw e
           })
           const estado = await servico.meuAcesso()
+          // Só a resposta do servidor grava a confirmação (e a data). Falha de rede
+          // nunca renova a janela offline.
           guardarAcesso(s.userId, estado)
           resultado = { ok: true, estado }
+          if (aceitePendente(s.userId)) {
+            await servico.registrarAceites().then(() => marcarAceitePendente(s.userId, false), () => {})
+          }
         } catch (e) {
           resultado = { ok: false, motivo: e instanceof ErroDeRede ? 'offline' : 'erro' }
         }
@@ -117,6 +167,9 @@ function ProvedorIntegrado({ children, servico }: { children: ReactNode; servico
     const s = sessaoRef.current
     return s ? verificarSessao(s) : null
   }, [verificarSessao])
+  useEffect(() => {
+    verificarRef.current = verificar
+  }, [verificar])
 
   // Abertura do app: a sessão guardada no aparelho (funciona sem rede).
   useEffect(() => {
@@ -175,11 +228,14 @@ function ProvedorIntegrado({ children, servico }: { children: ReactNode; servico
       sincronizarAgora,
       verificar,
       enviarCodigo: (email) => servico.enviarCodigo(email.trim().toLowerCase()),
-      async confirmarCodigo(email, codigo) {
+      async confirmarCodigo(email, codigo, opcoes) {
         const s = await servico.confirmarCodigo(email.trim().toLowerCase(), codigo.trim())
         sessaoRef.current = s
         setSessao(s)
-        await servico.registrarAceites().catch(() => {})
+        marcarAceitePendente(s.userId, true)
+        await servico.registrarAceites().then(() => marcarAceitePendente(s.userId, false), () => {})
+        // Só registra quando a pessoa marcou: não marcar não revoga um "sim" dado antes.
+        if (opcoes?.marketing) await servico.definirMarketing(true).catch(() => {})
         return verificarSessao(s)
       },
       async sair(apagarCopiaLocal) {
@@ -195,6 +251,26 @@ function ProvedorIntegrado({ children, servico }: { children: ReactNode; servico
         usarEspacoDemonstracao()
         setSituacao({ fase: 'sem_sessao' })
       },
+      async exportarMeusDados() {
+        const s = sessaoRef.current
+        let naConta: unknown | null = null
+        if (s && online()) naConta = await servico.exportarMeusDados().catch(() => null)
+        const e = lerEstado()
+        const agora = new Date()
+        const baixou = baixarJson(
+          nomeArquivo('acalma-meus-dados', agora),
+          montarMeusDados({
+            email: s?.email ?? null,
+            agora,
+            conta: naConta,
+            local: { combinados: e.combinados, favoritos: e.favoritos, registros: e.registros },
+            naoEnviadas: filaPendente(),
+          }),
+        )
+        return { incluiuConta: naConta !== null, baixou }
+      },
+      definirMarketing: (aceita) => servico.definirMarketing(aceita),
+      marketingAtual: () => servico.marketingAtual(),
       async excluirMeusDados() {
         const s = sessaoRef.current
         if (!s) return

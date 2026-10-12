@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BarraTopo } from '../components/BarraTopo'
 import { Confirmacao } from '../components/Confirmacao'
@@ -6,7 +6,8 @@ import { useAviso } from '../components/Aviso'
 import { botaoSecundario, botaoTexto, linhaLista, margem } from '../components/ui'
 import { IconeAvancar } from '../ilustracoes/icones'
 import { apagarDadosDoPrototipo, importarRegistrosAnteriores } from '../armazenamento/armazenamento'
-import { lerRegistrosAnteriores } from '../armazenamento/legado'
+import { lerRegistrosAnteriores, temDadosAnteriores } from '../armazenamento/legado'
+import { NINA_URL } from '../config'
 import { useEstado } from '../armazenamento/useEstado'
 import { useConta } from '../conta/Conta'
 import { dataHoraCurta } from '../util/datas'
@@ -20,6 +21,21 @@ export function Conta() {
   const [confirmando, setConfirmando] = useState<Confirmar>(null)
   const [apagarCopia, setApagarCopia] = useState(true)
   const integrado = conta.modo === 'integrado'
+  const [marketing, setMarketing] = useState<boolean | null>(null)
+  const [haAnteriores] = useState(temDadosAnteriores)
+
+  // Lê a decisão uma vez por conta (o objeto da conta muda a cada sincronização).
+  const lerMarketing = conta.marketingAtual
+  const uid = conta.sessao?.userId
+  useEffect(() => {
+    if (!integrado) return
+    let vivo = true
+    lerMarketing().then((v) => vivo && setMarketing(v === true), () => {})
+    return () => {
+      vivo = false
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- uma leitura por conta, não por renderização
+  }, [integrado, uid])
 
   // Registros do app anterior presentes neste navegador (só leitura) e ainda não importados.
   const anteriores = useMemo(() => {
@@ -69,9 +85,48 @@ export function Conta() {
                     ? `Sincronizado ${dataHoraCurta(new Date(conta.sinc.ultimaEm))}.`
                     : 'Ainda não sincronizado.'}
               </p>
-              <button type="button" className={`${botaoTexto} -ml-4`} disabled={conta.sinc.emAndamento} onClick={() => void conta.sincronizarAgora()}>
-                {conta.sinc.emAndamento ? 'Sincronizando…' : 'Sincronizar agora'}
-              </button>
+              <div className="flex flex-wrap gap-x-2">
+                <button type="button" className={`${botaoTexto} -ml-4`} disabled={conta.sinc.emAndamento} onClick={() => void conta.sincronizarAgora()}>
+                  {conta.sinc.emAndamento ? 'Sincronizando…' : 'Sincronizar agora'}
+                </button>
+                <button
+                  type="button"
+                  className={botaoTexto}
+                  onClick={() =>
+                    void conta.exportarMeusDados().then((r) =>
+                      avisar(!r.baixou ? 'Este navegador não permitiu gerar o arquivo' : r.incluiuConta ? 'Cópia gerada' : 'Cópia gerada só deste aparelho (sem conexão)'),
+                    )
+                  }
+                >
+                  Baixar uma cópia
+                </button>
+              </div>
+            </section>
+
+            <section className="mt-6" aria-labelledby="ct-mkt">
+              <h2 id="ct-mkt" className="font-semibold text-texto">Novidades por e-mail</h2>
+              <label className="mt-2 flex min-h-12 items-start gap-3 text-[0.9375rem] leading-snug text-texto">
+                <input
+                  type="checkbox"
+                  className="mt-0.5 size-5 shrink-0 accent-verde"
+                  checked={marketing === true}
+                  disabled={marketing === null}
+                  onChange={(e) => {
+                    const v = e.target.checked
+                    setMarketing(v)
+                    conta.definirMarketing(v).then(
+                      () => avisar(v ? 'Você vai receber novidades' : 'Você não vai mais receber novidades'),
+                      () => {
+                        setMarketing(!v)
+                        avisar('Sem conexão: tente de novo com internet')
+                      },
+                    )
+                  }}
+                />
+                <span>
+                  Quero receber novidades da NexoEdu por e-mail. Opcional; não muda o seu acesso.
+                </span>
+              </label>
             </section>
 
             {anteriores.length > 0 && (
@@ -91,6 +146,34 @@ export function Conta() {
               </section>
             )}
           </>
+        )}
+
+        {haAnteriores && (
+          <Link to="/registros-anteriores" className={`${linhaLista} mt-4`}>
+            <span className="flex-1 font-semibold text-verde-profundo">Registros do Acalma anterior</span>
+            <span className="text-texto-2"><IconeAvancar /></span>
+          </Link>
+        )}
+
+        {/* Convite para a Nina: só aqui, nunca na ajuda de crise, no modo de mostrar à criança
+            ou na segurança. Sem trial automático: a Nina só começa se a pessoa escolher lá. */}
+        {(integrado ? NINA_URL : true) && (
+          <section className="mt-6 rounded-[var(--radius-cartao)] border border-linha p-5" aria-labelledby="ct-nina">
+            <h2 id="ct-nina" className="font-semibold text-texto">Conhecer a Nina</h2>
+            <p className="mt-1.5 leading-relaxed text-texto-2">
+              Quer conversar sobre o que está acontecendo em casa? A Nina é a assistente da NexoEdu para famílias e usa a
+              mesma conta. Nada começa nela sem você escolher, e seus dados do Acalma não vão para lá.
+            </p>
+            {integrado ? (
+              <a className={`${botaoTexto} -ml-4`} href={`${NINA_URL.replace(/\/$/, '')}/?de=acalma`} target="_blank" rel="noopener">
+                Conhecer a Nina (abre em outra aba)
+              </a>
+            ) : (
+              <Link className={`${botaoTexto} -ml-4`} to="/demonstracao/nina">
+                Ver como funciona (simulação)
+              </Link>
+            )}
+          </section>
         )}
 
         <section className="mt-6">

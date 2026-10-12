@@ -4,6 +4,7 @@ import { Marca } from '../components/Marca'
 import { LinkSeguranca } from '../components/LinkSeguranca'
 import { botaoPrimario, botaoSecundario, botaoTexto, margem } from '../components/ui'
 import { Cena, type CenaId } from '../ilustracoes/Cena'
+import { Confirmacao } from '../components/Confirmacao'
 import { CONFIG } from '../config'
 import type { Tela } from '../conta/acesso'
 
@@ -25,7 +26,7 @@ const TEXTOS: Record<Exclude<Tela, 'entrar'>, { cena: CenaId; titulo: string; te
   revogado: {
     cena: 'vazio-registros',
     titulo: 'Este acesso foi encerrado',
-    texto: 'A compra deste e-mail foi reembolsada ou contestada. Se acha que é um engano, fale com o suporte.',
+    texto: 'A compra deste e-mail foi reembolsada ou estornada. Seus dados continuam seus: você pode baixar uma cópia ou excluí-los. Se acha que é um engano, fale com o suporte.',
   },
   confirmar_online: {
     cena: 'cantinho',
@@ -44,16 +45,27 @@ export function TelaAcesso({
   email,
   onTentar,
   onTrocarEmail,
+  onExportar,
+  onExcluir,
+  pendentes = 0,
   simulacao = false,
 }: {
   tela: Exclude<Tela, 'entrar'>
   email?: string | null
   onTentar?: () => Promise<unknown> | void
   onTrocarEmail?: () => Promise<unknown> | void
+  /** Cópia dos dados: não exige compra. */
+  onExportar?: () => Promise<unknown> | void
+  /** Exclusão dos dados do Acalma: não exige compra. */
+  onExcluir?: () => Promise<unknown> | void
+  /** Alterações deste aparelho que o servidor não aceitou (sem acesso). Ficam guardadas. */
+  pendentes?: number
   simulacao?: boolean
 }) {
   const t = TEXTOS[tela]
   const [tentando, setTentando] = useState(false)
+  const [confirmandoExclusao, setConfirmandoExclusao] = useState(false)
+  const [estadoDados, setEstadoDados] = useState('')
   const navegar = useNavigate()
   const tentar = async () => {
     if (!onTentar || tentando) return
@@ -85,6 +97,16 @@ export function TelaAcesso({
             Conta: <strong className="text-texto">{email}</strong>
           </p>
         )}
+        {tela === 'revogado' && pendentes > 0 && (
+          <p className="mt-3 text-[0.9375rem] leading-relaxed text-texto-2">
+            {pendentes === 1
+              ? 'Uma alteração feita neste aparelho não foi enviada. Ela continua guardada aqui e entra na cópia que você baixar.'
+              : `${pendentes} alterações feitas neste aparelho não foram enviadas. Elas continuam guardadas aqui e entram na cópia que você baixar.`}
+          </p>
+        )}
+        <p role="status" aria-live="polite" className="mt-2 text-[0.9375rem] font-semibold text-verde-profundo">
+          {estadoDados}
+        </p>
 
         <div className="mt-auto flex flex-col gap-2 pt-8">
           {(tela === 'processando' || tela === 'confirmar_online' || tela === 'erro_rede') && (
@@ -96,6 +118,27 @@ export function TelaAcesso({
             <a className={botaoPrimario} href={CONFIG.checkoutUrl} rel="noopener">
               Comprar o Acalma
             </a>
+          )}
+          {tela === 'revogado' && onExportar && (
+            <button
+              type="button"
+              className={botaoSecundario}
+              onClick={() =>
+                void Promise.resolve(onExportar()).then(
+                  (r) =>
+                    setEstadoDados(
+                      simulacao
+                        ? 'Simulação: nenhum arquivo foi gerado.'
+                        : (r as { baixou?: boolean } | undefined)?.baixou === false
+                          ? 'Este navegador não permitiu gerar o arquivo.'
+                          : 'Cópia gerada.',
+                    ),
+                  () => setEstadoDados('Não foi possível gerar a cópia agora.'),
+                )
+              }
+            >
+              Baixar uma cópia dos meus dados
+            </button>
           )}
           {(tela === 'nao_localizado' || tela === 'revogado') && onTrocarEmail && (
             <button type="button" className={botaoSecundario} onClick={() => void onTrocarEmail()}>
@@ -112,6 +155,11 @@ export function TelaAcesso({
               Falar com o suporte
             </a>
           )}
+          {tela === 'revogado' && onExcluir && (
+            <button type="button" className={`${botaoTexto} text-coral-texto`} onClick={() => setConfirmandoExclusao(true)}>
+              Excluir meus dados do Acalma
+            </button>
+          )}
           {simulacao && (
             <button type="button" className={botaoTexto} onClick={() => navegar('/demonstracao/acesso')}>
               Voltar às simulações
@@ -122,6 +170,20 @@ export function TelaAcesso({
           </div>
         </div>
       </main>
+      <Confirmacao
+        aberto={confirmandoExclusao}
+        titulo="Excluir seus dados do Acalma?"
+        texto="Apaga combinados, orientações salvas e registros da sua conta e deste aparelho, inclusive o que não foi enviado. Baixe uma cópia antes, se quiser guardar. Não dá para desfazer."
+        confirmar="Excluir dados"
+        onCancelar={() => setConfirmandoExclusao(false)}
+        onConfirmar={() => {
+          setConfirmandoExclusao(false)
+          void Promise.resolve(onExcluir?.()).then(
+            () => setEstadoDados(simulacao ? 'Simulação: nada foi excluído.' : 'Dados do Acalma excluídos.'),
+            () => setEstadoDados('Sem conexão: tente excluir de novo com internet.'),
+          )
+        }}
+      />
     </div>
   )
 }

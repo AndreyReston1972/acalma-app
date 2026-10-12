@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { CONFIG, VERSAO_PRIVACIDADE, VERSAO_TERMOS } from '../config'
-import type { RespostaSinc } from '../armazenamento/sincronizacao'
+import { CONFIG, VERSAO_MARKETING, VERSAO_PRIVACIDADE, VERSAO_TERMOS } from '../config'
+import type { RespostaServidorSinc } from '../armazenamento/sincronizacao'
 
 /*
  * Tudo o que o Acalma pede à conta NexoEdu (Supabase da Nina).
@@ -30,12 +30,21 @@ export interface ServicoConta {
   sair(): Promise<void>
   vincularCompras(): Promise<void>
   meuAcesso(): Promise<EstadoServidor>
-  sincronizar(mudancas: unknown, desde: string | null): Promise<RespostaSinc>
+  sincronizar(mudancas: unknown, desde: string | null): Promise<RespostaServidorSinc>
+  /** Aceite explícito de termos e privacidade (versão + data no servidor). */
   registrarAceites(): Promise<void>
+  /** Consentimento opcional de marketing por e-mail; false revoga. */
+  definirMarketing(aceita: boolean): Promise<void>
+  /** Última decisão de marketing registrada (null = nunca decidiu). */
+  marketingAtual(): Promise<boolean | null>
+  /** Cópia dos próprios dados na conta. Não exige compra. */
+  exportarMeusDados(): Promise<unknown>
   excluirMeusDados(): Promise<void>
 }
 
 export class ErroDeRede extends Error {}
+/** O Supabase Auth limita pedidos de código por e-mail/tempo. */
+export class ErroLimiteDeEnvio extends Error {}
 
 let clientePromessa: Promise<SupabaseClient> | null = null
 function cliente(): Promise<SupabaseClient> {
@@ -77,10 +86,17 @@ export const servicoSupabase: ServicoConta = {
       email,
       options: { shouldCreateUser: true, data: { produto_entrada: 'acalma' } },
     })
-    if (error) throw ehErroDeRede(error) ? new ErroDeRede(error.message) : error
+    if (error) {
+      if (ehErroDeRede(error)) throw new ErroDeRede(error.message)
+      if ((error as { status?: number }).status === 429 || /rate limit|security purposes|seconds/i.test(error.message)) throw new ErroLimiteDeEnvio(error.message)
+      throw error
+    }
   },
   async confirmarCodigo(email, codigo) {
+    // Código errado, vencido ou já usado: o GoTrue responde o mesmo erro ("Token has
+    // expired or is invalid"); a tela pede o e-mail mais recente.
     const { data, error } = await (await cliente()).auth.verifyOtp({ email, token: codigo, type: 'email' })
+    if (error && ehErroDeRede(error)) throw new ErroDeRede(error.message)
     if (error || !data.user) throw error ?? new Error('Código inválido')
     return { userId: data.user.id, email: data.user.email ?? email }
   },
@@ -95,11 +111,28 @@ export const servicoSupabase: ServicoConta = {
     return r.estado
   },
   async sincronizar(mudancas, desde) {
-    return rpc<RespostaSinc>('acalma_sincronizar', { p_mudancas: mudancas, p_desde: desde })
+    return rpc<RespostaServidorSinc>('acalma_sincronizar', { p_mudancas: mudancas, p_desde: desde })
   },
   async registrarAceites() {
     await rpc('acalma_registrar_aceite', { p_documento: 'termos', p_versao: VERSAO_TERMOS })
     await rpc('acalma_registrar_aceite', { p_documento: 'privacidade', p_versao: VERSAO_PRIVACIDADE })
+  },
+  async definirMarketing(aceita) {
+    await rpc('acalma_definir_marketing', { p_aceita: aceita, p_versao: VERSAO_MARKETING })
+  },
+  async marketingAtual() {
+    const { data, error } = await (await cliente())
+      .from('acalma_aceites')
+      .select('aceito')
+      .eq('documento', 'marketing_email')
+      .order('aceito_em', { ascending: false })
+      .order('id', { ascending: false })
+      .limit(1)
+    if (error) throw ehErroDeRede(error) ? new ErroDeRede(error.message) : new Error(error.message)
+    return data && data.length ? Boolean(data[0].aceito) : null
+  },
+  async exportarMeusDados() {
+    return rpc('acalma_exportar_meus_dados')
   },
   async excluirMeusDados() {
     await rpc('acalma_excluir_meus_dados')

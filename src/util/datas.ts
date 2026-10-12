@@ -12,3 +12,7 @@ export function dataHoraCurta(d: Date, agora = new Date()): string {
   const quando = mesmoDia(d, agora) ? 'hoje' : mesmoDia(d, ontem) ? 'ontem' : dia.format(d)
   return `${quando}, ${hora.format(d)}`
 }
+
+const diaAno = new Intl.DateTimeFormat('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' })
+/** "1 de jun. de 2026" */
+export const dataCurta = (d: Date) => diaAno.format(d)

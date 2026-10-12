@@ -5,7 +5,7 @@ import { TelaAcesso } from '../pages/TelaAcesso'
 import { Marca } from '../components/Marca'
 
 /* Rotas que nunca dependem de acesso. A segurança fica sempre aberta. */
-const LIVRES = ['/entrar', '/seguranca', '/termos', '/privacidade']
+const LIVRES = ['/entrar', '/seguranca', '/termos', '/privacidade', '/registros-anteriores']
 
 export function Portao({ children }: { children: ReactNode }) {
   const conta = useConta()
@@ -32,6 +32,9 @@ export function Portao({ children }: { children: ReactNode }) {
       email={conta.sessao?.email}
       onTentar={() => conta.verificar()}
       onTrocarEmail={() => conta.sair(false)}
+      onExportar={() => conta.exportarMeusDados()}
+      onExcluir={() => conta.excluirMeusDados()}
+      pendentes={conta.sinc.pendentes}
     />
   )
 }

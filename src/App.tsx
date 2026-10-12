@@ -16,6 +16,8 @@ import { Seguranca } from './pages/Seguranca'
 import { Entrar } from './pages/Entrar'
 import { Documento } from './pages/Documento'
 import { DemonstracaoAcesso } from './pages/DemonstracaoAcesso'
+import { DemonstracaoNina } from './pages/DemonstracaoNina'
+import { RegistrosAnteriores } from './pages/RegistrosAnteriores'
 import { privacidade, termos } from './content/documentos'
 import { ProvedorConta } from './conta/Conta'
 import { Portao } from './conta/Portao'
@@ -68,6 +70,8 @@ export function Rotas() {
       <Route path="/demonstracao/acesso" element={<DemonstracaoAcesso />} />
       <Route path="/demonstracao/acesso/:tela" element={<DemonstracaoAcesso />} />
       <Route path="/demonstracao/entrar" element={<Entrar simulacao />} />
+      <Route path="/demonstracao/nina" element={<DemonstracaoNina />} />
+      <Route path="/registros-anteriores" element={<RegistrosAnteriores />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
     </Portao>

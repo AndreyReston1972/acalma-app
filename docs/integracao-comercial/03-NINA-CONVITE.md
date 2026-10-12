@@ -1,34 +1,47 @@
-# Acalma → Nina: ponto de integração e especificação do convite
+# Acalma → Nina: passagem explícita (13/10/2026)
 
-**Nada disso foi implementado na interface.** Esta é só a especificação, para aprovação.
+**Decisão:** visitar a Nina não inicia o trial para quem veio do Acalma.
 
-## Ponto de integração que já existe
+Está implementado localmente nos dois repositórios, sem publicar.
 
-- A conta é a mesma (projeto Supabase da Nina). Quem entrou pelo Acalma tem `profiles.produto_entrada = 'acalma'` e **nenhuma** assinatura nem trial da Nina.
-- Se essa pessoa abrir a Nina, o fluxo atual do app da Nina chama `create_trial_once`. O teste
-  "se a pessoa entrar na Nina depois, o trial nasce normalmente" (PGlite) prova que o trial nasce
-  e que a conta passa a contar nas métricas da Nina (`origem_conta` → `espontanea`), respeitando o `trial_ledger`.
-- Comprar a Nina pela Hotmart com o mesmo e-mail segue o webhook atual da Nina; o Acalma não interfere.
-- **Atenção:** a Nina entra por senha. Quem só tem código do Acalma precisará criar senha
-  ("esqueci minha senha") ou usar o magic link legado. Isso precisa ser revisto no login da Nina antes de qualquer convite.
+## Fluxo
 
-## Regras do convite (propostas)
+1. **Acalma, tela Conta:** o cartão "Conhecer a Nina" é o único ponto de convite.
+   - No modo integrado, aparece só com `VITE_NINA_URL` e abre `<nina>/?de=acalma` em outra aba.
+   - Não aparece em Agora, na orientação, em "mostrar à criança" nem na segurança (testado rota a rota).
+2. **Nina, login com `?de=acalma`:**
+   - Um aviso orienta a entrar pelo **link no e-mail** (`signInWithOtp` com `shouldCreateUser: false`, já existente na Nina). Não é preciso criar senha nem usar "Esqueci minha senha".
+   - O login por senha de quem já usa a Nina fica igual.
+   - A URL só traz o marcador `de=acalma`. Nenhum token ou sessão atravessa os domínios.
+3. **Pós-login da Nina:**
+   - `create_trial_once` devolve `ESCOLHA_EXPLICITA` para conta do Acalma.
+   - O app leva a `/conhecer-a-nina`, que é um portão: link guardado não passa por cima.
+   - Versões antigas do app, em cache, não conseguem iniciar o trial: o bloqueio está no banco.
+4. **`/conhecer-a-nina`:** a proposta, com os consentimentos da Nina (termos, privacidade, maioridade), gravados com `source = 'conhecer_nina'`.
+   - Botão **"Iniciar meus 7 dias na Nina"** (`nina_iniciar_teste`). O resultado:
+     - `TRIAL_CREATED` → onboarding;
+     - `TRIAL_ALREADY_USED` → planos (quem já teve trial não ganha outro);
+     - `TRIAL_ALREADY_EXISTS` → acesso existente (quem já assina entra direto).
+   - Cliques repetidos ou duas abas: um trial só. A tela tem trava de envio e o banco tem lock + `on conflict`.
+   - "Agora não? Pode fechar esta página. Nada foi iniciado."
+5. Nenhum dado do Acalma vai para a Nina: combinados, registros, anotações e situações ficam no Acalma.
 
-| Regra | Motivo |
+## O que a Nina muda (revisar antes de publicar)
+
+| Arquivo | Mudança |
 |---|---|
-| Nunca em "Agora" nem durante uma orientação | É o momento de crise. |
-| Nunca no modo de mostrar o combinado à criança | A tela é da criança. |
-| Nunca na tela de segurança nem nas telas de acesso | Não confundir ajuda/pagamento. |
-| Só em Conta, ou num cartão discreto em Salvos depois de pelo menos 3 usos em dias diferentes | Momento calmo, pessoa já viu valor. |
-| Sem trial automático: o link só abre a Nina | Decisão de trial fica no fluxo da Nina e no `trial_ledger`. |
-| Nenhum dado do Acalma vai para a Nina (combinados, registros, anotações, situações) | Separação de dados. |
-| Fechar o convite o esconde por 90 dias, guardado só no aparelho | Sem insistência. |
-| Texto sem urgência, sem "grátis", sem "para sempre" | Tom e termos. |
+| `src/lib/pos-login.ts` | trata `ESCOLHA_EXPLICITA` → `/conhecer-a-nina` |
+| `src/lib/destino-pretendido.ts` | `/conhecer-a-nina` é portão |
+| `src/lib/consent.ts` | `flushPendingConsents(…, source)`, com padrão `signup` (sem mudança para o cadastro) |
+| `src/pages/ConhecerNina.tsx` (nova), `src/App.tsx` | rota |
+| `src/pages/Login.tsx` | aviso e botão de link em destaque **só com `?de=acalma`** |
+| `supabase/functions/delete-user` | decisão do marcador antes de apagar subscriptions |
+| migration `20261012130000` | `create_trial_once` com a trava, `nina_iniciar_teste`, `nina_conceder_trial`, `trial_deve_ser_marcado_na_exclusao` |
 
-Texto sugerido: "Quer conversar sobre o que está acontecendo em casa? A Nina é a assistente da
-NexoEdu para famílias. Ela usa a mesma conta." Botão "Conhecer a Nina" (abre em nova aba) e "Agora não".
+O cadastro normal da Nina continua igual. Os testes PGlite "Nina preservada" e "conta da Nina sem subscription: `create_trial_once` como em produção" passam. Mudança comum aos dois caminhos: duas chamadas simultâneas de trial não falham mais com chave duplicada; a segunda devolve `TRIAL_ALREADY_EXISTS`.
 
-## Medição
+## Pendente
 
-Se houver medição do convite, só a contagem de exibições e cliques, sem identificador da
-criança nem conteúdo. A medição precisa de decisão de privacidade antes. Hoje o Acalma não tem analytics.
+- `VITE_NINA_URL` (endereço público da Nina) no Netlify do Acalma.
+- Texto final da proposta, para revisão de marketing. Hoje ele diz o que é verdade no código: 7 dias, nada cobrado ao fim, e para continuar a pessoa escolhe um plano.
+- Template do e-mail de link da Nina: o mesmo do código do Acalma (ver 04-PUBLICACAO.md).
