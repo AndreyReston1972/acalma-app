@@ -1,0 +1,109 @@
+/*
+ * Acalma: estilos do protótipo.
+ *
+ * Estrutura (corrige o diagnóstico de 12/10):
+ * - Nenhum reset fora de camada. O preflight do Tailwind já zera margens;
+ *   qualquer regra base nova vai em @layer base, e componentes em
+ *   @layer components, então os utilitários sempre vencem.
+ * - Nenhum token --spacing-<nome>. No Tailwind v4 eles colidem com
+ *   max-w-* (era o que fazia max-w-xs virar 4px). O espaçamento usa a
+ *   escala numérica padrão (múltiplos de 4px).
+ */
+@import "tailwindcss";
+
+@theme {
+  /* Cor */
+  --color-creme: #FDF8F3;
+  --color-bege: #F5EDE0;
+  --color-bege-forte: #EBDFCC;
+  --color-linha: #E4D8C6;
+  --color-verde: #3B6857;
+  --color-verde-profundo: #2F5446;
+  --color-verde-claro: #E3ECE6;
+  --color-coral: #E8622A;
+  --color-coral-texto: #B4441A;
+  --color-texto: #2D3D2E;
+  --color-texto-2: #5A6A5D;
+
+  /* Tipografia */
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Forma */
+  --radius-cartao: 18px;
+  --radius-controle: 14px;
+  --shadow-suave: 0 1px 2px rgb(47 84 70 / 0.06), 0 6px 20px rgb(47 84 70 / 0.07);
+  --shadow-acao: 0 2px 4px rgb(47 84 70 / 0.10), 0 10px 24px rgb(47 84 70 / 0.16);
+
+  /* Movimento */
+  --ease-calma: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@layer base {
+  html {
+    background: var(--color-creme);
+    color: var(--color-texto);
+    font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    min-height: 100dvh;
+    font-size: 1.0625rem; /* 17px: leitura confortável com uma mão */
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-coral);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  ::selection {
+    background: var(--color-bege-forte);
+  }
+}
+
+@layer components {
+  /* Área útil do app: coluna central, nunca maior que um celular grande */
+  .coluna {
+    width: 100%;
+    max-width: 30rem;
+    margin-inline: auto;
+  }
+
+  /* Entrada discreta das telas. Some com movimento reduzido. */
+  .entrada {
+    animation: entrada 180ms var(--ease-calma) both;
+  }
+
+  /* Feedback de toque: escurece e afunda 1%, sem pulsar */
+  .tocavel {
+    transition: background-color 140ms ease, transform 140ms var(--ease-calma), box-shadow 140ms ease;
+  }
+  .tocavel:active {
+    transform: scale(0.985);
+  }
+
+  .rotulo {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-texto-2);
+  }
+}
+
+@keyframes entrada {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+  .tocavel:active { transform: none; }
+}
