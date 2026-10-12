@@ -13,6 +13,12 @@ import { Mostrar } from './pages/Mostrar'
 import { Salvos } from './pages/Salvos'
 import { Conta } from './pages/Conta'
 import { Seguranca } from './pages/Seguranca'
+import { Entrar } from './pages/Entrar'
+import { Documento } from './pages/Documento'
+import { DemonstracaoAcesso } from './pages/DemonstracaoAcesso'
+import { privacidade, termos } from './content/documentos'
+import { ProvedorConta } from './conta/Conta'
+import { Portao } from './conta/Portao'
 
 /* Telas com navegação: espaço no fim para a barra inferior nunca cobrir conteúdo */
 function ComNavegacao() {
@@ -37,6 +43,7 @@ function RolarParaOTopo() {
 
 export function Rotas() {
   return (
+    <Portao>
     <Routes>
       <Route element={<ComNavegacao />}>
         <Route path="/" element={<Inicio />} />
@@ -55,8 +62,15 @@ export function Rotas() {
       <Route path="/preparar/:combinadoId/mostrar" element={<Mostrar />} />
       <Route path="/conta" element={<Conta />} />
       <Route path="/seguranca" element={<Seguranca />} />
+      <Route path="/entrar" element={<Entrar />} />
+      <Route path="/termos" element={<Documento doc={termos} />} />
+      <Route path="/privacidade" element={<Documento doc={privacidade} />} />
+      <Route path="/demonstracao/acesso" element={<DemonstracaoAcesso />} />
+      <Route path="/demonstracao/acesso/:tela" element={<DemonstracaoAcesso />} />
+      <Route path="/demonstracao/entrar" element={<Entrar simulacao />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </Portao>
   )
 }
 
@@ -64,10 +78,12 @@ export default function App() {
   return (
     <BrowserRouter>
       <ProvedorAviso>
-        <RolarParaOTopo />
-        <div className="coluna">
-          <Rotas />
-        </div>
+        <ProvedorConta>
+          <RolarParaOTopo />
+          <div className="coluna">
+            <Rotas />
+          </div>
+        </ProvedorConta>
       </ProvedorAviso>
     </BrowserRouter>
   )

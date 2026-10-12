@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 import { afterEach } from 'vitest'
 import { cleanup } from '@testing-library/react'
+import { usarEspacoDemonstracao } from '../armazenamento/armazenamento'
 
 // jsdom ainda não implementa <dialog>.showModal/close
 if (typeof HTMLDialogElement !== 'undefined' && !HTMLDialogElement.prototype.showModal) {
@@ -46,4 +47,5 @@ if (typeof globalThis.localStorage?.getItem !== 'function') {
 afterEach(() => {
   cleanup()
   localStorage.clear()
+  usarEspacoDemonstracao()
 })

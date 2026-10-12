@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
 import { botaoSecundario } from './ui'
 
 /*
@@ -12,6 +12,7 @@ export function Confirmacao({
   confirmar,
   onConfirmar,
   onCancelar,
+  extra,
 }: {
   aberto: boolean
   titulo: string
@@ -19,6 +20,7 @@ export function Confirmacao({
   confirmar: string
   onConfirmar: () => void
   onCancelar: () => void
+  extra?: ReactNode
 }) {
   const ref = useRef<HTMLDialogElement>(null)
   const cancelar = useRef<HTMLButtonElement>(null)
@@ -53,6 +55,7 @@ export function Confirmacao({
           <p id="confirmacao-texto" className="mt-2 text-texto-2">
             {texto}
           </p>
+          {extra}
           <div className="mt-6 flex flex-col gap-3">
             <button
               type="button"

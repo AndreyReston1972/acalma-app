@@ -9,6 +9,10 @@ import '@fontsource/dm-sans/latin-600.css'
 import '@fontsource/dm-sans/latin-700.css'
 import './styles/index.css'
 import App from './App'
+import { registerSW } from 'virtual:pwa-register'
+
+// Offline: registra o service worker (atualiza sozinho; dados do aparelho não são tocados).
+registerSW({ immediate: true })
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

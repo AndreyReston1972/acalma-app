@@ -12,6 +12,8 @@ import type { SituacaoId } from '../content/tipos'
 import { useEstado } from '../armazenamento/useEstado'
 import { excluirRegistro, respostas, type Registro } from '../armazenamento/armazenamento'
 import { dataHoraCurta } from '../util/datas'
+import { emDemonstracao } from '../config'
+import { rotuloEmocaoAnterior } from '../armazenamento/legado'
 import { nomeDoCombinado } from '../util/combinados'
 
 type Aba = 'combinados' | 'orientacoes' | 'registros'
@@ -161,7 +163,7 @@ function ListaOrientacoes() {
   // "O que ajudou por aqui": só o que a própria pessoa marcou como "Ajudou"
   const vistos = new Set<string>()
   const ajudaram = registros
-    .filter((r) => r.resposta === 'ajudou')
+    .filter((r): r is Registro & { situacaoId: SituacaoId } => r.resposta === 'ajudou' && r.situacaoId !== null)
     .filter((r) => {
       const k = `${r.situacaoId}/${r.caminhoId ?? ''}`
       if (vistos.has(k)) return false
@@ -217,7 +219,9 @@ function ListaRegistros({ registros }: { registros: Registro[] }) {
 
   return (
     <>
-      <p className="text-[0.875rem] text-texto-2">Ficam só neste navegador.</p>
+      <p className="text-[0.875rem] text-texto-2">
+        {emDemonstracao() ? 'Ficam só neste navegador.' : 'Guardados neste aparelho e na sua conta.'}
+      </p>
       <ul className="mt-1 divide-y divide-linha">
         {registros.map((r) => (
           <ItemRegistro key={r.id} registro={r} onExcluir={() => setExcluindo(r)} />
@@ -242,10 +246,13 @@ function ListaRegistros({ registros }: { registros: Registro[] }) {
 function ItemRegistro({ registro, onExcluir }: { registro: Registro; onExcluir: () => void }) {
   const [aberto, setAberto] = useState(false)
   const id = useId()
-  const s = buscarSituacao(registro.situacaoId)
+  const s = registro.situacaoId ? buscarSituacao(registro.situacaoId) : undefined
   const c = buscarCaminho(s, registro.caminhoId)
   const resposta = respostas.find((x) => x.id === registro.resposta)?.rotulo
-  if (!s) return null
+  const anterior = registro.origem === 'app-anterior'
+  if (!s && !anterior) return null
+  // Registro do app anterior: exibido como veio, sem converter emoção em situação.
+  const emocao = anterior ? rotuloEmocaoAnterior(registro.legado) : null
   return (
     <li>
       <button
@@ -255,14 +262,16 @@ function ItemRegistro({ registro, onExcluir }: { registro: Registro; onExcluir: 
         onClick={() => setAberto((a) => !a)}
         className="tocavel -mx-2 flex min-h-[4.5rem] w-[calc(100%+1rem)] items-center gap-4 rounded-[var(--radius-controle)] px-2 py-2.5 text-left hover:bg-bege"
       >
-        <Miniatura id={s.cena} />
+        <Miniatura id={s ? s.cena : 'vazio-registros'} />
         <span className="min-w-0 flex-1">
           <span className="block font-semibold leading-tight text-texto">
-            {s.titulo}
+            {s ? s.titulo : 'Registro do app anterior'}
             {c && <span className="font-medium text-texto-2"> · {c.rotulo}</span>}
           </span>
           <span className="block text-[0.875rem] text-texto-2">
-            {dataHoraCurta(new Date(registro.criadoEm))} · {resposta}
+            {dataHoraCurta(new Date(registro.criadoEm))}
+            {resposta && ` · ${resposta}`}
+            {emocao && ` · emoção anotada: ${emocao}`}
           </span>
         </span>
         <span className={`text-texto-2 transition-transform duration-200 ${aberto ? 'rotate-180' : ''}`}>
@@ -276,9 +285,11 @@ function ItemRegistro({ registro, onExcluir }: { registro: Registro; onExcluir: 
           <p className="text-texto-2">Sem anotação.</p>
         )}
         <div className="mt-2 flex flex-wrap gap-x-1">
-          <Link to={rotaOrientacao(s.id, c?.id ?? null)} className={`${botaoTexto} -ml-4`}>
-            Abrir orientação
-          </Link>
+          {s && (
+            <Link to={rotaOrientacao(s.id, c?.id ?? null)} className={`${botaoTexto} -ml-4`}>
+              Abrir orientação
+            </Link>
+          )}
           <button type="button" onClick={onExcluir} className={botaoDestrutivo}>
             <IconeLixeira />
             Excluir

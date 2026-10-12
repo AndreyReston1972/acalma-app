@@ -39,7 +39,7 @@ describe('migração v1 → v2', () => {
     expect(e.versao).toBe(2)
     expect(e.favoritos).toEqual([{ situacaoId: 'desligar-tela', caminhoId: null, salvoEm: '2026-10-12T12:00:00.000Z' }])
     expect(e.registros).toEqual([
-      { id: 'r1', situacaoId: 'ir-embora', caminhoId: null, criadoEm: '2026-10-12T12:05:00.000Z', resposta: 'um-pouco', anotacao: 'Despedida do escorregador.' },
+      { id: 'r1', situacaoId: 'ir-embora', caminhoId: null, criadoEm: '2026-10-12T12:05:00.000Z', resposta: 'um-pouco', anotacao: 'Despedida do escorregador.', origem: 'acalma', legado: null },
     ])
     expect(e.combinados).toEqual([])
     expect(JSON.parse(localStorage.getItem(CHAVE)!).versao).toBe(2)

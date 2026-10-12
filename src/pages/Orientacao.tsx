@@ -122,7 +122,7 @@ export function Orientacao() {
 
         {!caminho && modelo && (
           <Link
-            to={`/preparar/novo?modelo=${modelo.id}`}
+            to={`/preparar/novo?modelo=${modelo.id}&de=${situacao.id}`}
             className="tocavel mt-5 block rounded-[var(--radius-cartao)] bg-verde-claro px-4 pb-4 pt-3.5 hover:bg-bege active:bg-bege-forte"
           >
             <span className="flex items-center justify-between gap-3">

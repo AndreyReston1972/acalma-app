@@ -9,6 +9,7 @@ import { IconeAbaixo, IconeAcima, IconeFechar, IconeMais } from '../ilustracoes/
 import { buscarAcao, buscarModelo, NOME_MAX, PASSOS_MAX, PASSOS_MIN } from '../content/combinados'
 import type { AcaoId } from '../content/tipos'
 import { buscarCombinado, novoIdCombinado, salvarCombinado } from '../armazenamento/armazenamento'
+import { buscarSituacao } from '../content/situacoes'
 
 /*
  * Editor de combinado. A tela principal tem só o nome, a sequência e o
@@ -36,7 +37,9 @@ export function EditorCombinado() {
   const cheio = passos.length >= PASSOS_MAX
   const falta = Math.max(0, PASSOS_MIN - passos.length)
   const pronto = falta === 0
-  const sair = existente ? `/preparar/${existente.id}` : '/preparar'
+  // Aberto a partir de uma orientação: fechar volta para ela.
+  const origem = buscarSituacao(busca.get('de') ?? undefined)
+  const sair = existente ? `/preparar/${existente.id}` : origem ? `/agora/${origem.id}` : '/preparar'
 
   function adicionar(acao: AcaoId) {
     setPassos((p) => (p.includes(acao) || p.length >= PASSOS_MAX ? p : [...p, acao]))
@@ -75,8 +78,8 @@ export function EditorCombinado() {
     >
       <BarraTopo
         fecharPara={sair}
-        rotuloFechar="Fechar sem salvar"
-        titulo={existente ? 'Editar combinado' : modelo ? `Modelo: ${modelo.titulo}` : 'Novo combinado'}
+        rotuloFechar={origem ? `Fechar sem salvar e voltar a ${origem.titulo}` : 'Fechar sem salvar'}
+        titulo={existente ? 'Editar combinado' : origem ? `Para: ${origem.titulo}` : modelo ? `Modelo: ${modelo.titulo}` : 'Novo combinado'}
       />
 
       <main className={`${margem} flex-1 pb-6`}>
