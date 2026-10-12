@@ -15,6 +15,22 @@ que **já ativou o acesso**: esse estado é de demonstração, não um controle 
 - Testes: automatizados (Vitest) e no navegador com emulação. Teclado Android real,
   TalkBack e o S25 físico ainda **não** foram testados.
 
+## Refinamento (commit `f969d2e`, sem novas funcionalidades)
+
+- **Home:** card de ajuda mais baixo, com a cena "ajuda" (tablet, tênis, toalhas) no lugar
+  dos balões de conversa; "Montar nosso combinado" inteiro na primeira tela a 360, 390 e
+  412 px; "Já salvo por você" aparece só quando há dado.
+- **Editor:** a tela principal tem nome, sequência e salvar. O catálogo abre sob demanda
+  numa folha inferior (`<dialog>`): Esc, o X ou o fundo fecham sem perder nada; escolher
+  devolve à sequência com o passo marcado como "Adicionado". No limite de 5, o botão é
+  desabilitado com explicação. Altura do editor com o modelo "Sair de casa" a 360 px:
+  1.642 px → 780 px.
+- **Mostrar:** uma barra de progresso discreta + "Passo n de N"; Voltar e Próximo sempre
+  na mesma posição; "Fechar combinado" separado (não se confunde com "Sair de casa").
+- **Texto:** "Pede só mais um" não impõe quando a tela volta: a frase é "Agora não tem
+  mais um. A tela acabou." e a orientação permite completar com o próximo momento, se já
+  estiver combinado.
+
 ## O percurso que a v2 demonstra
 
 "Escolhi a situação → encontrei ajuda → montei nosso combinado → deixei salvo para usar
@@ -113,7 +129,7 @@ npm install
 npm run dev
 npm run build      # tsc + vite build
 npm run lint
-npm test           # 33 testes: percursos, persistência/migração, conteúdo
+npm test           # 36 testes: percursos, persistência/migração, conteúdo
 ```
 
 ## O que falta para produção
