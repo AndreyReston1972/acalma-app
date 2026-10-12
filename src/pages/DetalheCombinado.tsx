@@ -75,7 +75,7 @@ export function DetalheCombinado() {
         onConfirmar={() => {
           excluirCombinado(combinado.id)
           setExcluindo(false)
-          avisar('Combinado excluído')
+          avisar('Combinado excluído', '/preparar')
           navegar('/preparar', { replace: true })
         }}
       />

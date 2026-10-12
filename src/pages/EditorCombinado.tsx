@@ -52,7 +52,7 @@ export function EditorCombinado() {
     if (!pronto || salvando.current) return
     salvando.current = true
     salvarCombinado({ id, nome, modeloId: modelo?.id ?? null, passos })
-    avisar(existente ? 'Combinado atualizado' : 'Combinado salvo')
+    avisar(existente ? 'Combinado atualizado' : 'Combinado salvo', `/preparar/${id}`)
     navegar(`/preparar/${id}`, { replace: true })
   }
 

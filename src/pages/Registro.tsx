@@ -34,7 +34,7 @@ export function Registro() {
     if (!situacao || !resposta || salvando.current) return
     salvando.current = true
     adicionarRegistro({ situacaoId: situacao.id, caminhoId: caminho?.id ?? null, resposta, anotacao }, agora)
-    avisar('Registro guardado')
+    avisar('Registro guardado', '/salvos')
     navegar('/salvos?aba=registros', { replace: true })
   }
 

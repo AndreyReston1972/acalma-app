@@ -4,19 +4,28 @@ import { useLocation } from 'react-router-dom'
 const TELAS_COM_NAVEGACAO = ['/', '/preparar', '/salvos']
 
 /* Aviso discreto (toast): uma linha, some sozinho, anunciado a leitores de tela. */
-const Contexto = createContext<(texto: string) => void>(() => {})
+/*
+ * Cada aviso pertence a uma tela: a atual ou, quando quem chama vai navegar
+ * em seguida, a de destino (ex.: "Combinado salvo" aparece no combinado).
+ * Ao sair dessa tela, o aviso não acompanha e não cobre a tela seguinte.
+ */
+type Avisar = (texto: string, rota?: string) => void
+const Contexto = createContext<Avisar>(() => {})
 
 export function ProvedorAviso({ children }: { children: ReactNode }) {
-  const [aviso, setAviso] = useState<{ texto: string; chave: number } | null>(null)
+  const [aviso, setAviso] = useState<{ texto: string; chave: number; rota: string } | null>(null)
   const timer = useRef<number | undefined>(undefined)
   const { pathname } = useLocation()
   const acimaDaNavegacao = TELAS_COM_NAVEGACAO.includes(pathname)
 
-  const avisar = useCallback((texto: string) => {
-    window.clearTimeout(timer.current)
-    setAviso({ texto, chave: Date.now() })
-    timer.current = window.setTimeout(() => setAviso(null), 2600)
-  }, [])
+  const avisar = useCallback<Avisar>(
+    (texto, rota) => {
+      window.clearTimeout(timer.current)
+      setAviso({ texto, chave: Date.now(), rota: (rota ?? pathname).split('?')[0] })
+      timer.current = window.setTimeout(() => setAviso(null), 2600)
+    },
+    [pathname],
+  )
 
   return (
     <Contexto.Provider value={avisar}>
@@ -28,10 +37,10 @@ export function ProvedorAviso({ children }: { children: ReactNode }) {
         style={
           acimaDaNavegacao
             ? { bottom: 'calc(env(safe-area-inset-bottom) + 5.5rem)' }
-            : { top: 'calc(env(safe-area-inset-top) + 4.5rem)' }
+            : { bottom: 'calc(env(safe-area-inset-bottom) + 6.5rem)' }
         }
       >
-        {aviso && (
+        {aviso && aviso.rota === pathname && (
           <p
             key={aviso.chave}
             className="entrada rounded-[var(--radius-controle)] bg-verde-profundo px-5 py-3 text-[0.9375rem] font-medium text-white shadow-[var(--shadow-acao)]"
