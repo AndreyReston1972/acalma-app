@@ -7,7 +7,6 @@ import SOS from './pages/SOS'
 import Emocoes from './pages/Emocoes'
 import Limites from './pages/Limites'
 import Diario from './pages/Diario'
-import Nina from './pages/Nina'
 
 function OnboardingGuard() {
   const done = localStorage.getItem('acalma_onboarding')
@@ -35,12 +34,13 @@ export default function App() {
       <Routes>
         <Route path="/onboarding" element={<OnboardingGuard />} />
         <Route path="/sos" element={<SOS />} />
+        {/* Oferta antiga da Nina retirada; links salvos voltam ao início */}
+        <Route path="/nina" element={<Navigate to="/" replace />} />
         <Route element={<AppLayout />}>
           <Route path="/" element={<HomeGuard />} />
           <Route path="/emocoes" element={<Emocoes />} />
           <Route path="/limites" element={<Limites />} />
           <Route path="/diario" element={<Diario />} />
-          <Route path="/nina" element={<Nina />} />
         </Route>
       </Routes>
     </BrowserRouter>

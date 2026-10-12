@@ -271,7 +271,6 @@ export default function Home() {
               { icon: '💚', label: 'Emoções', sub: '8 fichas completas', rota: '/emocoes' },
               { icon: '🎯', label: 'Limites', sub: '6 scripts práticos', rota: '/limites' },
               { icon: '📔', label: 'Diário', sub: 'Registre episódios', rota: '/diario' },
-              { icon: '✨', label: 'Nina', sub: 'Planos e suporte', rota: '/nina' },
             ].map(({ icon, label, sub, rota }) => (
               <button
                 key={rota}
