@@ -33,7 +33,7 @@ export function Conta() {
         <section className="mt-6">
           <h2 className="font-semibold text-texto">Seus dados</h2>
           <p className="mt-1.5 leading-relaxed text-texto-2">
-            Favoritos e registros ficam só neste aparelho e neste navegador.
+            Combinados, orientações salvas e registros ficam só neste navegador. Nesta versão de avaliação, nada é sincronizado.
           </p>
           <button type="button" className={`${botaoSecundario} mt-4 text-coral-texto`} onClick={() => setConfirmando(true)}>
             Apagar dados deste protótipo
@@ -42,8 +42,8 @@ export function Conta() {
       </main>
       <Confirmacao
         aberto={confirmando}
-        titulo="Apagar favoritos e registros?"
-        texto="Apaga o que foi salvo nesta versão de avaliação, neste aparelho. Não dá para desfazer."
+        titulo="Apagar os dados do protótipo?"
+        texto="Apaga combinados, orientações salvas e registros desta versão de avaliação, neste navegador. Não dá para desfazer."
         confirmar="Apagar"
         onCancelar={() => setConfirmando(false)}
         onConfirmar={() => {

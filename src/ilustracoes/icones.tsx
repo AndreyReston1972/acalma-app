@@ -69,3 +69,9 @@ export function IconePreparar({ ativo }: { ativo: boolean }) {
 export function IconeSalvos({ ativo }: { ativo: boolean }) {
   return <IconeMarcador preenchido={ativo} />
 }
+export const IconeMais = () => <Base><path d="M12 5v14M5 12h14" /></Base>
+export const IconeAcima = () => <Base><path d="m6 15 6-6 6 6" /></Base>
+export const IconeCheck = () => <Base><path d="m5 12.5 4.5 4.5L19 7.5" /></Base>
+export const IconeLapis = () => (
+  <Base><path d="M4 20h4L19 9l-4-4L4 16Z" /><path d="m13.5 6.5 4 4" /></Base>
+)

@@ -1,12 +1,12 @@
-import type { IlustracaoId } from '../ilustracoes/Ilustracao'
+import type { CenaId } from '../ilustracoes/Cena'
 
 /**
- * Estado editorial de cada texto. Nesta rodada tudo é "rascunho": candidato
+ * Estado editorial de cada texto. Tudo nesta versão é "rascunho": candidato
  * à revisão editorial e profissional, ainda não validado.
  */
 export type EstadoEditorial = 'rascunho' | 'revisado'
 
-/** Identificadores estáveis: usados em favoritos e registros salvos no aparelho. */
+/** Identificadores estáveis: usados em favoritos, registros e combinados salvos. */
 export type SituacaoId =
   | 'desligar-tela'
   | 'ouvir-nao'
@@ -15,34 +15,58 @@ export type SituacaoId =
   | 'guardar-brinquedos'
   | 'outra-situacao'
 
-export type SequenciaId = 'sair' | 'encerrar-tela' | 'banho'
+export type AcaoId =
+  | 'guardar-brinquedos'
+  | 'calcar'
+  | 'sair'
+  | 'guardar-aparelho'
+  | 'brincar'
+  | 'separar-roupa'
+  | 'tomar-banho'
+  | 'vestir'
+  | 'lavar-maos'
+  | 'ler-historia'
+
+export type ModeloId = 'sair-de-casa' | 'encerrar-tela' | 'hora-do-banho'
+
+/**
+ * Caminho opcional depois da primeira ajuda ("Ainda está difícil" etc.).
+ * Um nível só: não abre novas perguntas.
+ */
+export interface Caminho {
+  id: string
+  rotulo: string
+  orientacao: string
+  frase: string
+}
 
 export interface Situacao {
   id: SituacaoId
   titulo: string
-  ilustracao: IlustracaoId
+  cena: CenaId
   /** 1. O que fazer agora: uma ação curta. */
   agora: string
   /** 2. Frase sugerida para dizer à criança. */
   frase: string
   /** 3. Próximo passo, quando houver uma brecha. */
   depois: string
-  /** Expansão opcional "Se continuar difícil". */
-  seContinuarDificil: string[]
-  /** Sequência do Preparar que ajuda da próxima vez, se houver. */
-  prepararDaProximaVez?: SequenciaId
+  /** Dois ou três caminhos específicos desta situação. */
+  caminhos: Caminho[]
+  /** Modelo de combinado que combina com o contexto, se houver. */
+  modeloParaProximaVez?: ModeloId
   estado: EstadoEditorial
 }
 
-export interface PassoSequencia {
-  id: string
+export interface Acao {
+  id: AcaoId
+  /** Rótulo concreto, como aparece para a criança. */
   rotulo: string
-  ilustracao: IlustracaoId
+  cena: CenaId
 }
 
-export interface Sequencia {
-  id: SequenciaId
+export interface Modelo {
+  id: ModeloId
   titulo: string
-  passos: PassoSequencia[]
+  passos: AcaoId[]
   estado: EstadoEditorial
 }

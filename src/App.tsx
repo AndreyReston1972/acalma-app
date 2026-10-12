@@ -7,7 +7,9 @@ import { Situacao } from './pages/Situacao'
 import { Orientacao } from './pages/Orientacao'
 import { Registro } from './pages/Registro'
 import { Preparar } from './pages/Preparar'
-import { Sequencia } from './pages/Sequencia'
+import { EditorCombinado } from './pages/EditorCombinado'
+import { DetalheCombinado } from './pages/DetalheCombinado'
+import { Mostrar } from './pages/Mostrar'
 import { Salvos } from './pages/Salvos'
 import { Conta } from './pages/Conta'
 import { Seguranca } from './pages/Seguranca'
@@ -44,8 +46,13 @@ export function Rotas() {
       {/* Fluxos de foco: sem barra inferior, com voltar e fechar sempre visíveis */}
       <Route path="/agora" element={<Situacao />} />
       <Route path="/agora/:situacaoId" element={<Orientacao />} />
-      <Route path="/agora/:situacaoId/registrar" element={<Registro />} />
-      <Route path="/preparar/:sequenciaId" element={<Sequencia />} />
+      <Route path="/agora/:situacaoId/:caminhoId" element={<Orientacao />} />
+      <Route path="/registrar/:situacaoId" element={<Registro />} />
+      <Route path="/preparar/novo" element={<EditorCombinado />} />
+      <Route path="/preparar/modelo/:modeloId/mostrar" element={<Mostrar />} />
+      <Route path="/preparar/:combinadoId" element={<DetalheCombinado />} />
+      <Route path="/preparar/:combinadoId/editar" element={<EditorCombinado />} />
+      <Route path="/preparar/:combinadoId/mostrar" element={<Mostrar />} />
       <Route path="/conta" element={<Conta />} />
       <Route path="/seguranca" element={<Seguranca />} />
       <Route path="*" element={<Navigate to="/" replace />} />

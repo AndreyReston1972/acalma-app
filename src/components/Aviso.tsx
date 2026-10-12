@@ -25,7 +25,11 @@ export function ProvedorAviso({ children }: { children: ReactNode }) {
         role="status"
         aria-live="polite"
         className="pointer-events-none fixed inset-x-0 z-50 flex justify-center px-6"
-        style={{ bottom: `calc(env(safe-area-inset-bottom) + ${acimaDaNavegacao ? '5.5rem' : '1.25rem'})` }}
+        style={
+          acimaDaNavegacao
+            ? { bottom: 'calc(env(safe-area-inset-bottom) + 5.5rem)' }
+            : { top: 'calc(env(safe-area-inset-top) + 4.5rem)' }
+        }
       >
         {aviso && (
           <p

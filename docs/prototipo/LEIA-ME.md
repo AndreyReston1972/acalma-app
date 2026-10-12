@@ -1,96 +1,128 @@
-# Acalma: protótipo da nova experiência
+# Acalma: protótipo da nova experiência (v2)
 
-Branch `prototipo/nova-experiencia-2026-10`, a partir de `main@4ce22f8`. **Não é produção.**
-`acalma.nexo-edu.com` continua servindo a `main`.
+Branch `prototipo/nova-experiencia-2026-10`, PR em rascunho #1 (**não fazer merge**).
+Preview: `https://deploy-preview-1--acalma-nexoedu.netlify.app/`.
+A v1 parou no commit `0d7bd93`. `acalma.nexo-edu.com` continua servindo a `main`.
 
 ## O que é
 
-Um protótipo navegável de alta fidelidade para avaliação no celular. Ele representa uma
-pessoa que **já ativou o acesso**. Esse estado é de demonstração, não um controle de
-acesso pronto.
+Protótipo navegável de alta fidelidade para avaliação no celular. Representa uma pessoa
+que **já ativou o acesso**: esse estado é de demonstração, não um controle de acesso.
 
-- Sem login, sem pagamento, sem Supabase (a dependência foi removida desta branch).
-- Sem chamadas de rede em uso: as fontes vêm no pacote e o conteúdo é estático.
-- Sem service worker e sem manifest: o protótipo não instala nada no navegador.
-- Testes: automatizados (Vitest) e no navegador com emulação. Teclado Android real, TalkBack e o S25 físico ainda NÃO foram testados.
-- Fora do contexto `production` do Netlify (preview, branch, local), a página sai com
-  `<meta name="robots" content="noindex, nofollow">` (plugin em `vite.config.ts`).
+- Sem login, sem pagamento, sem Supabase, sem IA, sem service worker e sem manifest.
+- `noindex` fora do contexto `production` do Netlify (`vite.config.ts`) e
+  `X-Robots-Tag: noindex` que o Netlify aplica aos Deploy Previews.
+- Testes: automatizados (Vitest) e no navegador com emulação. Teclado Android real,
+  TalkBack e o S25 físico ainda **não** foram testados.
+
+## O percurso que a v2 demonstra
+
+"Escolhi a situação → encontrei ajuda → montei nosso combinado → deixei salvo para usar
+novamente."
+
+1. **Agora:** situação → primeira orientação em 2 toques (ação, frase, próximo passo).
+   Depois, 2 ou 3 caminhos opcionais e específicos ("Ainda está difícil", "Pede só mais
+   um", "Não quer andar"...). É um nível só, com retorno à primeira orientação.
+2. **Preparar:** combinados visuais personalizados. A pessoa parte de um modelo ou do
+   zero, escolhe de 2 a 5 passos de um catálogo de 10 ações, reordena com botões "Mover
+   para cima/baixo", dá um nome opcional e salva. Depois mostra à criança um passo por vez,
+   com fim em "Fim do combinado", e pode editar ou excluir.
+3. **Salvos:** Combinados, Orientações (salvas, incluindo a variação escolhida, e "O que
+   ajudou por aqui", só a partir de registros marcados "Ajudou") e Registros.
 
 ## Conteúdo
 
-Todos os textos estão marcados como `estado: 'rascunho'` em `src/content/`: são
-**candidatos à revisão editorial e profissional**, não conteúdo validado.
+Tudo em `src/content/`, separado dos componentes, com IDs estáveis e marcado como
+`estado: 'rascunho'`: **candidato à revisão editorial e profissional, não validado.**
+O texto integral está em `CONTEUDO-completo.html` no pacote de avaliação.
 
-- `situacoes.ts`: seis situações. "Desligar a tela" é a referência completa; as demais
-  são breves e específicas.
-- `sequencias.ts`: três sequências do Preparar (exemplos adaptáveis).
-- `seguranca.ts`: usa **apenas** a frase de segurança já presente no projeto Nina
-  (190 / 192 / CVV 188). Pendente de revisão jurídica e profissional antes de produção.
-- Não há personalização por idade, porque o conteúdo não tem variações reais.
-- Não há coleta de nome, data de nascimento ou foto da criança.
+Correções editoriais aplicadas na v2:
+- Retirada a orientação "segure a mão com firmeza", sem substituir por outra contenção.
+- "Mantenha o não" → "Se o não continua valendo...", com o caminho "Quero rever o não".
+- "Foi difícil sair" → "Está difícil ir embora" (a saída ainda não aconteceu).
+- "Ir embora" não aponta mais para a rotina doméstica "Sair de casa".
+- Sem promessas de resultado, culpa ou generalizações; sem conselho médico.
 
-## Direção visual: "calma que orienta"
+Sem fonte profissional: os textos foram escritos para o protótipo e precisam de revisão.
 
-| Token | Valor | Uso |
-|---|---|---|
-| `creme` | #FDF8F3 | fundo principal |
-| `bege` / `bege-forte` | #F5EDE0 / #EBDFCC | superfícies secundárias, fundo das ilustrações |
-| `linha` | #E4D8C6 | divisórias finas |
-| `verde` | #3B6857 | ação principal, identidade |
-| `verde-profundo` | #2F5446 | títulos, contraste, frase sugerida |
-| `verde-claro` | #E3ECE6 | estado selecionado |
-| `coral` | #E8622A | pequenos acentos e anel de foco (nunca texto pequeno) |
-| `coral-texto` | #B4441A | coral legível: link de segurança, ação de excluir |
-| `texto` / `texto-2` | #2D3D2E / #5A6A5D | leitura / secundário |
+## Segurança (`src/content/seguranca.ts`)
 
-- **Tipografia:** Playfair Display (500/600) só em títulos curtos e na marca; DM Sans
-  (400–700) na leitura e na interface; corpo de 17 px; frase sugerida em 22 px, sem
-  itálico. As fontes são locais (`@fontsource`).
-- **Forma:** cartões com raio de 18 px, controles com 14 px, duas sombras (suave e de
-  ação). Alvos de toque de 48 px ou mais.
-- **Ilustração:** um único sistema vetorial em `src/ilustracoes/Ilustracao.tsx`, em grade
-  de 64, com traço de 2,4, duas superfícies e um acento coral. Só objetos (tela, porta,
-  cesta, tênis, toalha, banheira, roupa, gaveta, blocos); nenhuma pessoa, foto ou emoji.
-- **Movimento:** entrada de 180 ms e leve afundamento ao toque. Com
-  `prefers-reduced-motion`, tudo cai para 1 ms. Sem animação contínua.
-- **Estilos:** sem reset fora de camada e sem tokens `--spacing-<nome>`, as duas causas
-  dos defeitos do diagnóstico de 12/10 (`src/styles/index.css`).
+Papéis conferidos em fontes oficiais em 12/10/2026:
+- **192, SAMU** (Ministério da Saúde, gov.br/saude/pt-br/composicao/saes/samu-192):
+  urgência de saúde; gratuito, 24 horas.
+- **190, Polícia Militar** (Governo do Paraná, "Acionar emergência policial - 190"):
+  violência, crime em andamento, risco à integridade; gratuito em todo o país, 24 horas.
+- **188, CVV** (cvv.org.br): apoio emocional e prevenção do suicídio; gratuito, 24 horas,
+  também por chat. A tela informa que **não é atendimento de emergência**.
+
+A frase "Se for mais do que uma birra" foi trocada por "Você não precisa ter certeza de que
+é grave para pedir ajuda." Os testes nunca acionam os links `tel:`.
+**Pendente:** revisão jurídica e profissional antes de produção.
+
+## Direção visual
+
+Mantidos: creme #FDF8F3, verde #3B6857, verde profundo #2F5446, bege #F5EDE0, coral
+#E8622A em detalhes, Playfair Display em títulos curtos e DM Sans no resto.
+
+Dois sistemas separados:
+- **A. Ícones de interface** (`src/ilustracoes/icones.tsx`): grade 24, traço 2.
+- **B. Cenas de conteúdo** (`src/ilustracoes/Cena.tsx`): grade 160×120, desenhadas como
+  cenas de objetos (blocos caindo na cesta, tênis junto à porta, aparelho entrando na
+  caixa, banheira com patinho...). Gramática comum: sombra no chão, face lateral um tom
+  abaixo para dar volume, traço de 3 e um único detalhe coral. Sem pessoas, crianças,
+  emojis, fotos ou texto. São vetores feitos à mão em código, sem ferramenta de geração
+  de imagem.
+
+Composição: Home com a ação dominante ocupando o espaço útil e a cena como protagonista;
+estados de selecionado (borda + fundo verde-claro + check), pressionado (afunda 1,5% e
+escurece), salvo (marcador coral + aviso) e concluído ("Fim do combinado").
+Movimento: entrada de 180 ms e toque; com `prefers-reduced-motion`, 1 ms.
 
 ## Persistência
 
-Uma chave própria e versionada: `acalma.prototipo.v1` (`src/armazenamento/`).
+- Chave atual: `acalma.prototipo.v2` (favoritos com `caminhoId`, registros com
+  `caminhoId`, combinados).
+- **Migração v1 → v2:** se a v2 não existe e há `acalma.prototipo.v1`, favoritos e
+  registros são convertidos (`caminhoId: null`) e gravados na v2. A v1 **fica intacta**
+  (permite voltar ao preview anterior). "Apagar dados deste protótipo" remove as duas.
+- Combinado: `salvar` faz upsert pelo id fixado ao abrir o editor; toques repetidos não
+  duplicam.
+- As chaves do app publicado (`acalma_*`) **nunca** são lidas, escritas ou apagadas
+  (coberto por teste).
 
-- As chaves do app publicado (`acalma_onboarding`, `acalma_perfil`, `acalma_diario_*`,
-  `acalma_checklist`, `acalma_banner_dismissed`) **nunca** são lidas, escritas ou apagadas.
-  Isso é coberto por teste.
-- Dado corrompido ou de versão desconhecida → o app começa vazio, sem quebrar.
-- "Apagar dados deste protótipo" (em Conta) remove só a chave própria.
+### Transição futura dos dados antigos (não feita)
 
-### Transição futura dos dados antigos (não feita nesta rodada)
+1. A versão de produção não apaga as chaves `acalma_*`.
+2. Importação explícita e única: oferecer trazer `acalma_diario_*` como "Registros
+   anteriores", sem converter emoções em situações por adivinhação.
+3. Remoção das chaves antigas só depois de importação confirmada e com prazo.
 
-1. A versão nova, quando for para produção, **não apaga** as chaves `acalma_*`.
-2. A migração será uma etapa explícita e única: ler `acalma_diario_*` e oferecer importar
-   os registros antigos como "Registros anteriores", sem converter emoções em situações
-   por adivinhação.
-3. As chaves antigas só são removidas depois de importação confirmada, e com prazo.
-4. O perfil antigo (idade, desafio, reação) não é migrado: não tem uso na nova experiência.
+## Peso
+
+| | v1 (`0d7bd93`) | v2 |
+|---|---|---|
+| JS | 278,9 kB (86,5 kB gzip) | 308,4 kB (93,4 kB gzip) |
+| CSS | 25,0 kB (5,8 kB gzip) | 28,2 kB (6,3 kB gzip) |
+| Imagens raster | 0 | 0 (cenas em SVG no próprio JS) |
+| Fontes | 4 woff2 DM Sans + 2 Playfair | igual |
 
 ## Rodar
 
 ```
 npm install
-npm run dev        # desenvolvimento
+npm run dev
 npm run build      # tsc + vite build
 npm run lint
-npm test           # 20 testes: percursos, persistência, conteúdo
+npm test           # 33 testes: percursos, persistência/migração, conteúdo
 ```
 
 ## O que falta para produção
 
-Conta NexoEdu (Supabase da Nina) com direito de acesso separado; compra Hotmart de
-R$14,90 com tratamento de compra antes do cadastro, duplicidade e reembolso; garantir que
-comprar Acalma não inicie o trial da Nina (pendente de confirmação na função atual de produção: a evidência de que o cadastro da Nina cria trial automaticamente veio das migrations);
-offline real do núcleo, com teste, sem cache de respostas autenticadas; migração opcional
-dos dados antigos; revisão editorial e profissional dos textos e do apoio de segurança;
-termos, privacidade e consentimento; remoção do `noindex` no contexto de produção (já
-automática pelo `CONTEXT`).
+Conta NexoEdu (Supabase da Nina) com direito de acesso separado; compra Hotmart de R$14,90
+(compra antes do cadastro, duplicidade, reembolso); garantir que a compra do Acalma não
+inicie o trial da Nina (**pendente de confirmação na função atual de produção**: a
+evidência de que o cadastro da Nina cria trial automaticamente veio das migrations);
+offline real do núcleo, implementado e testado, sem cache de respostas autenticadas;
+importação opcional dos dados antigos; revisão editorial e profissional dos textos e da
+tela de segurança; termos, privacidade e consentimento; teste no S25 físico, com teclado
+Android real e TalkBack.

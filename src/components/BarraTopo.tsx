@@ -24,7 +24,7 @@ export function BarraTopo({
 }) {
   const navegar = useNavigate()
   return (
-    <header className="sticky top-0 z-20 bg-creme/95 pt-[env(safe-area-inset-top)] supports-[backdrop-filter]:bg-creme/90">
+    <header className="sticky top-0 z-20 bg-creme pt-[env(safe-area-inset-top)]">
       <div className="flex h-16 items-center gap-1 px-3">
         {voltarPara ? (
           <button type="button" className={botaoIcone} aria-label={rotuloVoltar} onClick={() => navegar(voltarPara)}>

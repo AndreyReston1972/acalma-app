@@ -17,3 +17,10 @@ export const botaoIcone =
 
 /** Margem lateral padrão das telas */
 export const margem = 'px-6'
+
+export const botaoDestrutivo =
+  'tocavel inline-flex min-h-12 items-center justify-center gap-2 rounded-[var(--radius-controle)] px-4 text-base font-semibold text-coral-texto hover:bg-bege active:bg-bege-forte'
+
+/** Linha de lista tocável (situações, combinados, salvos) */
+export const linhaLista =
+  'tocavel -mx-2 flex min-h-[4.5rem] items-center gap-4 rounded-[var(--radius-controle)] px-2 py-2.5 hover:bg-bege active:bg-bege-forte'
