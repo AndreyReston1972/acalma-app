@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { BarraTopo } from '../components/BarraTopo'
 import { Miniatura } from '../components/Miniatura'
-import { botaoPrimario, botaoSecundario, margem } from '../components/ui'
+import { botaoPrimario, botaoSecundario, botaoTexto, margem } from '../components/ui'
 import { Cena } from '../ilustracoes/Cena'
 import { buscarAcao, buscarModelo } from '../content/combinados'
 import type { AcaoId } from '../content/tipos'
@@ -78,33 +78,18 @@ export function Mostrar() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-creme">
-      <BarraTopo fecharPara={volta} rotuloFechar="Fechar" titulo={titulo} />
+      <BarraTopo fecharPara={volta} rotuloFechar="Fechar combinado" titulo={titulo} />
 
       <main className={`${margem} flex flex-1 flex-col`}>
-        <ol className="flex gap-2" aria-label="Passos do combinado">
-          {passos.map((p, i) => {
-            const atual = i === indice
-            return (
-              <li key={p} className="flex-1">
-                <button
-                  type="button"
-                  onClick={() => ir(i)}
-                  aria-current={atual ? 'step' : undefined}
-                  aria-label={`Passo ${i + 1}: ${buscarAcao(p)!.rotulo}`}
-                  className={`tocavel flex min-h-12 w-full flex-col items-start justify-end gap-1.5 rounded-lg pb-1 text-[0.8125rem] ${
-                    atual ? 'font-bold text-verde-profundo' : 'font-medium text-texto-2'
-                  }`}
-                >
-                  <span>{i + 1}</span>
-                  <span
-                    aria-hidden="true"
-                    className={`block w-full rounded-full ${atual ? 'h-1.5 bg-verde' : i < indice ? 'h-1 bg-verde/45' : 'h-1 bg-linha'}`}
-                  />
-                </button>
-              </li>
-            )
-          })}
-        </ol>
+        {/* Progresso: uma barra discreta (decorativa) + um único texto "Passo n de N" */}
+        <div aria-hidden="true" className="flex gap-1.5 pt-1">
+          {passos.map((p, i) => (
+            <span
+              key={p}
+              className={`h-1.5 flex-1 rounded-full ${i < indice ? 'bg-verde/45' : i === indice ? 'bg-verde' : 'bg-linha'}`}
+            />
+          ))}
+        </div>
 
         <div key={acao.id} className="entrada flex flex-1 flex-col justify-center py-4">
           <p className="rotulo text-center" aria-live="polite">
@@ -128,12 +113,18 @@ export function Mostrar() {
         </div>
       </main>
 
-      <div className={`grid grid-cols-[1fr_1.5fr] gap-3 ${margem} pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-2`}>
-        <button type="button" className={botaoSecundario} onClick={() => (indice > 0 ? ir(indice - 1) : navegar(volta))}>
-          {indice > 0 ? 'Voltar' : 'Sair'}
-        </button>
-        <button type="button" className={botaoPrimario} onClick={() => ir(proxima ? indice + 1 : 'fim')}>
-          {proxima ? 'Próximo' : 'Terminar'}
+      {/* Voltar e Próximo sempre no mesmo lugar; fechar fica separado, em texto */}
+      <div className={`${margem} pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-2`}>
+        <div className="grid grid-cols-[1fr_1.5fr] gap-3">
+          <button type="button" className={`${botaoSecundario} disabled:opacity-40`} disabled={indice === 0} onClick={() => ir(indice - 1)}>
+            Voltar
+          </button>
+          <button type="button" className={botaoPrimario} onClick={() => ir(proxima ? indice + 1 : 'fim')}>
+            {proxima ? 'Próximo' : 'Terminar'}
+          </button>
+        </div>
+        <button type="button" className={`${botaoTexto} mt-1 w-full text-texto-2`} onClick={() => navegar(volta)}>
+          Fechar combinado
         </button>
       </div>
     </div>

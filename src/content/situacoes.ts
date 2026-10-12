@@ -31,8 +31,8 @@ export const situacoes: Situacao[] = [
         id: 'pede-mais-um',
         rotulo: 'Pede “só mais um”',
         orientacao:
-          'Responda uma vez, sem negociar no meio do choro. Se vocês costumam ter tela em outro momento, diga quando é, sem prometer o que não vai cumprir.',
-        frase: 'Agora não tem mais um. A tela volta em outro dia.',
+          'Responda uma vez, sem negociar no meio do choro. Se vocês já têm um próximo momento de tela combinado, pode completar a frase com ele. Se não têm, não precisa decidir isso agora.',
+        frase: 'Agora não tem mais um. A tela acabou.',
       },
       {
         id: 'nao-quer-ajuda',

@@ -66,34 +66,59 @@ describe('ajuda na hora da birra', () => {
 })
 
 describe('combinados', () => {
-  it('cria de um modelo, reordena com botões, nomeia, salva uma vez só e mostra', async () => {
+  it('cria de um modelo, adiciona pelo catálogo, reordena, nomeia, salva uma vez só e mostra', async () => {
     const u = userEvent.setup()
     abrir('/preparar')
     await u.click(screen.getByRole('link', { name: /sair de casa/i }))
-    expect(screen.getAllByRole('listitem').filter((li) => li.closest('ol'))).toHaveLength(3)
+    // a tela principal do editor não traz o catálogo inteiro
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(within(screen.getByRole('region', { name: /passos, na ordem/i })).getAllByRole('listitem')).toHaveLength(3)
 
     await u.click(screen.getByRole('button', { name: 'Mover Sair de casa para cima' }))
-    await u.click(screen.getByRole('button', { name: /lavar as mãos/i }))
+    await u.click(screen.getByRole('button', { name: 'Adicionar passo' }))
+    const catalogo = screen.getByRole('dialog', { name: 'Escolha um passo' })
+    expect(within(catalogo).getByRole('button', { name: /calçar os sapatos \(já está no combinado\)/i })).toBeDisabled()
+    await u.click(within(catalogo).getByRole('button', { name: 'Adicionar Lavar as mãos' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(screen.getByText('Adicionado')).toBeInTheDocument()
     await u.type(screen.getByRole('textbox', { name: /nome/i }), 'Escola')
 
-    const salvar = screen.getByRole('button', { name: 'Salvar combinado' })
-    await u.click(salvar)
+    await u.click(screen.getByRole('button', { name: 'Salvar combinado' }))
     expect(salvo().combinados).toHaveLength(1)
     expect(salvo().combinados[0]).toMatchObject({ nome: 'Escola', modeloId: 'sair-de-casa', passos: ['guardar-brinquedos', 'sair', 'calcar', 'lavar-maos'] })
 
     expect(screen.getByRole('heading', { level: 1, name: 'Escola' })).toBeInTheDocument()
     await u.click(screen.getByRole('link', { name: /mostrar para a criança/i }))
     expect(screen.getByRole('heading', { level: 1, name: 'Guardar os brinquedos' })).toBeInTheDocument()
-    expect(screen.getByText('Sair de casa', { selector: 'span' })).toBeInTheDocument()
+    expect(screen.getByText('Passo 1 de 4')).toBeInTheDocument()
+    // no primeiro passo, a saída não se confunde com a ação "Sair de casa"
+    expect(screen.getAllByRole('button', { name: 'Fechar combinado' }).length).toBeGreaterThan(0)
+    expect(screen.queryByRole('button', { name: /^sair$/i })).not.toBeInTheDocument()
     for (let i = 0; i < 3; i++) await u.click(screen.getByRole('button', { name: /próximo/i }))
     expect(screen.getByRole('heading', { level: 1, name: 'Lavar as mãos' })).toBeInTheDocument()
     expect(screen.getByText('Último passo')).toBeInTheDocument()
     await u.click(screen.getByRole('button', { name: 'Terminar' }))
     expect(screen.getByRole('heading', { name: 'Fim do combinado' })).toBeInTheDocument()
+    expect(screen.queryByText(/cumpri|conseguiu|parabéns/i)).not.toBeInTheDocument()
     await u.click(screen.getByRole('button', { name: 'Mostrar de novo' }))
     expect(screen.getByRole('heading', { level: 1, name: 'Guardar os brinquedos' })).toBeInTheDocument()
-    // mostrar não grava nada
     expect(salvo().registros).toHaveLength(0)
+  })
+
+  it('fechar o catálogo sem escolher não perde nome, ordem nem passos', async () => {
+    const u = userEvent.setup()
+    abrir('/preparar/novo?modelo=encerrar-tela')
+    await u.type(screen.getByRole('textbox', { name: /nome/i }), 'Depois do desenho')
+    await u.click(screen.getByRole('button', { name: 'Mover Brincar para cima' }))
+    await u.click(screen.getByRole('button', { name: 'Adicionar passo' }))
+    await u.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Fechar sem escolher' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(screen.getByRole('textbox', { name: /nome/i })).toHaveValue('Depois do desenho')
+    const rotulos = within(screen.getByRole('region', { name: /passos, na ordem/i }))
+      .getAllByRole('listitem')
+      .map((li) => li.textContent)
+    expect(rotulos[1]).toMatch(/Brincar/)
+    expect(rotulos[2]).toMatch(/Lavar as mãos/)
   })
 
   it('impede salvar com menos de 2 passos e explica o que falta', async () => {
@@ -101,19 +126,22 @@ describe('combinados', () => {
     abrir('/preparar/novo')
     const salvar = screen.getByRole('button', { name: 'Salvar combinado' })
     expect(salvar).toBeDisabled()
-    expect(screen.getByText(/escolha pelo menos 2 passos/i)).toBeInTheDocument()
-    await u.click(screen.getByRole('button', { name: /vestir a roupa/i }))
-    expect(screen.getByText(/falta escolher mais 1 passo/i)).toBeInTheDocument()
-    await u.click(screen.getByRole('button', { name: /ler uma história/i }))
+    expect(screen.getByText(/adicione pelo menos 2 passos/i)).toBeInTheDocument()
+    await u.click(screen.getByRole('button', { name: 'Adicionar passo' }))
+    await u.click(screen.getByRole('button', { name: 'Adicionar Vestir a roupa' }))
+    expect(screen.getByText(/falta mais 1 passo/i)).toBeInTheDocument()
+    await u.click(screen.getByRole('button', { name: 'Adicionar passo' }))
+    await u.click(screen.getByRole('button', { name: 'Adicionar Ler uma história' }))
     expect(salvar).toBeEnabled()
   })
 
-  it('limita a 5 passos', async () => {
+  it('no limite de 5 passos, explica e não abre mais o catálogo', async () => {
     const u = userEvent.setup()
     abrir('/preparar/novo?modelo=hora-do-banho')
-    await u.click(screen.getByRole('button', { name: /lavar as mãos/i }))
-    expect(screen.getByText(/já tem 5 passos/i)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /brincar/i })).toBeDisabled()
+    await u.click(screen.getByRole('button', { name: 'Adicionar passo' }))
+    await u.click(screen.getByRole('button', { name: 'Adicionar Lavar as mãos' }))
+    expect(screen.getByRole('button', { name: 'Adicionar passo' })).toBeDisabled()
+    expect(screen.getByText(/até 5 passos/i)).toBeInTheDocument()
   })
 
   it('edita e exclui com confirmação; persiste ao reabrir', async () => {
@@ -143,6 +171,30 @@ describe('combinados', () => {
     await u.click(screen.getByRole('button', { name: /excluir combinado/i }))
     await u.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Excluir combinado' }))
     expect(salvo().combinados).toHaveLength(0)
+  })
+})
+
+describe('início', () => {
+  it('mostra as duas utilidades e, sem dados, nenhum atalho vazio', () => {
+    abrir('/')
+    expect(screen.getByRole('link', { name: /ajuda na hora da birra/i })).toHaveAttribute('href', '/agora')
+    expect(screen.getByRole('link', { name: /montar nosso combinado/i })).toHaveAttribute('href', '/preparar')
+    expect(screen.queryByText(/já salvo por você/i)).not.toBeInTheDocument()
+  })
+
+  it('com combinado salvo, oferece abrir e mostrar', () => {
+    localStorage.setItem(
+      CHAVE,
+      JSON.stringify({
+        versao: 2,
+        favoritos: [],
+        registros: [],
+        combinados: [{ id: 'c-9', nome: 'Escola', modeloId: 'sair-de-casa', passos: ['calcar', 'sair'], criadoEm: 'x', atualizadoEm: 'x' }],
+      }),
+    )
+    abrir('/')
+    expect(screen.getByRole('link', { name: /^escola/i })).toHaveAttribute('href', '/preparar/c-9')
+    expect(screen.getByRole('link', { name: 'Mostrar Escola' })).toHaveAttribute('href', '/preparar/c-9/mostrar')
   })
 })
 

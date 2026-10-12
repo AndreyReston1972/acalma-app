@@ -29,6 +29,7 @@ export type CenaId =
   | 'toalha'
   | 'cantinho'
   | 'frase'
+  | 'ajuda'
   | 'vazio-combinados'
   | 'vazio-favoritos'
   | 'vazio-registros'
@@ -49,9 +50,9 @@ const fino = { ...tr, strokeWidth: 2 }
 
 const Chao = ({ rx = 58 }: { rx?: number }) => <ellipse cx="80" cy="106" rx={rx} ry="6.5" fill={BGF} />
 
-function Tenis({ x = 0, y = 0, face = BR }: { x?: number; y?: number; face?: string }) {
+function Tenis({ x = 0, y = 0, face = BR, escala = 1 }: { x?: number; y?: number; face?: string; escala?: number }) {
   return (
-    <g transform={`translate(${x} ${y})`}>
+    <g transform={`translate(${x} ${y}) scale(${escala})`}>
       <path d="M8 26V13a6 6 0 0 1 6-6h13l8 8c6 4 14 5.5 22 7 6 1.2 10 4 10 8v4H8Z" fill={face} {...tr} />
       <path d="M6 34h64v2.5a4.5 4.5 0 0 1-4.5 4.5h-55A4.5 4.5 0 0 1 6 36.5Z" fill={BGF} {...tr} />
       <path d="m30 15-5 4M35.5 18.5l-5 4M41 21l-5 4" {...fino} />
@@ -283,6 +284,24 @@ function cena(id: CenaId): ReactNode {
           <circle cx="116" cy="70" r="3" fill={T} />
           <circle cx="126" cy="70" r="3" fill={CO} />
           <circle cx="136" cy="70" r="3" fill={T} />
+        </>
+      )
+    case 'ajuda':
+      // Home: objetos das situações do dia a dia (tela, sair, banho), sem conversa
+      return (
+        <>
+          <Chao rx={62} />
+          <g transform="rotate(-8 52 58)">
+            <rect x="26" y="20" width="50" height="68" rx="8" fill={BR} {...tr} />
+            <rect x="33" y="28" width="36" height="46" rx="3" fill={VC} />
+            <path d="M33 62c8-6 16-5 22 0s10 4 14 1v11H33Z" fill={VS} />
+            <path d="M46 40 58 47.5 46 55Z" fill={CO} stroke={CO} strokeWidth={3} strokeLinejoin="round" />
+          </g>
+          <rect x="94" y="74" width="50" height="30" rx="6" fill={VC} {...tr} />
+          <path d="M94 86h50" {...fino} />
+          <rect x="99" y="56" width="40" height="18" rx="6" fill={BR} {...tr} />
+          <path d="M106 65h26" stroke={VS} strokeWidth={3} strokeLinecap="round" />
+          <Tenis x={38} y={70} escala={0.8} />
         </>
       )
     case 'vazio-combinados':
