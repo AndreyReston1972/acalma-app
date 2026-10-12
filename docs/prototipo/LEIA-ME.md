@@ -12,6 +12,7 @@ acesso pronto.
 - Sem login, sem pagamento, sem Supabase (a dependência foi removida desta branch).
 - Sem chamadas de rede em uso: as fontes vêm no pacote e o conteúdo é estático.
 - Sem service worker e sem manifest: o protótipo não instala nada no navegador.
+- Testes: automatizados (Vitest) e no navegador com emulação. Teclado Android real, TalkBack e o S25 físico ainda NÃO foram testados.
 - Fora do contexto `production` do Netlify (preview, branch, local), a página sai com
   `<meta name="robots" content="noindex, nofollow">` (plugin em `vite.config.ts`).
 
@@ -88,7 +89,7 @@ npm test           # 20 testes: percursos, persistência, conteúdo
 
 Conta NexoEdu (Supabase da Nina) com direito de acesso separado; compra Hotmart de
 R$14,90 com tratamento de compra antes do cadastro, duplicidade e reembolso; garantir que
-comprar Acalma não inicie o trial da Nina (o signup da Nina hoje cria trial por trigger);
+comprar Acalma não inicie o trial da Nina (pendente de confirmação na função atual de produção: a evidência de que o cadastro da Nina cria trial automaticamente veio das migrations);
 offline real do núcleo, com teste, sem cache de respostas autenticadas; migração opcional
 dos dados antigos; revisão editorial e profissional dos textos e do apoio de segurança;
 termos, privacidade e consentimento; remoção do `noindex` no contexto de produção (já
