@@ -85,7 +85,7 @@ export const termos: Documento = {
 
 export const privacidade: Documento = {
   titulo: 'Privacidade no Acalma',
-  versao: '2026-10-13',
+  versao: '2026-10-13b',
   secoes: [
     {
       titulo: 'Quem cuida dos seus dados',
@@ -132,8 +132,9 @@ export const privacidade: Documento = {
       titulo: 'Por quanto tempo',
       paragrafos: [
         'Combinados, orientações salvas e registros: enquanto você mantiver a conta, ou até você excluí-los pela tela Conta.',
-        'Aviso completo da Hotmart (pode conter nome, documento, telefone e outros dados do comprador): até 180 dias depois do último evento da compra, para conferir pagamentos, reembolsos e contestações. Depois disso, só o registro mínimo fica.',
-        'Registro mínimo da compra (código da transação, produto, situação, datas dos eventos e e-mail da compra): até 5 anos depois do último evento da compra, para comprovar a compra, atender pedidos e contestações e permitir recuperar o acesso. Esses prazos são a nossa política; não dizemos que uma lei os exige. Os registros ficam separados dos dados do app e, se você excluir a conta, deixam de estar ligados a ela.',
+        'Registro da compra (código da transação, produto, situação, datas e e-mail da compra) e avisos de pagamento da Hotmart (que podem conter nome, documento, telefone e outros dados do comprador): hoje são guardados sem exclusão automática.',
+        'Enquanto a compra der acesso, o registro é mantido para liberar e recuperar o acesso, inclusive se você excluir a conta e criar outra com o mesmo e-mail. Quando a compra deixa de dar acesso (reembolso, estorno ou cancelamento), o registro serve para comprovar o que aconteceu e atender pedidos.',
+        `Estamos preparando a redução automática desses dados (resumo dos avisos completos e exclusão de compras encerradas). Quando ela estiver ativa, esta política informará os prazos. Até lá, você pode pedir a exclusão pelo canal ${CANAL}; o que for necessário para comprovar a compra ou exercer direitos pode ser mantido, como a lei permite.`,
         'Registros de aceite dos termos e de consentimento de marketing: enquanto a conta existir e pelo prazo necessário para comprovar o aceite ou a retirada.',
       ],
     },
