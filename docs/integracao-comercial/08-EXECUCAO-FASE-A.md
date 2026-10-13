@@ -422,3 +422,21 @@ Teste `supabase/functions/acalma-hotmart/test/integrado.test.ts` (branch `acalma
 - Migration de limpeza: **não autorizada**.
 - Tela branca na primeira abertura depois do app antigo: limitação conhecida (recuperação: recarregar).
 - Ciclo financeiro real do 8715752 (compra, e-mail, acesso, reembolso): não observado. As vendas seguem bloqueadas.
+
+# Publicação da revisão editorial (13/10/2026, autorizada)
+- **Publicado:** `main` avançada de `804d414` para **`10d9f7377680751636fd770f60e71f089553d98a`** (fast-forward, sem commit de merge).
+  - Último commit de código: `05f100f`. Inclui os 3 commits do PR #3 (agora "Merged"): `6817d3f`, `05f100f`, `10d9f73`.
+  - Escopo conferido antes: 15 arquivos de conteúdo, telas, testes e documentação. Nada em armazenamento, conta, banco, Netlify ou dependências.
+- **Versão servida:** `acalma.nexo-edu.com` serve `index-CGJOcXX2.js`, **byte a byte idêntico** ao build local do commit aprovado com as variáveis de produção do `netlify.toml`. Antes servia `index-B6hDtu1M.js`.
+- **Offline:** o `sw.js` de produção inclui o bundle novo. No navegador, depois da atualização, o service worker controla a página e o cache `workbox-precache-v2` contém `index-CGJOcXX2.js`.
+- **Telas de orientação em produção:** continuam atrás do controle de acesso. Com a conta de teste sem compra aparece "Não encontramos uma compra para este e-mail", comportamento inalterado.
+  - A conferência visual das orientações alteradas e da navegação apoio ao adulto → segurança → voltar → mesma orientação foi feita no deploy preview #3, com o mesmo código, em navegador real.
+  - Não foi feita compra para ver as telas em produção (vendas bloqueadas).
+  - A tela de segurança (aberta a todos) foi aberta em produção.
+- **Combinados salvos:** o código de armazenamento e sincronização não mudou (diff vazio em `src/armazenamento` e `src/conta`). O modelo só preenche um combinado novo, e um teste cobre um combinado salvo com o modelo antigo de 3 passos. Nenhum dado de usuário foi lido ou alterado.
+- **Recuperação, se necessário:**
+  1. **Mais rápida, sem mexer no git:** no painel do Netlify (site do Acalma → Deploys), escolher o deploy de produção anterior (`804d414`) e "Publish deploy".
+  2. **Pelo git:** `git revert --no-edit 6817d3f^..10d9f73` e push na `main`. O Netlify publica de novo.
+  - Nos dois casos o app instalado atualiza na abertura seguinte. Armazenamento e dados não são afetados (não houve mudança de formato).
+- **Pendente, cosmético:** o título do PR #3 ainda diz "NÃO FAZER MERGE" (era o aviso do preview).
+- **Vendas:** seguem bloqueadas. Nenhuma migration, banco, integração, compra, reembolso ou envio.
