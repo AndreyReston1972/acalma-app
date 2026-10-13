@@ -85,3 +85,70 @@ A configuração "Monitor Vendas NexoEdu — n8n" da Hotmart recebe eventos de *
 - A conta interna `andrey.reston+android@gmail.com` não existia. O pedido de código pelo Acalma **criou a conta** com `produto_entrada = acalma` e `origem_conta = acalma`, **sem** subscription (sem trial), **sem** SignupStarted e sem compra.
 - Código errado (`00000000`): **rejeitado pelo Supabase real**, com a mensagem "Código incorreto, vencido ou já usado".
 - **Faltam:** o código certo (lido e digitado pela responsável), a reutilização do código já usado e o link "Entrar na Nina".
+
+## Publicação (13/10/2026, madrugada) — vendas continuam BLOQUEADAS
+- **Nina:** `main` `0c1444d4…` → `cc91e348f29503ebdf06cb50f6e3fc42add5a92d` (fast-forward, sem force). Antes do push, conferi que as 3 funções publicadas (`acalma-hotmart`, `hotmart-webhook-`, `delete-user`) e os `_shared` são **idênticos, arquivo por arquivo,** a esse commit. As 4 migrations aplicadas são iguais às do commit. O commit `cd43876` (minimização, não autorizada) ficou fora.
+  - Netlify publicou `index-DBPFTEeu.js`.
+  - Conferido em produção: `?de=acalma` mostra o aviso e o botão de link; o login normal está igual; `/conhecer-a-nina` sem sessão volta para `/?de=acalma`.
+- **Acalma:** `main` `4ce22f88…` → `1446ef3ca1b773b3a7445bf54f5ee4e03cbe5150` (fast-forward).
+  - Netlify publicou `index-Co9W-1ey.js` (modo integrado, Supabase da NexoEdu, checkout).
+  - Conferido: `/` → Entrar; segurança, termos, privacidade e registros anteriores abrem sem login, sem rascunho; nenhuma chamada fora do próprio domínio sem login.
+  - Efeito: quem usava a versão gratuita passa a ver o login e, com as vendas bloqueadas, ainda não consegue comprar.
+- **Aprovação:** os dois pushes, fixados no commit, foram aceitos pelo classificador e não precisaram de retry manual. O procedimento oficial, se fosse preciso, é `/permissions` → **Recently denied** → `r`, ou a aprovação dita na conversa nomeando a ação. O retry da negação antiga **não** deveria ser usado: ela publicava a branch "como estivesse" (hoje incluiria `cd43876`).
+
+## Testes de e-mail com contas reais (banco, só leitura)
+| Conta | Login | Aceites do Acalma | Compra / acesso pago | Trial Nina | SignupStarted |
+|---|---|---|---|---|---|
+| `+android` (criada pelo Acalma às 00:40) | sim, 00:42 | termos e privacidade `2026-10-13` | nenhum | nenhum | nenhum |
+| e-mail novo (criado às 00:44, `produto_entrada = acalma`) | sim, 00:44 | nenhum (entrou pelo link da Nina, não pelo código) | nenhum | nenhum | nenhum |
+
+- Código errado: rejeitado pelo Supabase real.
+- A recusa de código vencido ou reutilizado foi feita pela responsável. O banco não registra tentativas recusadas.
+- **Destino real do link "Entrar na Nina" no e-mail pedido pelo Acalma:** o Acalma não passa `emailRedirectTo`, então o link vai para a **Site URL** = `https://app.nexo-edu.com` (redirects permitidos: `https://app.nexo-edu.com/**` e `/auth/nova-senha`). A conta criada às 00:44 entrou sem trial: no app antigo da Nina, `create_trial_once` já devolvia `ESCOLHA_EXPLICITA`.
+- **Atenção:** o e-mail novo não está em `emails_internos()`. Se for seu, vai contar como conta de origem Acalma no funil. Para tirá-lo, é preciso uma migration que o inclua na lista (não feita).
+
+## Monitor n8n "Monitor de Vendas - Hotmart v3" (id `gaFlkQYrcpyP319M`, publicado), lido sem alterar
+Fluxo: Webhook → `PURCHASE_APPROVED`?
+- **sim** → "É Nina AI?" (`body.product.name` contém "Nina") → sim: MailerLite (grupo Nina) + Telegram + planilha; não: Telegram "Venda Aprovada" + planilha "Bot Andrey / Vendas".
+- **não** → `SUBSCRIPTION_CANCELLATION`? → MailerLite remove do grupo Nina + Telegram; `PURCHASE_REFUNDED`? → Telegram; `SUBSCRIPTION_REACTIVATED`? → Telegram; outros → Telegram.
+
+**Para o produto 8715752:**
+
+| Efeito | Acontece? |
+|---|---|
+| Trial, acesso, `subscriptions` | **não**: o workflow não escreve no Supabase |
+| MailerLite / campanhas da Nina | **não**: o nome do Acalma não contém "Nina", e o Acalma (pagamento único) não gera `SUBSCRIPTION_CANCELLATION` |
+| Meta / CAPI | **não há** nó de Meta neste workflow |
+| Alertas | **sim**, internos: Telegram ("Venda Aprovada", "Reembolso" ou "Outros Eventos") |
+| Métricas | **sim**: aprovação vira linha na planilha "Bot Andrey / Vendas" (Data, Produto, Comprador, Email, Valor, Evento) |
+
+**Achado (não alterado):** o webhook da Hotmart está na versão 2.0.0, onde os campos ficam em `body.data.*`, mas o workflow lê `body.product`, `body.buyer` e `body.purchase`.
+- Evidência: na aprovação real da Nina de 01/10 (execução 1882), "É Nina AI?" deu **falso**, e a venda foi para Telegram e planilha, sem MailerLite.
+- Ou seja, hoje a planilha provavelmente grava Produto/Comprador/Email/Valor vazios, e uma venda do Acalma ficaria indistinguível de uma da Nina ali.
+
+**Ajuste mínimo proposto (não aplicado):** trocar, nos nós da planilha e do "É Nina AI?", `body.product.name` por `body.data.product.name` (e o mesmo para `buyer` e `purchase`). Isso corrige também a Nina.
+- **Efeito colateral a decidir:** com a leitura certa, aprovações da Nina passariam a cadastrar no MailerLite por este caminho, o que hoje não acontece. Convém conferir antes se isso duplica a sincronização do MailerLite já existente.
+- **Alternativa mínima, só para o Acalma:** acrescentar uma coluna `produto_id` (`body.data.product.id`) na planilha.
+
+## Minimização (`20261013100000_acalma_minimizacao_compras.sql`, `cd43876`) — continua NÃO autorizada, e precisa de revisão
+| Pergunta | Como está | Avaliação |
+|---|---|---|
+| Acesso de compras válidas depois de 5 anos | apaga `acalma_compras` 5 anos depois do último evento, **qualquer status** | **NÃO preserva**: quem comprou perderia o acesso após 5 anos. Defeito. |
+| Recuperação / vínculo | depende de `acalma_compras.email_comprador`, que seria apagado em 5 anos | **NÃO preserva** depois de 5 anos |
+| Eventos pendentes / em disputa | não minimiza eventos `pausado` / `aguardando_configuracao`; **minimiza** o payload de compra `pendente` ou `em_disputa` após 180 dias | **parcial**: disputa longa perderia o payload completo |
+| Duplicatas reiniciando o prazo | duplicata do mesmo id não é gravada; reenvio com id novo e mesmo `creation_date` não muda o máximo; evento sem data usa `recebido_em` e **pode** reiniciar | **parcial** |
+
+**Correção proposta (não implementada):**
+- **compra que dá acesso** (`aprovada`, `em_disputa`): o registro mínimo **não expira** enquanto o serviço existir;
+- **compra que não dá mais acesso** (`reembolsada`, `chargeback`, `cancelada`, `pendente` vencida): 5 anos contados de `acalma_compras.status_em` (o momento do estado efetivo, que duplicata não muda), e não do último evento recebido;
+- **payload completo**: minimizar 180 dias depois de `status_em`, só quando o status é final (`aprovada` há 180 dias, `reembolsada`, `chargeback`, `cancelada`); nunca em `pendente` ou `em_disputa`.
+
+O texto da privacidade **publicada** diz "registro mínimo até 5 anos depois do último evento", o que contradiz o acesso vitalício-enquanto-em-operação. Ele precisa ser corrigido junto com a migration, antes da 1ª venda.
+
+## Validade do link / código (24 h real × "1 hora" no e-mail)
+| Opção | Mudança | Impacto |
+|---|---|---|
+| **A (recomendada)** | `MAILER_OTP_EXP` 86400 → 3600 (Auth → Sign In / Providers → Email) | alinha com o texto e com a recomendação do painel. **Na Nina:** links de login sem senha e de "Esqueci minha senha" passam a valer 1 h (hoje valem 24 h, embora o e-mail diga 1 h). Quem abrir depois pede outro. **No Acalma:** o código vale 1 h. |
+| B | trocar no e-mail "O link é válido por 1 hora" por "24 horas" | nenhuma mudança de comportamento; mantém validade acima do recomendado |
+
+Nenhuma das duas foi aplicada. A configuração é compartilhada; a decisão é sua.
