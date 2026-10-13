@@ -340,3 +340,85 @@ Nenhuma das duas foi aplicada. A configuração é compartilhada; a decisão é 
   - Nada mais mudou: Pixel, GA4, consentimento, UTMs e checkout `L108001786T` estão iguais.
 - **Sem CPF/CNPJ.** A única ocorrência de "CPF" está dentro de uma imagem em base64; não é texto.
 - **Observação, não alterada:** o banner de cookies ainda aponta para a Política de Privacidade do site NexoEdu (`politica-de-privacidade.html`), com o texto "a configuração de consentimento é a mesma do site NexoEdu". Coerente, já que os cookies são do site `nexo-edu.com`, e fora das 5 trocas.
+
+# Fechamento técnico (13/10): validação integrada sem dinheiro
+
+## Já comprovado (não repetido)
+- Webhook oficial da Hotmart: conectividade e autenticação.
+- Rejeição de produtos diferentes do Acalma.
+- Login no Acalma com código novo e rejeição do anterior após reenvio.
+- Conta originada no Acalma entrando na Nina sem iniciar trial.
+- Correção do SignupCompleted (`3d2b9e3`, attribution-capture v25).
+- Página de vendas publicada e conferida.
+- **O reembolso real da Nina é evidência do fluxo da Nina, não do acesso comercial do Acalma.**
+
+## Código testado = código publicado
+- **Função `acalma-hotmart` v1:** os 3 arquivos publicados (`index.ts`, `logica.ts`, `_shared/secrets.ts`) são idênticos aos da `main` da Nina (`3d2b9e3`).
+- **Banco:** as 4 migrations `20261012*_acalma_*` aplicadas num PostgreSQL 17.10 local têm impressão digital **idêntica** à da produção (lida só em leitura) em 43 objetos: 26 funções, 6 tabelas, 5 políticas, 6 gatilhos.
+  - Diferença só em permissões: a produção tem `EXECUTE` extra para `service_role` em todas as funções e para `anon`/`authenticated` em 5 auxiliares (`acalma_peso_status`, `acalma_status_da_acesso`, `acalma_status_do_evento`, `acalma_sessao_prova_email` e a função de gatilho `acalma_conta_passa_a_nina`). Vêm dos privilégios padrão do Supabase.
+  - As auxiliares só mapeiam status ou leem o próprio JWT; a de gatilho não pode ser chamada diretamente. Nenhuma chamada dos cenários depende dessa diferença. Não alterado.
+- **App do Acalma:** a versão testada é a publicada (`804d414`); o código do app na branch é idêntico.
+
+## Cenários aprovados (HTTP → `tratar` publicado → PostgreSQL real → RPCs do app)
+Teste `supabase/functions/acalma-hotmart/test/integrado.test.ts` (branch `acalma/integracao-comercial`, `765991b`): **10/10 passos**.
+1. Aprovação pelo endpoint HTTP → compra criada (payload 2.0.0, e-mail com maiúsculas e espaços normalizado).
+2. Vínculo só com sessão que provou o e-mail:
+   - com senha, `confirme_o_email`;
+   - com código, `nao_vinculada` → vínculo → `ativo`;
+   - sincronização aceita e grava.
+3. Duplicata (mesmo id) responde `duplicado`; reenvio com id novo não duplica compra nem acesso.
+4. Reembolso da mesma transação → `atualizada_reembolsada`.
+5. Online: estado `revogado`; sincronização responde `sem_acesso` e não grava nada.
+6. Exportação devolve os dados sincronizados antes do reembolso.
+7. Aprovação **antiga** recebida depois do reembolso não devolve o acesso.
+8. Nova compra legítima (outra transação) → vínculo → `ativo`; a sincronização devolve os dados antigos e aceita o que fora recusado.
+9. Nada da Nina foi tocado: sem `subscriptions`, sem `marketing_events`; a função só chamou `acalma_processar_evento_hotmart`.
+
+**Suítes existentes, na versão publicada:**
+- handler 11/11 (Deno);
+- regras do banco 64/64 (PGlite);
+- concorrência 6/6 (PostgreSQL 17 real);
+- app 84/84, incluindo 1 teste novo (abaixo).
+
+## Limites da simulação (declarados)
+- **Simulado:**
+  - o PostgREST/supabase-js entre a função e o banco, trocado por um adaptador que faz o mesmo (transação, claims do JWT, `SET LOCAL ROLE`, argumentos nomeados);
+  - o GoTrue, trocado por `INSERT` em `auth.users` e claims com `amr` (`otp` / `password`);
+  - o segredo `ACALMA_HOTMART_PRODUTO_IDS`, cujo valor não é legível: usado `8715752`;
+  - o hottok de teste.
+- **Base mínima:** `base-nina.sql` reconstrói só o que as migrations tocam. As funções marcadas [PRODUÇÃO] nele foram copiadas da produção em 12/10.
+- **Não exercitado:**
+  - a infraestrutura de borda da Supabase (gateway, `verify_jwt` desligado);
+  - a Hotmart real, com uma compra e um reembolso de verdade;
+  - o envio de e-mail;
+  - o app num navegador real contra o banco: o lado do app foi testado com o servidor falso do próprio projeto (jsdom).
+- **Conclusão:** validação integrada simulada concluída; transação financeira real do Acalma ainda não observada.
+
+## Offline depois do reembolso (comportamento efetivo, `src/conta/acesso.ts` e `Conta.tsx`)
+- **Online:** o app consulta o servidor na abertura, ao voltar a conexão (evento `online`) e ao voltar para o app (`visibilitychange`). Uma sincronização que receba `sem_acesso` também força nova consulta.
+  - Revogação confirmada pelo servidor encerra o acesso na hora (tela "acesso foi encerrado").
+  - A fila local fica no aparelho e pode ser baixada.
+- **Totalmente offline:** **não há revogação instantânea.** Com a última confirmação `ativo` guardada no aparelho, o acesso continua liberado até 30 dias **contados da última confirmação bem-sucedida com o servidor** (não do reembolso).
+  - Falha de rede não renova o prazo.
+  - **Exposição máxima prevista:** até 30 dias de uso offline depois da última confirmação. Se o reembolso ocorrer logo depois de uma confirmação e o aparelho ficar sem rede, até ~30 dias.
+  - Limite conhecido: o prazo usa o relógio do aparelho; atrasar o relógio pode estendê-lo. Política de 30 dias não alterada.
+- **Ao voltar à rede:** com o app aberto, o evento `online` dispara a consulta. O servidor responde `revogado`, a confirmação guardada é substituída e a tela muda.
+  - Coberto agora por teste novo em `src/test/integrado.test.tsx`: "reembolso enquanto estava sem rede: ao voltar a conexão com o app aberto, o acesso é encerrado".
+  - Abertura com rede: já coberta pelo teste "reembolso: ao reabrir com rede…".
+
+## Defeitos encontrados
+- **Nenhum** nos cenários definidos. Os erros intermediários da primeira execução eram do próprio teste novo (e-mail do aviso diferente do da conta, nome de estado e IDs repetidos entre rodadas), corrigidos no teste. Nenhum código de produção foi alterado.
+
+## Conteúdo para a próxima etapa
+- `Área de Trabalho\Acalma-Conteudo-Para-Revisao.md`, gerado por script direto dos arquivos de conteúdo do commit publicado `804d414` (sem transcrição manual):
+  - 6 situações, 20 frases, 10 ações, 3 modelos;
+  - tela de segurança;
+  - pontos 1, 2, 3 e 5 com as 5 fontes já consultadas.
+  - Sem alteração de conteúdo e sem dados de usuários.
+
+## Pendências registradas separadamente
+- Identificação do fornecedor sem publicar CPF/CNPJ: decisão tomada; conformidade jurídica **não** presumida.
+- Revisão das orientações dos pontos 1, 2, 3 e 5: será feita pela equipe, com fontes confiáveis (não é tarefa do advogado; não há validação profissional).
+- Migration de limpeza: **não autorizada**.
+- Tela branca na primeira abertura depois do app antigo: limitação conhecida (recuperação: recarregar).
+- Ciclo financeiro real do 8715752 (compra, e-mail, acesso, reembolso): não observado. As vendas seguem bloqueadas.

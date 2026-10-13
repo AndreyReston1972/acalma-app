@@ -114,6 +114,21 @@ describe('entrar e acesso', () => {
     abrir(ap.servico)
     expect(await screen.findByRole('heading', { name: /conecte-se uma vez/i })).toBeInTheDocument()
   })
+
+  it('reembolso enquanto estava sem rede: ao voltar a conexão com o app aberto, o acesso é encerrado', async () => {
+    const srv = new ServidorFalso()
+    const uid = srv.conta('volta@teste.dev', 'ativo')
+    const ap = aparelho(srv)
+    ap.entrarComo(srv.contas.get('volta@teste.dev')!.sessao)
+    ap.estado.online = false
+    guardarAcesso(uid, 'ativo', new Date())
+    abrir(ap.servico)
+    expect(await home()).toBeInTheDocument() // sem rede: liberado pela confirmação guardada
+    srv.contas.get('volta@teste.dev')!.acesso = 'revogado' // o reembolso chega ao servidor
+    ap.estado.online = true
+    window.dispatchEvent(new Event('online'))
+    expect(await screen.findByRole('heading', { name: /acesso foi encerrado/i })).toBeInTheDocument()
+  })
 })
 
 describe('dados por conta', () => {
