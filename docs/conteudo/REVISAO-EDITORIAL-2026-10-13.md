@@ -64,7 +64,7 @@ Branch `conteudo/revisao-editorial-2026-10`, a partir da versão publicada (`804
 | # | Ponto | O que mudou | O que continua dependendo de avaliação individual |
 |---|---|---|---|
 | 1 | "Parece que algo incomoda" (banho) | Conferir **uma coisa por vez** (temperatura, barulho, água no rosto, sabonete, tecido, etiqueta), sem presumir água mais quente ou fria. Sem forçar exposição ao desconforto. A criança pode mostrar ou apontar; o adulto pode observar. Dor ou incômodo recorrente: pediatra. Orientação profissional já existente vem primeiro. | crianças com diferenças sensoriais: a orientação individual de quem acompanha a criança prevalece |
-| 2 | "Não quer andar" e "Estamos em público" | Considerar cansaço, dor ou desconforto antes de presumir recusa. Pausa em local seguro e ajuda de outro adulto. Mão dada ou colo só se as duas forem possíveis e seguras. Aviso de não puxar pelas mãos, punhos ou braços mantido. Perigo: sair do risco e pedir ajuda. **Retirado:** "segure pelo corpo" e qualquer instrução de carregar uma criança que resiste. Em público: "se for possível e seguro", sempre junto com a criança. | carregar ou segurar uma criança que resiste: não é ensinado no app |
+| 2 | "Não quer andar" e "Estamos em público" | Em blocos visíveis (ajuste final): **Agora** (ver cansaço, dor ou desconforto; pausa só se o local estiver seguro), **Na pausa, você pode dizer**, **Se precisarem seguir** (mão dada ou colo só se possíveis e seguros; ajuda de outro adulto) e **Cuidado** (não puxar nem levantar pelas mãos, punhos ou braços; perigo: sair do risco e pedir ajuda), sem acordeão nem outro toque. **Retirado:** "segure pelo corpo" e qualquer instrução de carregar uma criança que resiste. Em público: "se for possível e seguro", sempre junto com a criança. | carregar ou segurar uma criança que resiste: não é ensinado no app |
 | 3 | "Quero rever o não" | Removido "para não parecer que o choro decidiu". Agora: se o limite continua necessário, mantenha; se percebeu que se enganou ou entendeu melhor o pedido, corrija e explique em uma frase. Sem exigir que a criança pare de chorar para o adulto reconhecer o erro. Frase: "Eu entendi melhor. Podemos fazer assim…" | quando a flexibilidade ajuda e quando reforça a birra, em cada família |
 | 5 | Frases prontas (2 a 6 anos) | Mais curtas e naturais ("A tela terminou. Estou aqui.", "Estou aqui. Vou ajudar."). Retiradas: "Agora não tem mais um", "Pode demorar", "Primeiro só os pés. Depois a gente vê o resto". Aviso discreto de que são sugestões. Sem configuração por idade. | adequação de vocabulário por idade e para crianças com atraso de linguagem ou outras condições de desenvolvimento: **o conteúdo não se apresenta como adequado a qualquer condição** |
 
@@ -76,3 +76,17 @@ Branch `conteudo/revisao-editorial-2026-10`, a partir da versão publicada (`804
 - **"Pode demorar":** não diferenciava esperar em segurança de precisar agir.
 - **"Biscoito agora não… fruta e pão" (Ouvir um não):** exemplo alimentar trocado por objetos neutros.
 - **"Lavar as mãos" no modelo "Encerrar a tela":** não é etapa necessária para encerrar a tela.
+
+## Ajustes finais (13/10, após avaliação do pacote)
+
+- **Desligar a tela / Não quer minha ajuda:** retirada a aproximação periódica, que contradizia o respeito à distância. Agora: "Fique por perto, onde consiga supervisionar, sem insistir em se aproximar ou tocar. Mostre que continua disponível." A frase foi mantida.
+- **Ir embora / Depois:** retirado "abrir caminho até o portão". A tarefa é pequena e sempre "seguindo junto com você".
+- **Pede para ficar mais:**
+  - retirado "Um último brinquedo funciona…", que soava como garantia de resultado;
+  - a frase principal passou a "Você queria ficar mais. Agora vamos.", porque "A última já foi" presumia uma última atividade já combinada e concluída.
+- **Não quer andar:** o parágrafo único virou os quatro blocos descritos no ponto 2. O "Cuidado" fica sempre visível, com o mesmo tamanho de fonte.
+- **Eu também perdi a paciência:**
+  - pausa "mantendo a supervisão adequada ou com outro adulto responsável";
+  - acesso à ajuda junto ao "Agora" ("Tem medo de machucar alguém? Procure ajuda agora."), que abre a tela de segurança existente;
+  - o acesso no fim foi mantido.
+  - Regras de acesso inalteradas.
