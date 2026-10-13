@@ -13,7 +13,8 @@ export const apoioAdulto = {
   titulo: 'Eu também perdi a paciência',
   agora:
     'Primeiro, segurança: pare a discussão e veja se ninguém pode se machucar. Se outro adulto estiver por perto, peça que assuma por alguns minutos.',
-  pausa: 'Se precisar se afastar para se acalmar, só faça isso com a criança num lugar seguro.',
+  pausa: 'Se precisar de uma pausa, mantenha a supervisão adequada ou peça que outro adulto responsável assuma.',
+  ajudaAgora: 'Tem medo de machucar alguém? Procure ajuda agora.',
   frase: 'Eu gritei. Não foi uma boa forma de falar com você. Vou tentar de novo.',
   depois:
     'Quando estiver em condições, volte e conserte a forma como falou. Um limite que era necessário pode continuar valendo.',

@@ -38,6 +38,12 @@ export interface Caminho {
   rotulo: string
   orientacao: string
   frase: string
+  /** Rótulo da frase quando ela depende do que veio antes (ex.: só na pausa). */
+  rotuloFrase?: string
+  /** "Se precisarem seguir": o que fazer quando não dá para ficar parado. */
+  seguir?: string
+  /** "Cuidado": aviso de segurança, sempre visível (nunca escondido em outro toque). */
+  cuidado?: string
 }
 
 export interface Situacao {

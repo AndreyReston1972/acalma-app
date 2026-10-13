@@ -39,7 +39,7 @@ export const situacoes: Situacao[] = [
         id: 'nao-quer-ajuda',
         rotulo: 'Não quer minha ajuda',
         orientacao:
-          'Respeite se a criança não quer que você chegue perto. Fique onde consiga ver e ouvir, fazendo algo calmo. De tempos em tempos, aproxime-se um pouco, sem esperar que ela peça.',
+          'Fique por perto, onde consiga supervisionar, sem insistir em se aproximar ou tocar. Mostre que continua disponível.',
         frase: 'Tudo bem. Vou ficar aqui perto.',
       },
     ],
@@ -81,21 +81,24 @@ export const situacoes: Situacao[] = [
     cena: 'parque',
     agora: 'Diga que é hora de ir e comecem a se preparar juntos: pegue as coisas e ofereça a mão.',
     frase: 'Você queria ficar. Agora vamos embora juntos.',
-    depois: 'Dê uma tarefa para a saída: carregar algo leve, abrir caminho até o portão ou dar tchau para o lugar.',
+    depois: 'Dê uma tarefa pequena para a saída, como carregar algo leve ou dar tchau para o lugar, seguindo junto com você.',
     caminhos: [
       {
         id: 'quer-ficar-mais',
         rotulo: 'Pede para ficar mais',
         orientacao:
-          'Um último brinquedo funciona quando é combinado antes de começar a saída, se houver tempo: “Mais uma descida e vamos.” Se essa última vez já aconteceu, não ofereça outra a cada protesto. Se precisam sair agora, diga isso em poucas palavras.',
-        frase: 'A última já foi. Agora vamos.',
+          'Se houver tempo, você pode combinar uma última atividade antes de começar a saída. Se essa última vez já aconteceu, não ofereça outra a cada protesto. Se precisam sair agora, diga isso em poucas palavras.',
+        frase: 'Você queria ficar mais. Agora vamos.',
       },
       {
         id: 'nao-quer-andar',
         rotulo: 'Não quer andar',
-        orientacao:
-          'Veja primeiro se é cansaço, dor ou desconforto. Sem perigo por perto, façam uma pausa num lugar seguro e, se der, peça ajuda a outro adulto. Ofereça mão dada ou colo só se as duas formas forem possíveis e seguras. Nunca puxe nem levante pelas mãos, punhos ou braços: isso pode machucar o cotovelo. Se houver perigo, como carros, a prioridade é sair dali e pedir ajuda.',
+        orientacao: 'Veja se há cansaço, dor ou desconforto. Se o local estiver seguro, façam uma pausa.',
+        rotuloFrase: 'Na pausa, você pode dizer',
         frase: 'Está difícil andar? Vamos parar um pouco aqui.',
+        seguir: 'Ofereça mão dada ou colo apenas se forem opções possíveis e seguras. Se precisar, peça ajuda a outro adulto.',
+        cuidado:
+          'Não puxe nem levante a criança pelas mãos, punhos ou braços. Se houver perigo, como carros, a prioridade é sair do risco e pedir ajuda.',
       },
       {
         id: 'em-publico',

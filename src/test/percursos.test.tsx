@@ -40,7 +40,10 @@ describe('ajuda na hora da birra', () => {
     await u.click(screen.getByRole('link', { name: /não quer andar/i }))
     expect(screen.getByRole('heading', { level: 1, name: 'Não quer andar' })).toBeInTheDocument()
     expect(screen.getByText('Ir embora')).toBeInTheDocument()
-    expect(screen.getByText(/nunca puxe nem levante pelas mãos/i)).toBeInTheDocument()
+    // frase ligada à pausa e cuidado visível na mesma tela, sem outro toque
+    expect(screen.getByRole('heading', { name: 'Na pausa, você pode dizer' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Se precisarem seguir' })).toBeInTheDocument()
+    expect(within(screen.getByRole('region', { name: 'Cuidado' })).getByText(/não puxe nem levante a criança/i)).toBeVisible()
     // um nível só: nenhum novo caminho aqui
     expect(screen.queryByRole('region', { name: /se precisar de mais/i })).not.toBeInTheDocument()
 
@@ -56,6 +59,7 @@ describe('ajuda na hora da birra', () => {
     abrir('/agora/ouvir-nao')
     await u.click(screen.getByRole('link', { name: /eu também perdi a paciência/i }))
     expect(screen.getByRole('heading', { level: 1, name: /eu também perdi a paciência/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /tem medo de machucar alguém/i })).toHaveAttribute('href', '/seguranca')
     expect(screen.getByRole('link', { name: /alguém pode se machucar/i })).toHaveAttribute('href', '/seguranca')
     await u.click(screen.getByRole('button', { name: 'Voltar' }))
     expect(screen.getByRole('heading', { level: 1, name: /ouvir um “não”/i })).toBeInTheDocument()

@@ -9,7 +9,7 @@ const textosSituacoes = situacoes.flatMap((s) => [
   s.agora,
   s.frase,
   s.depois,
-  ...s.caminhos.flatMap((c) => [c.rotulo, c.orientacao, c.frase]),
+  ...s.caminhos.flatMap((c) => [c.rotulo, c.orientacao, c.frase, c.rotuloFrase ?? '', c.seguir ?? '', c.cuidado ?? '']),
 ])
 const todosOsTextos = [
   ...textosSituacoes,
@@ -77,7 +77,8 @@ describe('revisão de 13/10: limites que não podem voltar', () => {
   it('cada situação tem preparação para a próxima vez, e o aviso de não puxar pelos braços fica', () => {
     for (const s of situacoes) expect(s.proximaVez.trim().length, s.id).toBeGreaterThan(20)
     const andar = situacoes.find((s) => s.id === 'ir-embora')!.caminhos.find((c) => c.id === 'nao-quer-andar')!
-    expect(andar.orientacao).toMatch(/nunca puxe nem levante pelas mãos, punhos ou braços/i)
+    expect(andar.cuidado).toMatch(/não puxe nem levante a criança pelas mãos, punhos ou braços/i)
+    expect(andar.orientacao).toMatch(/se o local estiver seguro/i) // a pausa (e a frase dela) depende de local seguro
   })
 
   it('não exige olhar, abraço ou respiração da criança e não traz de volta trechos retirados', () => {

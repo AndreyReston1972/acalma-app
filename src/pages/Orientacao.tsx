@@ -65,7 +65,7 @@ export function Orientacao() {
         </div>
 
         <section aria-labelledby="o-agora" className="mt-6">
-          <h2 id="o-agora" className="rotulo">{caminho ? 'Tente assim' : 'Agora'}</h2>
+          <h2 id="o-agora" className="rotulo">{caminho && !(caminho.seguir || caminho.cuidado) ? 'Tente assim' : 'Agora'}</h2>
           <p className="mt-1.5 text-[1.1875rem] font-medium leading-snug text-texto">
             {caminho ? caminho.orientacao : situacao.agora}
           </p>
@@ -73,12 +73,26 @@ export function Orientacao() {
 
         <section aria-labelledby="o-frase" className="relative mt-5 overflow-hidden rounded-[var(--radius-cartao)] bg-bege px-5 pb-5 pt-4">
           <span aria-hidden="true" className="absolute inset-y-0 left-0 w-1.5 bg-coral" />
-          <h2 id="o-frase" className="rotulo">Você pode dizer</h2>
+          <h2 id="o-frase" className="rotulo">{caminho?.rotuloFrase ?? 'Você pode dizer'}</h2>
           <p className="mt-2 text-[1.375rem] font-medium leading-[1.35] tracking-[-0.005em] text-verde-profundo">
             {caminho ? caminho.frase : situacao.frase}
           </p>
           <p className="mt-2 text-[0.875rem] text-texto-2">Use as palavras que combinam com vocês.</p>
         </section>
+
+        {caminho?.seguir && (
+          <section aria-labelledby="o-seguir" className="mt-5">
+            <h2 id="o-seguir" className="rotulo">Se precisarem seguir</h2>
+            <p className="mt-1.5 text-[1.0625rem] leading-relaxed text-texto">{caminho.seguir}</p>
+          </section>
+        )}
+
+        {caminho?.cuidado && (
+          <section aria-labelledby="o-cuidado" className="mt-5 border-l-4 border-coral pl-4">
+            <h2 id="o-cuidado" className="rotulo text-coral-texto">Cuidado</h2>
+            <p className="mt-1.5 text-[1.0625rem] font-semibold leading-relaxed text-texto">{caminho.cuidado}</p>
+          </section>
+        )}
 
         {!caminho && (
           <section aria-labelledby="o-depois" className="mt-5">

@@ -22,6 +22,7 @@ export function ApoioAdulto() {
           <h2 id="a-agora" className="rotulo">Agora</h2>
           <p className="mt-1.5 text-[1.1875rem] font-medium leading-snug text-texto">{apoioAdulto.agora}</p>
           <p className="mt-2 text-[1.0625rem] leading-relaxed text-texto">{apoioAdulto.pausa}</p>
+          <LinkSeguranca className="mt-1" texto={apoioAdulto.ajudaAgora} />
         </section>
 
         <section aria-labelledby="a-depois" className="mt-5">
