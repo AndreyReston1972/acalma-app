@@ -327,3 +327,16 @@ Nenhuma das duas foi aplicada. A configuração é compartilhada; a decisão é 
 - **Contaminação conhecida no GA4:** o `SignupCompleted` da conta de teste `andrey.reston+android@…` (`7977a42b…`), enviado em 13/10 05:50:14 (GA4 204, Meta não), **continua no GA4**.
   - Não foi compensado com outro evento nem removido.
   - A linha em `marketing_events` foi mantida como registro.
+
+## 15. Página de vendas com as 5 trocas: conferida e já no ar (13/10)
+- **Arquivo do responsável:** `Área de Trabalho\acalma.html` (gerado com o ChatGPT, 05:29). A página publicada `nexo-edu.com/acalma.html` (last-modified 05:35, Brasília) é **idêntica** a ele.
+  - Únicas diferenças: o que o Cloudflare injeta ao servir (proteção do e-mail `mailto:` e script de verificação de robô). Não fazem parte do arquivo.
+- **Comparado com a versão anterior da página**, mudaram exatamente as 5 trocas de `lp/TROCAS.md`:
+  1. aviso perto do preço;
+  2. FAQ "Preciso pagar todo mês?";
+  3. FAQ nova "Como eu acesso? Funciona sem internet?";
+  4. `termsUrl` / `privacyUrl` do Acalma;
+  5. link de privacidade do rodapé.
+  - Nada mais mudou: Pixel, GA4, consentimento, UTMs e checkout `L108001786T` estão iguais.
+- **Sem CPF/CNPJ.** A única ocorrência de "CPF" está dentro de uma imagem em base64; não é texto.
+- **Observação, não alterada:** o banner de cookies ainda aponta para a Política de Privacidade do site NexoEdu (`politica-de-privacidade.html`), com o texto "a configuração de consentimento é a mesma do site NexoEdu". Coerente, já que os cookies são do site `nexo-edu.com`, e fora das 5 trocas.
