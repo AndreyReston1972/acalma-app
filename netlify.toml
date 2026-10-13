@@ -3,13 +3,18 @@
   publish = "dist"
 
 # Valores PÚBLICOS do Acalma comercial, só no contexto de PRODUÇÃO (main). Deploy previews
-# não recebem nada daqui e continuam em demonstração. Nenhum segredo neste arquivo.
-# O modo integrado só liga com VITE_ACALMA_MODO=integrado + VITE_NEXO_SUPABASE_URL +
-# VITE_NEXO_SUPABASE_ANON_KEY, definidos no painel do Netlify no passo de publicação
-# (docs/integracao-comercial/04-PUBLICACAO.md). Até lá, estes valores não têm efeito.
+# não recebem nada daqui e continuam em demonstração. Nenhum segredo neste arquivo: a chave
+# do Supabase é a PUBLISHABLE (pública por natureza, a mesma do app da Nina; a proteção é a
+# RLS). O merge desta configuração na main É a publicação do Acalma comercial: só depois do
+# template de e-mail com código e do teste de e-mail (04-PUBLICACAO.md, fase A).
+# O build falha se os termos voltarem a ter pendências (scripts/verificar-publicacao.mjs).
 # Produto Hotmart: 8715752 (o ID vai no segredo ACALMA_HOTMART_PRODUTO_IDS do Supabase).
 [context.production.environment]
+  VITE_ACALMA_MODO = "integrado"
+  VITE_NEXO_SUPABASE_URL = "https://eizkmbqnvhxwvepiyxeg.supabase.co"
+  VITE_NEXO_SUPABASE_ANON_KEY = "sb_publishable_qzXa1flcLXma1Zfn4iAR6g_bzx9ysTA"
   VITE_ACALMA_CHECKOUT_URL = "https://pay.hotmart.com/L108001786T"
+  VITE_ACALMA_SUPORTE_EMAIL = "comercial@nexo-edu.com"
   VITE_NINA_URL = "https://app.nexo-edu.com"
 
 [[headers]]
