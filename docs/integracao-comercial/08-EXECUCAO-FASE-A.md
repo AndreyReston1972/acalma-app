@@ -187,7 +187,7 @@ Nenhuma das duas foi aplicada. A configuração é compartilhada; a decisão é 
 - Versão anterior `9faf3d08-f60f-43f0-92e4-74cc3f6cd173` (backup em `n8n/monitor-vendas-correcao.mjs`); versão publicada `a71cb19d-e0cc-491d-86a9-f05bb7ea6799`, ativa.
 - "É Nina AI?" e MailerLite não foram alterados (continua falso, sem MailerLite por esse caminho). Nenhuma venda antiga foi reprocessada.
 
-## 5. Página de vendas: `lp/TROCAS.md` (5 trocas conferidas; CPF/CNPJ pendente do usuário)
+## 5. Página de vendas: `lp/TROCAS.md` (5 trocas conferidas; CPF/CNPJ NÃO será publicado, por decisão da responsável; ver item 8)
 
 ## 6. Correção de cadastro de teste: conta digitada errada EXCLUÍDA (13/10, autorizada)
 - Conta: o e-mail digitado sem o "y" (`andre.reston+android@…`), `8cd6123e-a44c-4432-9740-b28a91851670`.
@@ -226,3 +226,51 @@ Nenhuma das duas foi aplicada. A configuração é compartilhada; a decisão é 
   - No teste, o SW novo assumiu, mas a aba antiga **travou** em vez de recarregar.
   - Pior que a tela branca; nada foi publicado nem commitado. O diff ficou só no rascunho local.
   - Próxima tentativa, se for prioridade: teste fora da automação do navegador, num aparelho real com o Acalma antigo instalado.
+
+## 8. Identificação do fornecedor: decisão de não publicar CPF/CNPJ (13/10)
+- A responsável decidiu **não expor CPF nem CNPJ publicamente**: página de vendas, termos, privacidade e arquivos públicos. Nenhum número foi buscado ou incluído.
+- Continuam os demais dados de identificação e suporte já confirmados (os mesmos da Nina).
+- **Pendência separada, em aberto:** avaliar uma forma de identificação do fornecedor compatível com essa decisão (Decreto 7.962/2013, art. 2º, I). A conformidade jurídica **não** está resolvida.
+- Testes de login e preparação do HTML não dependem disso.
+
+## 9. Problema conhecido: tela em branco na primeira abertura depois do app antigo (SEM correção publicada)
+- Causa e reprodução: item 7.
+- A solução de recarga automática **não será retomada**: travou a aba no teste.
+- Investigação encerrada por ora.
+- **Instrução de recuperação** (para suporte e FAQ; não exige apagar dados do navegador):
+  > Se o Acalma abrir com a tela em branco, recarregue a página (ou feche e abra de novo). Na segunda abertura, a versão atualizada aparece normalmente. Não é preciso apagar dados do navegador.
+
+## 10. Testes de login de 13/10 (produção, feitos pelo responsável; conferência só de leitura)
+**Acalma, `andrey.reston+android@…` (`7977a42b…`, conta originada no Acalma):**
+- **Comprovado:** o código anterior foi **recusado** depois de um novo envio (mensagem de expirado) e o login com o **código novo** funcionou: `last_sign_in_at` 13/10 05:28:57 (Brasília).
+  - **Não** é teste da expiração por tempo de 1 hora.
+- Depois do login, a tela "Não encontramos uma compra para este e-mail", como esperado.
+- **Aceites (`acalma_aceites`):**
+  - termos `2026-10-13` (00:42, primeiro login);
+  - privacidade `2026-10-13` (00:42);
+  - privacidade **`2026-10-13b`** registrada no novo login (05:28:57).
+- **Sem compra** (`acalma_compras` 0), **sem acesso pago** (`concessoes_acesso` 0), **sem trial da Nina** (sem `subscriptions`, `nina_teste_escolhido_em` nulo), sem eventos de marketing.
+  - Observação: `profiles.plan` mostra o valor padrão `trial` sem assinatura. A fonte de verdade é `subscriptions`.
+
+**Nina: o clique no último e-mail NÃO validou a conta `+e2e`:**
+- O único e-mail de autenticação da Nina nesta rodada foi para `andrey.reston+e2e@…`, enviado às 01:17 (Brasília).
+- Esse token **continua sem uso** (pendente e expirado). A `+e2e` não tem sessão e o último login dela é de 18/09.
+- Nenhum e-mail de autenticação foi enviado para `andrey.reston@…` nesta rodada.
+- A entrada na conta `andrey.reston@…` veio de **Google**, não do link:
+  - a sessão Google existente (criada em 05/10) foi renovada às 05:28;
+  - a identidade Google registrou entrada às 05:33:28;
+  - nenhuma sessão nova ficou ativa depois disso.
+- **Trial e assinatura sem alteração pelo teste:**
+  - `andrey.reston@…` passou de trial para `trial_expired` às 04:00 (Brasília), pela expiração automática diária (fim do trial em 12/10 16:20), **antes** do teste;
+  - `+e2e` segue `trial_expired` desde 26/09.
+- **Ainda falta:** o login na Nina com a conta originada no Acalma (`+android`). Preparado no item 11.
+
+## 11. Teste pendente: conta originada no Acalma entrando na Nina
+- **Objetivo:** a mesma conta do Acalma entra na Nina pelo link, e isso **não** inicia trial nem assinatura.
+- **Estado antes:** sem `subscriptions` e sem trial escolhido.
+- **Intervenção do responsável:**
+  1. numa **janela anônima**, para não reaproveitar a sessão Google da conta principal, abrir `https://app.nexo-edu.com`;
+  2. em "Entrar sem senha, por link no e-mail", pedir o link para `andrey.reston+android@gmail.com`;
+  3. abrir o link **na mesma janela anônima**, em até 1 hora;
+  4. não escolher iniciar o teste da Nina; só anotar a tela que apareceu.
+- **Conferência depois (só leitura):** token consumido, sessão nova da `+android`, nenhuma `subscriptions` criada, `nina_teste_escolhido_em` nulo.

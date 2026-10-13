@@ -7,7 +7,7 @@ O `conferir_trocas.py` aplica as 5 trocas numa cópia e confere.
 - Termos: `https://acalma.nexo-edu.com/termos`
 - Privacidade: `https://acalma.nexo-edu.com/privacidade`
 
-**CPF/CNPJ:** a página ainda não identifica o fornecedor com o número (Decreto 7.962/2013, art. 2º, I). O número será informado pela responsável; nenhum foi inventado.
+**Identificação do fornecedor:** por decisão da responsável, **nenhum número de CPF ou CNPJ é publicado** (página de vendas, termos, privacidade ou arquivos públicos). Os demais dados de identificação e suporte já confirmados continuam. Está em aberto, como pendência separada, avaliar uma forma de identificação do fornecedor compatível com essa decisão (Decreto 7.962/2013, art. 2º, I); a conformidade jurídica **não** está resolvida. Estas 5 trocas não dependem disso.
 
 ---
 
