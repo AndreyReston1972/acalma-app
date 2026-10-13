@@ -143,7 +143,7 @@ Fluxo: Webhook → `PURCHASE_APPROVED`?
 - **compra que não dá mais acesso** (`reembolsada`, `chargeback`, `cancelada`, `pendente` vencida): 5 anos contados de `acalma_compras.status_em` (o momento do estado efetivo, que duplicata não muda), e não do último evento recebido;
 - **payload completo**: minimizar 180 dias depois de `status_em`, só quando o status é final (`aprovada` há 180 dias, `reembolsada`, `chargeback`, `cancelada`); nunca em `pendente` ou `em_disputa`.
 
-O texto da privacidade **publicada** diz "registro mínimo até 5 anos depois do último evento", o que contradiz o acesso vitalício-enquanto-em-operação. Ele precisa ser corrigido junto com a migration, antes da 1ª venda.
+O texto da privacidade **publicada** diz "registro mínimo até 5 anos depois do último evento", o que contradiz o acesso enquanto o Acalma estiver em operação. Ele precisa ser corrigido junto com a migration, antes da 1ª venda.
 
 ## Validade do link / código (24 h real × "1 hora" no e-mail)
 | Opção | Mudança | Impacto |
