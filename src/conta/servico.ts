@@ -12,7 +12,7 @@ import type { RespostaServidorSinc } from '../armazenamento/sincronizacao'
  *   • Prova que a pessoa controla o e-mail (amr "otp"): é isso que permite vincular
  *     uma compra com segurança, já que a confirmação de e-mail da Nina está desligada.
  *   • O cadastro novo leva produto_entrada = "acalma": não inicia trial, e-mails ou
- *     métricas da Nina (migration 20261012100000).
+ *     métricas da Nina (migration 20261012100000_acalma_entrada_sem_trial_nina.sql).
  * Sessão própria do Acalma (storageKey separado): não presumimos sessão compartilhada
  * entre subdomínios.
  */

@@ -247,3 +247,12 @@ describe('barreira de publicação', () => {
     expect(rodar({ VITE_ACALMA_MODO: '' })).toBe(0)
   })
 })
+
+describe('checkout real fora das simulações', () => {
+  it('a simulação de "compra não localizada" não leva ao checkout da Hotmart', async () => {
+    abrir(undefined, '/demonstracao/acesso/nao_localizado')
+    const comprar = await screen.findByRole('button', { name: 'Comprar o Acalma' })
+    expect(comprar.tagName).toBe('BUTTON')
+    expect(document.querySelector('a[href*="hotmart"]')).toBeNull()
+  })
+})

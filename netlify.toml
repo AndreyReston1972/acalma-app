@@ -2,6 +2,16 @@
   command = "npm run build"
   publish = "dist"
 
+# Valores PÚBLICOS do Acalma comercial, só no contexto de PRODUÇÃO (main). Deploy previews
+# não recebem nada daqui e continuam em demonstração. Nenhum segredo neste arquivo.
+# O modo integrado só liga com VITE_ACALMA_MODO=integrado + VITE_NEXO_SUPABASE_URL +
+# VITE_NEXO_SUPABASE_ANON_KEY, definidos no painel do Netlify no passo de publicação
+# (docs/integracao-comercial/04-PUBLICACAO.md). Até lá, estes valores não têm efeito.
+# Produto Hotmart: 8715752 (o ID vai no segredo ACALMA_HOTMART_PRODUTO_IDS do Supabase).
+[context.production.environment]
+  VITE_ACALMA_CHECKOUT_URL = "https://pay.hotmart.com/L108001786T"
+  VITE_NINA_URL = "https://app.nexo-edu.com"
+
 [[headers]]
   for = "/sw.js"
   [headers.values]

@@ -131,7 +131,7 @@ export interface RespostaSinc {
 }
 
 /**
- * O servidor só grava com direito de acesso (migration 20261012120000). Sem ele, responde
+ * O servidor só grava com direito de acesso (migration 20261012120000_acalma_dados_sincronizados.sql). Sem ele, responde
  * sem_acesso e não aplica NADA: o aparelho mantém a fila intacta, sem descartar anotações
  * ou combinados, e confere o acesso de novo.
  */

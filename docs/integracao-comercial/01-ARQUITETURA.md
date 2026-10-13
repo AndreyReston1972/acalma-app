@@ -28,12 +28,12 @@ Contas internas: `conta_comercial()` + `emails_internos()`. As métricas filtram
 
 ### Migrations (todas aditivas; nenhuma aplicada)
 
-**`20261012100000` — entrada sem trial**
+**`20261012100000_acalma_entrada_sem_trial_nina.sql` — entrada sem trial**
 - `profiles.produto_entrada` (`nina` | `acalma`): imutável pelo cliente.
 - `profiles.nina_teste_escolhido_em`: só a escolha explícita grava.
 - Cadastro pelo Acalma: sem trial, sem SignupStarted e fora das métricas da Nina enquanto não houver subscription.
 
-**`20261012110000` — compras e acesso**
+**`20261012110000_acalma_compras_e_acesso.sql` — compras e acesso**
 - Eventos da Hotmart **guardados antes de qualquer decisão**.
 - Serializados por transação (advisory lock).
 - Precedência no mesmo instante; reembolso e chargeback são finais.
@@ -42,14 +42,14 @@ Contas internas: `conta_comercial()` + `emails_internos()`. As métricas filtram
 - `acalma_tem_acesso()`: decidido no servidor; uma compra válida basta.
 - Disputa mantém o acesso.
 
-**`20261012120000` — dados**
+**`20261012120000_acalma_dados_sincronizados.sql` — dados**
 - `acalma_sincronizar` **só grava com acesso**. Sem acesso, responde `sem_acesso` e não aplica nada: nem criação, nem edição, nem exclusão item a item.
 - `acalma_exportar_meus_dados()` e `acalma_excluir_meus_dados()` funcionam sem compra.
 - `acalma_aceites` é um registro que só acrescenta:
   - termos e privacidade: explícitos, com versão e data;
   - marketing por e-mail: opcional e revogável. Nenhuma ferramenta de envio lê esta tabela.
 
-**`20261012130000` — passagem para a Nina e exclusão**
+**`20261012130000_acalma_passagem_nina_e_exclusao.sql` — passagem para a Nina e exclusão**
 - `create_trial_once` devolve `ESCOLHA_EXPLICITA` para conta do Acalma. Vale também para serviço interno e para versões antigas do app.
 - `nina_iniciar_teste()`:
   - exige os consentimentos da Nina (`terms`, `privacy`, `guardian_majority`);

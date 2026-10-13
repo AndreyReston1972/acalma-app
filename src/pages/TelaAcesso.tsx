@@ -114,7 +114,12 @@ export function TelaAcesso({
               {tentando ? 'Conferindo…' : tela === 'processando' ? 'Verificar de novo' : 'Tentar de novo'}
             </button>
           )}
-          {tela === 'nao_localizado' && CONFIG.checkoutUrl && (
+          {tela === 'nao_localizado' && simulacao && (
+            <button type="button" className={botaoPrimario} onClick={() => setEstadoDados('Simulação: na versão integrada, abre o checkout da Hotmart.')}>
+              Comprar o Acalma
+            </button>
+          )}
+          {tela === 'nao_localizado' && !simulacao && CONFIG.checkoutUrl && (
             <a className={botaoPrimario} href={CONFIG.checkoutUrl} rel="noopener">
               Comprar o Acalma
             </a>

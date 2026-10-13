@@ -1,6 +1,6 @@
 /*
  * Servidor falso para os testes do frontend integrado. Reproduz, em memória, as
- * regras da RPC acalma_sincronizar (migration 20261012120000) e o estado de acesso.
+ * regras da RPC acalma_sincronizar (migration 20261012120000_acalma_dados_sincronizados.sql) e o estado de acesso.
  * As regras do banco em si são testadas no repositório da Nina (PGlite).
  */
 import type { EstadoServidor, ServicoConta, Sessao } from '../conta/servico'

@@ -36,12 +36,12 @@ Está implementado localmente nos dois repositórios, sem publicar.
 | `src/pages/ConhecerNina.tsx` (nova), `src/App.tsx` | rota |
 | `src/pages/Login.tsx` | aviso e botão de link em destaque **só com `?de=acalma`** |
 | `supabase/functions/delete-user` | decisão do marcador antes de apagar subscriptions |
-| migration `20261012130000` | `create_trial_once` com a trava, `nina_iniciar_teste`, `nina_conceder_trial`, `trial_deve_ser_marcado_na_exclusao` |
+| migration `20261012130000_acalma_passagem_nina_e_exclusao.sql` | `create_trial_once` com a trava, `nina_iniciar_teste`, `nina_conceder_trial`, `trial_deve_ser_marcado_na_exclusao` |
 
-O cadastro normal da Nina continua igual. Os testes PGlite "Nina preservada" e "conta da Nina sem subscription: `create_trial_once` como em produção" passam. Mudança comum aos dois caminhos: duas chamadas simultâneas de trial não falham mais com chave duplicada; a segunda devolve `TRIAL_ALREADY_EXISTS`.
+O cadastro normal da Nina continua igual. Os testes PGlite "Nina preservada" e "conta da Nina sem subscription: `create_trial_once` como em produção" passam. Mudança comum aos dois caminhos: duas chamadas simultâneas de trial não falham mais com chave duplicada; a segunda espera e devolve `TRIAL_ALREADY_EXISTS`. Isso foi comprovado em PostgreSQL 17 real, com duas conexões (`concorrencia.pg.test.ts`).
 
 ## Pendente
 
-- `VITE_NINA_URL` (endereço público da Nina) no Netlify do Acalma.
+- `VITE_NINA_URL = https://app.nexo-edu.com`: já está no `netlify.toml`, só no contexto de produção.
 - Texto final da proposta, para revisão de marketing. Hoje ele diz o que é verdade no código: 7 dias, nada cobrado ao fim, e para continuar a pessoa escolhe um plano.
 - Template do e-mail de link da Nina: o mesmo do código do Acalma (ver 04-PUBLICACAO.md).
