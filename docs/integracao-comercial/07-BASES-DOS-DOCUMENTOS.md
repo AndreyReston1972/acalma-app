@@ -15,20 +15,24 @@ Os textos (versão `2026-10-13`, `src/content/documentos.ts`) foram escritos pel
 | Canal: comercial@nexo-edu.com | "Quem cuida dos seus dados" | LGPD, art. 41, §2º, I; Res. CD/ANPD nº 2/2022, art. 11, §1º (canal obrigatório quando não há encarregado) | — |
 | Encarregado | "Não há encarregado de dados formalmente indicado; os pedidos dos titulares são recebidos e respondidos por esse canal" | LGPD, art. 41 (dever de indicar); Res. CD/ANPD nº 2/2022, art. 2º, I (pessoa natural pode ser agente de pequeno porte), art. 11 (dispensa) | **ver o ponto 1 abaixo** |
 
-## Retenção das compras: o que se guarda, por quanto tempo e por quê
+## Retenção das compras (revisada em 13/10/2026)
 
-| Dado | Para quê | Prazo proposto | Contagem |
-|---|---|---|---|
-| Aviso completo da Hotmart (`acalma_eventos_hotmart.payload`: pode trazer nome, documento, telefone e endereço do comprador) | conferir pagamento, reembolso e contestação; conciliação com a Hotmart | **até 180 dias** | do **último evento** da transação (`ocorrido_em` mais recente) |
-| Registro mínimo: transação, produto, situação, datas dos eventos, e-mail da compra | comprovar a compra; atender pedidos e contestações; religar a compra se a conta for recriada (com nova prova do e-mail) | **até 5 anos** | idem |
-| Dados do app (combinados, registros, favoritos, aceites) | o serviço | enquanto a conta existir | apagados na exclusão (cascade) |
+**Hoje (publicado, privacidade `2026-10-13b`):** não há exclusão automática. O registro da compra e os avisos da Hotmart ficam guardados. Enquanto a compra der acesso, o registro serve para liberar e recuperar o acesso, inclusive depois da exclusão da conta.
 
-**O que as fontes sustentam e o que não sustentam:**
-- A LGPD (art. 16, I e art. 7º, VI) **permite** conservar dados para cumprir obrigação legal ou exercer direitos em processo. Ela não fixa prazo.
-- O CDC, art. 27, dá **5 anos para o consumidor pedir reparação** por fato do serviço. Isso justifica guardar o **mínimo** que comprova a compra por esse período. **Não obriga** a guardar nada, e não justifica guardar o payload inteiro.
-- O CTN, arts. 173 e 195, trata da guarda de livros e comprovantes **do contribuinte**. Na venda pela Hotmart, quem emite os documentos fiscais e o que a fornecedora precisa guardar é questão contábil a confirmar. Não usei o CTN como base para reter dados de clientes.
-- Os 180 dias do payload são uma **proposta operacional**: uma folga para reembolsos, contestações e conciliação. Não vêm de norma.
-- **Pendente antes da 1ª venda:** uma migration de minimização agendada (como o expurgo de 36 meses do `trial_ledger`) que, depois de 180 dias, apaga do payload os dados do comprador e, depois de 5 anos, apaga o registro mínimo. Ela não foi feita nem aplicada nesta rodada, que não a autorizava.
+**Proposta, migration `20261013100000_acalma_minimizacao_compras.sql` (NÃO aplicada):**
+
+| Situação | Registro mínimo (transação, produto, situação, datas, e-mail da compra) | Payload completo (dados pessoais do comprador) |
+|---|---|---|
+| `aprovada`, `em_disputa` (dão acesso) | **nunca apagado automaticamente**, vinculado ou não a uma conta | `aprovada`: resumido 180 dias depois do marco; `em_disputa`: nunca |
+| `pendente` | nunca (caso de conciliação) | nunca |
+| `cancelada` (nunca paga) | apagado 180 dias depois do marco: só conciliação, sem pagamento a comprovar | resumido em 180 dias |
+| `reembolsada`, `chargeback` | apagado **5 anos** depois do marco, para comprovar a devolução e atender reclamações (referência: CDC art. 27, prazo de pretensão do consumidor; política, não obrigação legal comprovada) | resumido em 180 dias |
+| transação com evento ainda não aplicado (pausa ou configuração) | nada é tocado | nada é tocado |
+
+- **Situação definitiva** (a única que leva à exclusão): `chargeback`, `reembolsada` (só pode virar `chargeback`) e `cancelada`. **`aprovada` não é definitiva**: ainda pode receber reembolso ou chargeback.
+- **Marco:** o momento em que a compra **entrou** na situação atual. É o menor `ocorrido_em` entre os eventos dessa situação; sem data, o menor `recebido_em`. Duplicatas não são gravadas; reenvios ou reprocessamentos com data igual ou posterior e eventos sem data não movem o marco.
+- **Exclusão da conta:** os dados do app saem na hora (cascade). A compra fica sem dono (`user_id` nulo), com o e-mail da compra, e continua religável com nova prova do e-mail enquanto der acesso.
+- **Testado** (PGlite): compra válida antiga, conta excluída + recuperação, reembolso (marco no reembolso, não na aprovação), disputa, pendente, recompra, duplicata + reenvio + evento sem data, fora de ordem, cancelada, pausa.
 
 ## Pontos que continuam com você
 

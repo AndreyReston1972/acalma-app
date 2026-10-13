@@ -152,3 +152,39 @@ O texto da privacidade **publicada** diz "registro mínimo até 5 anos depois do
 | B | trocar no e-mail "O link é válido por 1 hora" por "24 horas" | nenhuma mudança de comportamento; mantém validade acima do recomendado |
 
 Nenhuma das duas foi aplicada. A configuração é compartilhada; a decisão é sua.
+
+---
+
+# Rodada de fechamento (13/10/2026)
+
+## 1. Validade do código / link: 24 h → 1 h (APLICADO)
+- **Mudança:** Supabase → Auth → Sign In / Providers → Email → "Email OTP Expiration": `86400` → `3600`. Nada mais foi alterado: comprimento do código continua `8`, link da Nina preservado, sem `config push`.
+- **Afeta:** link e código de login sem senha (Nina e Acalma), "Esqueci minha senha", troca de e-mail e convite. **Não afeta** duração da sessão, login por senha ou Google.
+- **Textos:** o e-mail "Magic link or OTP" diz "válido por 1 hora", agora verdadeiro. O app do Acalma não mostra prazo na tela.
+- **Recuperação:** voltar o mesmo campo para `86400` e salvar.
+- **Testes (conta interna):**
+  - código do Acalma pedido em produção para `andrey.reston+android@gmail.com`;
+  - link da Nina enviado separadamente para `andrey.reston+e2e@gmail.com` pelo mesmo endpoint e com os mesmos parâmetros do app (`create_user:false`, retorno `app.nexo-edu.com/auth/callback`, HTTP 200);
+  - o uso (digitar o código / clicar no link em até 1 h) depende do usuário; a conferência no banco vem depois.
+
+## 2. Privacidade: correção só de texto (PUBLICADA)
+- Commit `804d414`, só `src/content/documentos.ts`; versão da privacidade `2026-10-13b`, termos seguem `2026-10-13`. Bundle `index-B6hDtu1M.js` conferido em produção.
+- O texto passou a descrever o que existe: registro de compra e avisos da Hotmart **sem exclusão automática hoje**, redução automática em preparação, exclusão a pedido pelo canal.
+- **Ponto de atenção:** na primeira abertura depois do deploy, `/entrar` ficou em branco (service worker antigo); recarregar resolveu. Usuários que já abriram o app podem passar por isso uma vez.
+
+## 3. Minimização: refeita, NÃO aplicada
+- Arquivo `supabase/migrations/20261013100000_acalma_minimizacao_compras.sql` no repositório da integração, commit `3894bd4`.
+- Regras:
+  - "definitiva" = `chargeback`, `reembolsada` ou `cancelada` (nunca paga). `aprovada` não é definitiva;
+  - o marco é a entrada na situação atual (menor data entre os eventos dessa situação), então duplicatas, reprocessamentos e eventos sem data não prolongam a guarda;
+  - `aprovada` / `em_disputa` / `pendente` nunca são apagadas;
+  - o payload é resumido em 180 dias (exceto pendente/disputa ou transação com evento não aplicado);
+  - `cancelada` é apagada em 180 dias; `reembolsada` / `chargeback` em 5 anos.
+- Testes: 74/74 (PGlite) + 6/6 (concorrência em PostgreSQL 17). Cobrem compra válida antiga, conta excluída, recuperação, reembolso, disputa, recompra, duplicatas e eventos fora de ordem.
+
+## 4. n8n "Monitor de Vendas - Hotmart v3" (PUBLICADO)
+- Só mudaram o texto do "Telegram - Venda Aprovada" e as 6 colunas do "Append row in sheet", agora lendo `body.data.*` (2.0.0) e com o ID do produto. A linha "Adicionado ao grupo MailerLite!" saiu.
+- Versão anterior `9faf3d08-f60f-43f0-92e4-74cc3f6cd173` (backup em `n8n/monitor-vendas-correcao.mjs`); versão publicada `a71cb19d-e0cc-491d-86a9-f05bb7ea6799`, ativa.
+- "É Nina AI?" e MailerLite não foram alterados (continua falso, sem MailerLite por esse caminho). Nenhuma venda antiga foi reprocessada.
+
+## 5. Página de vendas: `lp/TROCAS.md` (5 trocas conferidas; CPF/CNPJ pendente do usuário)
