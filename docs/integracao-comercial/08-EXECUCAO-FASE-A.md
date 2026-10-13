@@ -274,3 +274,9 @@ Nenhuma das duas foi aplicada. A configuração é compartilhada; a decisão é 
   3. abrir o link **na mesma janela anônima**, em até 1 hora;
   4. não escolher iniciar o teste da Nina; só anotar a tela que apareceu.
 - **Conferência depois (só leitura):** token consumido, sessão nova da `+android`, nenhuma `subscriptions` criada, `nina_teste_escolhido_em` nulo.
+
+## 12. Teste do item 11, 1ª tentativa (13/10): "Não encontramos conta com este e-mail"
+- A tela da Nina só mostra essa frase quando o Supabase responde "Signups not allowed for otp": nenhuma conta corresponde ao e-mail enviado (o botão usa `shouldCreateUser: false`, de propósito).
+- A conta `andrey.reston+android@…` existe. Desde o código do Acalma (05:28) não recebeu nenhum pedido: o horário do último envio não mudou e não há token pendente.
+- **Conclusão provável:** o e-mail digitado na janela anônima era diferente do da conta. Não deu para ver qual foi: os logs do Supabase não devolveram nada nem numa consulta sem filtro, e o painel mostrava aviso de instabilidade.
+- Sem efeito colateral: nenhuma conta criada, nenhum e-mail enviado, nenhum trial.
