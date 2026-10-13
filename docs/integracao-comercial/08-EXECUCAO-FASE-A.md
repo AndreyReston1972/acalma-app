@@ -188,3 +188,41 @@ Nenhuma das duas foi aplicada. A configuração é compartilhada; a decisão é 
 - "É Nina AI?" e MailerLite não foram alterados (continua falso, sem MailerLite por esse caminho). Nenhuma venda antiga foi reprocessada.
 
 ## 5. Página de vendas: `lp/TROCAS.md` (5 trocas conferidas; CPF/CNPJ pendente do usuário)
+
+## 6. Correção de cadastro de teste: conta digitada errada EXCLUÍDA (13/10, autorizada)
+- Conta: o e-mail digitado sem o "y" (`andre.reston+android@…`), `8cd6123e-a44c-4432-9740-b28a91851670`.
+- **Antes de excluir, conferido:**
+  - correspondência exata e única;
+  - criada em 13/10 00:44 (Brasília), nesta rodada;
+  - `produto_entrada = acalma`, sem teste da Nina escolhido;
+  - nenhuma linha em subscriptions, consents, concessões, conversas, crianças, memória, MailerLite, compras do Acalma ou webhook_logs;
+  - nenhuma linha em nenhuma tabela com chave para `profiles` ou `auth.users`, além do próprio perfil.
+- **Como:** os passos do `delete-user` v34 (= `cc91e348`) executados no banco, numa transação com as mesmas guardas.
+  - A função exige a sessão da própria conta, e obtê-la exigiria mandar e-mail ao endereço errado, o que não foi feito.
+  - Para esta conta, a regra do marcador (`trial_deve_ser_marcado_na_exclusao`) dá **falso** e o pedido de interrupção do MailerLite dá nulo. Sobram só a exclusão do perfil e da conta.
+- **Resultado conferido:**
+  - conta, identidade e perfil: 0;
+  - `trial_ledger` continuou com 2 linhas (**nenhuma marca de trial**);
+  - nenhuma interrupção registrada;
+  - nenhum e-mail enviado.
+- `andrey.reston+android@…` e `andrey.reston+e2e@…` intactas.
+
+## 7. Tela em branco na primeira abertura: causa reproduzida (sem correção publicada)
+- **Indício:** no momento da tela branca em produção, o título era "Acalma — Parentalidade Consciente", o do **MiniApp antigo** (até `4ce22f8`), e não o do app atual ("Acalma").
+- **Causa:**
+  - o service worker da geração antiga (mesmo endereço `/sw.js`) serve o HTML antigo na primeira abertura;
+  - o app antigo não tem `/entrar`, `/termos` nem `/privacidade`, e não tem rota "qualquer outra", então renderiza nada;
+  - na mesma abertura, o SW novo instala e assume (`skipWaiting` + `clients.claim`), e a próxima navegação já mostra o app novo.
+- **Reproduzido localmente** (servidor que imita o Netlify, onde arquivo inexistente devolve `index.html` 200):
+  1. MiniApp antigo instalado;
+  2. versão atual publicada por cima;
+  3. `/entrar` em branco (título antigo, `#root` vazio);
+  4. a navegação seguinte (`/privacidade`) já veio certa.
+- Entre duas versões da geração atual (`B6hDtu1M` → outra) **não** acontece: a versão anterior abre normalmente e a nova vale na abertura seguinte.
+- **Quem é afetado:** só quem abriu o Acalma antigo naquele navegador antes de 13/10, e uma única vez:
+  - em `/` vê o app antigo uma vez;
+  - num link para `/entrar`, `/termos` ou `/privacidade` vê tela branca uma vez; recarregar resolve.
+- **Tentativa de correção descartada:** recarregar as abas uma vez quando o SW novo detecta a geração antiga (marca: `registerSW.js` no precache).
+  - No teste, o SW novo assumiu, mas a aba antiga **travou** em vez de recarregar.
+  - Pior que a tela branca; nada foi publicado nem commitado. O diff ficou só no rascunho local.
+  - Próxima tentativa, se for prioridade: teste fora da automação do navegador, num aparelho real com o Acalma antigo instalado.
