@@ -297,3 +297,33 @@ Nenhuma das duas foi aplicada. A configuração é compartilhada; a decisão é 
   - motivo: `attribution-capture` dispara um `SignupCompleted` por usuário no primeiro login, sem olhar `produto_entrada`;
   - efeito: uma conta do Acalma (aqui, de teste) entra no GA4 como cadastro concluído da Nina, sem o SignupStarted correspondente;
   - **decisão pendente:** se contas `produto_entrada = acalma` devem ficar fora desse evento ou ganhar um evento próprio.
+
+## 14. Correção publicada: conta do Acalma não emite SignupCompleted da Nina (13/10, autorizada)
+- **Commit** `3d2b9e374b65b8c5735f2108ceab2ba9c38733d7` na `main` da Nina (fast-forward de `cc91e34`).
+  - Só 3 arquivos: `attribution-capture/index.ts`, o novo `attribution-capture/signup-completed.ts` e o teste.
+- **Regra:**
+  - antes de emitir o `SignupCompleted`, a função lê `profiles.produto_entrada` com service_role;
+  - essa origem é gravada na criação da conta e protegida contra o app; nunca vem da requisição ou da URL;
+  - `acalma` não emite;
+  - suprimir = não chamar o emissor: nenhuma linha reivindicada em `marketing_events`, nada pendente para o próximo login. Como a origem não muda, a conta do Acalma nunca emite, nem depois de iniciar o teste da Nina;
+  - sem leitura confiável da origem, também não emite; uma conta da Nina emite no login seguinte, uma vez só.
+- **Inalterados:**
+  - cadastro normal da Nina (SignupStarted no trigger, SignupCompleted no 1º login);
+  - TrialStarted (marco separado do início do teste);
+  - consentimento (`emitEvent`) e exclusões de contas internas;
+  - `marketing_attribution`;
+  - acesso, trial, preços e integrações comerciais.
+  - Nenhum evento novo.
+- **Testes:**
+  - 7 novos (Deno), todos passando. Cobrem: conta do Acalma; logins repetidos sem nada reivindicado; conta do Acalma que depois inicia o teste; cadastro normal da Nina com login repetido sem reenvio; origem nula; origem indisponível; recuperação no login seguinte;
+  - testes vizinhos do `delete-user`: 8 passando;
+  - checagem de tipos: só o erro que já existia na `main` (`EdgeRuntime` no bloco do TrialStarted).
+- **Caminho de emissão:** o `attribution-capture` é o único emissor de `SignupCompleted`. Nenhuma função do banco nem do app o emite, e não há reenvio automático (claim único).
+- **Publicação verificada:**
+  - `attribution-capture` v25 ativa (13/10 05:58, Brasília);
+  - os 4 arquivos publicados são idênticos ao commit (antes, a v24 era idêntica a `cc91e34`);
+  - sem JWT responde 401 (verificação de JWT mantida);
+  - app da Nina segue com `index-DBPFTEeu.js`.
+- **Contaminação conhecida no GA4:** o `SignupCompleted` da conta de teste `andrey.reston+android@…` (`7977a42b…`), enviado em 13/10 05:50:14 (GA4 204, Meta não), **continua no GA4**.
+  - Não foi compensado com outro evento nem removido.
+  - A linha em `marketing_events` foi mantida como registro.
