@@ -27,7 +27,7 @@ async function entrarPorCodigo(u: ReturnType<typeof userEvent.setup>, email: str
   await u.type(await screen.findByRole('textbox', { name: 'E-mail' }), email)
   await u.click(screen.getByRole('checkbox', { name: /li e aceito os termos/i }))
   await u.click(screen.getByRole('button', { name: 'Receber código' }))
-  await u.type(await screen.findByRole('textbox', { name: /código de 6 dígitos/i }), '123456')
+  await u.type(await screen.findByRole('textbox', { name: /código recebido por e-mail/i }), '123456')
   await u.click(screen.getByRole('button', { name: 'Entrar' }))
 }
 

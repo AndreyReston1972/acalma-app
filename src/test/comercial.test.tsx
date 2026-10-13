@@ -36,7 +36,7 @@ async function pedirCodigo(u: ReturnType<typeof userEvent.setup>, email: string,
 }
 async function digitarCodigo(u: ReturnType<typeof userEvent.setup>, codigo = '123456') {
   await u.click(screen.getByRole('button', { name: 'Receber código' }))
-  await u.type(await screen.findByRole('textbox', { name: /código de 6 dígitos/i }), codigo)
+  await u.type(await screen.findByRole('textbox', { name: /código recebido por e-mail/i }), codigo)
   await u.click(screen.getByRole('button', { name: 'Entrar' }))
 }
 
@@ -76,6 +76,22 @@ describe('aceite explícito e marketing separado', () => {
 })
 
 describe('código e envio', () => {
+  it('aceita o código de 8 dígitos da configuração real; com menos de 6 o botão fica desligado', async () => {
+    const srv = new ServidorFalso()
+    srv.conta('oito@t.dev')
+    const ap = aparelho(srv)
+    const u = userEvent.setup()
+    abrir(ap.servico)
+    await pedirCodigo(u, 'oito@t.dev')
+    await u.click(screen.getByRole('button', { name: 'Receber código' }))
+    const campo = await screen.findByRole('textbox', { name: /código recebido por e-mail/i })
+    await u.type(campo, '12345')
+    expect(screen.getByRole('button', { name: 'Entrar' })).toBeDisabled()
+    await u.type(campo, '678')
+    await u.click(screen.getByRole('button', { name: 'Entrar' }))
+    await home()
+  })
+
   it('código errado, vencido ou já usado: mesma orientação, sem entrar', async () => {
     const srv = new ServidorFalso()
     srv.conta('c@t.dev')

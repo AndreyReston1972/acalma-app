@@ -9,8 +9,12 @@ import { ErroDeRede, ErroLimiteDeEnvio } from '../conta/servico'
 import { temDadosAnteriores } from '../armazenamento/legado'
 import { JANELA_OFFLINE_DIAS } from '../config'
 
+/** Tamanho do código do Supabase Auth (MAILER_OTP_LENGTH): hoje 8; o padrão antigo era 6. */
+const CODIGO_MIN = 6
+const CODIGO_MAX = 8
+
 /*
- * Entrada: e-mail → código de 6 dígitos. Sem senha, sem cadastro extenso, sem dados da
+ * Entrada: e-mail → código numérico (6 a 8 dígitos, conforme a configuração do Supabase Auth). Sem senha, sem cadastro extenso, sem dados da
  * criança. Mesma conta da Nina, se a pessoa já tiver.
  *   • Aceite dos termos e da privacidade: AÇÃO EXPLÍCITA (caixa), registrado com versão e data.
  *   • Novidades por e-mail: caixa separada e opcional; não é condição para nada.
@@ -38,7 +42,8 @@ export function Entrar({ simulacao = false }: { simulacao?: boolean }) {
   }, [reenviarEm])
 
   if (conta.modo === 'demonstracao' && !simulacao) return <Navigate to="/" replace />
-  // Simulação (preview): nada é enviado; o código de exemplo é qualquer sequência de 6 dígitos.
+  // Simulação (preview): nada é enviado; o código de exemplo é qualquer sequência de 6 a 8 dígitos.
+  const codigoCompleto = codigo.length >= CODIGO_MIN && codigo.length <= CODIGO_MAX
   const espera = () => new Promise((r) => setTimeout(r, 500))
 
   const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())
@@ -66,7 +71,7 @@ export function Entrar({ simulacao = false }: { simulacao?: boolean }) {
   }
 
   async function confirmar() {
-    if (codigo.length !== 6 || enviando) return
+    if (!codigoCompleto || enviando) return
     setEnviando(true)
     setErro('')
     try {
@@ -112,7 +117,7 @@ export function Entrar({ simulacao = false }: { simulacao?: boolean }) {
             }}
           >
             <h1 className="font-display text-[1.875rem] font-semibold leading-[1.12] text-verde-profundo">Entrar no Acalma</h1>
-            <p className="mt-2 text-texto-2">Use o e-mail da sua compra. Enviamos um código de 6 dígitos, sem senha.</p>
+            <p className="mt-2 text-texto-2">Use o e-mail da sua compra. Enviamos um código por e-mail, sem senha.</p>
             {anteriores && (
               <div className="mt-4 rounded-[var(--radius-cartao)] bg-bege p-4 text-[0.9375rem] leading-relaxed text-texto">
                 <p className="font-semibold">O Acalma mudou</p>
@@ -176,17 +181,17 @@ export function Entrar({ simulacao = false }: { simulacao?: boolean }) {
               Enviamos um código para <strong className="text-texto">{email.trim()}</strong>.
             </p>
             <label htmlFor="codigo" className="mt-6 block font-semibold text-texto">
-              Código de 6 dígitos
+              Código recebido por e-mail
             </label>
             <input
               id="codigo"
               inputMode="numeric"
               autoComplete="one-time-code"
               pattern="[0-9]*"
-              maxLength={6}
+              maxLength={CODIGO_MAX}
               enterKeyHint="go"
               value={codigo}
-              onChange={(e) => setCodigo(e.target.value.replace(/\D/g, '').slice(0, 6))}
+              onChange={(e) => setCodigo(e.target.value.replace(/\D/g, '').slice(0, CODIGO_MAX))}
               aria-describedby={erro ? 'erro-codigo' : undefined}
               className="mt-2 block min-h-14 w-full rounded-[var(--radius-controle)] border border-linha bg-white px-4 text-center font-semibold tracking-[0.4em] text-[1.5rem] text-texto focus:border-verde focus:outline-none focus-visible:outline-3 focus-visible:outline-coral"
             />
@@ -195,7 +200,7 @@ export function Entrar({ simulacao = false }: { simulacao?: boolean }) {
                 {erro}
               </p>
             )}
-            <button type="submit" disabled={codigo.length !== 6 || enviando} className={`${botaoPrimario} mt-6`}>
+            <button type="submit" disabled={!codigoCompleto || enviando} className={`${botaoPrimario} mt-6`}>
               {enviando ? 'Conferindo…' : 'Entrar'}
             </button>
             <div className="mt-3 flex flex-wrap justify-between">

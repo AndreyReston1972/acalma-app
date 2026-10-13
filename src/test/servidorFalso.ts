@@ -93,7 +93,8 @@ export function aparelho(srv: ServidorFalso) {
     },
     async confirmarCodigo(email, codigo) {
       exigirRede()
-      if (codigo !== '123456') throw new Error('Código inválido')
+      // o Supabase Auth do projeto usa 8 dígitos (MAILER_OTP_LENGTH); 6 era o padrão antigo
+      if (codigo !== '123456' && codigo !== '12345678') throw new Error('Código inválido')
       sessao = srv.contas.get(email)!.sessao
       return sessao
     },

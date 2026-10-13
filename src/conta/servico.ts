@@ -5,7 +5,8 @@ import type { RespostaServidorSinc } from '../armazenamento/sincronizacao'
 /*
  * Tudo o que o Acalma pede à conta NexoEdu (Supabase da Nina).
  *
- * Autenticação: código de 6 dígitos por e-mail (signInWithOtp + verifyOtp).
+ * Autenticação: código numérico por e-mail (signInWithOtp + verifyOtp). O tamanho vem da
+ * configuração do Supabase Auth (MAILER_OTP_LENGTH, hoje 8; aceitamos de 6 a 8).
  *   • Mesma infraestrutura da Nina: nenhuma senha nova, nenhum outro sistema de login.
  *   • Funciona no navegador interno do Instagram e entre aparelhos (o link mágico
  *     abre em outro navegador e perde a sessão).
