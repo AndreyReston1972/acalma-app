@@ -280,3 +280,20 @@ Nenhuma das duas foi aplicada. A configuração é compartilhada; a decisão é 
 - A conta `andrey.reston+android@…` existe. Desde o código do Acalma (05:28) não recebeu nenhum pedido: o horário do último envio não mudou e não há token pendente.
 - **Conclusão provável:** o e-mail digitado na janela anônima era diferente do da conta. Não deu para ver qual foi: os logs do Supabase não devolveram nada nem numa consulta sem filtro, e o painel mostrava aviso de instabilidade.
 - Sem efeito colateral: nenhuma conta criada, nenhum e-mail enviado, nenhum trial.
+
+## 13. Teste do item 11 concluído: conta originada no Acalma entrou na Nina pelo link (13/10)
+- O link foi pedido às 05:47 (Brasília) para `andrey.reston+android@…`, colando o e-mail na janela anônima. A tela mostrou "Se houver conta com este e-mail…".
+- **Login comprovado:**
+  - link consumido (nenhum token pendente);
+  - sessão nova criada às 05:50:13 pelo método `otp` (link do e-mail);
+  - `last_sign_in_at` 05:50:13.
+- **Nenhum trial e nenhuma assinatura:**
+  - sem `subscriptions`, `nina_teste_escolhido_em` nulo (o responsável não clicou em "Iniciar meus 7 dias");
+  - `trial_ledger` continua com 2;
+  - sem compra, sem concessão de acesso, sem aceite da Nina, sem mensagens;
+  - nenhum SignupStarted / TrialStarted / StartTrial.
+- **Achado de métrica (não corrigido; sem nova funcionalidade nesta rodada):**
+  - o primeiro login na Nina gravou `marketing_attribution` (05:50:14) e emitiu **`SignupCompleted` para o GA4** (204; Meta não);
+  - motivo: `attribution-capture` dispara um `SignupCompleted` por usuário no primeiro login, sem olhar `produto_entrada`;
+  - efeito: uma conta do Acalma (aqui, de teste) entra no GA4 como cadastro concluído da Nina, sem o SignupStarted correspondente;
+  - **decisão pendente:** se contas `produto_entrada = acalma` devem ficar fora desse evento ou ganhar um evento próprio.
