@@ -59,3 +59,29 @@
 
 ## Achado
 A configuração "Monitor Vendas NexoEdu — n8n" da Hotmart recebe eventos de **todos os produtos**, então também vai receber as vendas do Acalma. Não foi alterada. Confirme se esse workflow do n8n (que tem token da Meta) deve tratar as vendas do Acalma (ex.: evento de compra para anúncios).
+
+## Continuação (13/10/2026)
+
+### Teste oficial da Hotmart ("Enviar teste de configuração", enviado pela responsável)
+- **8 eventos** (aprovada, completa, aguardando pagamento, cancelada, expirada, pedido de reembolso, reembolsada, chargeback), produto "Produto test postback2", transação de teste, comprador fictício `@example.com`. Todos chegaram a `acalma-hotmart` às 22:16 e voltaram **HTTP 200**.
+- **Banco:** 0 eventos e 0 compras do Acalma; na Nina, 0 `webhook_logs`, 0 `webhook_errors` e 0 assinaturas alteradas nas 3 h.
+- **Logs da função:** só inicializações, nenhuma mensagem de hottok inválido nem de gravação. Isso é coerente com o caminho "hottok válido, produto ≠ 8715752, ignorado", que responde 200 sem gravar.
+- **Comprovado:** a Hotmart chega à função; a autenticação pelo hottok funciona; produtos de outro ID são ignorados sem efeito.
+- **NÃO comprovado:** o ciclo de compra e acesso do Acalma (o teste não usa o produto 8715752).
+- **Monitor do n8n:** NÃO recebeu os testes. No histórico, os 8 eventos aparecem só para a URL do Supabase; as vendas reais anteriores aparecem para as duas URLs.
+- **Incidente:** um clique no histórico acionou "Reprocessar" do evento de teste Chargeback (22:18:17), em vez de abrir o detalhe. O reenvio foi o mesmo evento de teste, só para o Acalma-Webhook, com HTTP 200 e nada gravado (conferido no banco depois).
+
+### Template de e-mail ("Magic link or OTP", compartilhado)
+- Acrescentado, depois do botão "Entrar na Nina": "Está entrando pelo Acalma? Use este código no app:" + `{{ .Token }}`.
+- O link da Nina (`{{ .ConfirmationURL }}`) e o resto do HTML ficaram iguais (25 linhas, eram 23). Conferido depois de recarregar.
+- **Configuração real do Auth (lida, não alterada):** código de **8 dígitos** (`MAILER_OTP_LENGTH`) e validade de **24 h** (`MAILER_OTP_EXP = 86400`). Por isso:
+  - o Acalma passou a aceitar de 6 a 8 dígitos (`b24394b`);
+  - o texto do e-mail não diz quantos dígitos são.
+- **Achados, sem alteração:**
+  - o painel avisa que a validade de 24 h passa do recomendado (até 1 h);
+  - o e-mail da Nina diz "o link é válido por 1 hora", o que diverge da configuração. Mudar a validade afeta os links da Nina; é decisão sua.
+
+### E-mail e acesso: teste real, com build integrado local (`localhost`) apontando para o Supabase de produção
+- A conta interna `andrey.reston+android@gmail.com` não existia. O pedido de código pelo Acalma **criou a conta** com `produto_entrada = acalma` e `origem_conta = acalma`, **sem** subscription (sem trial), **sem** SignupStarted e sem compra.
+- Código errado (`00000000`): **rejeitado pelo Supabase real**, com a mensagem "Código incorreto, vencido ou já usado".
+- **Faltam:** o código certo (lido e digitado pela responsável), a reutilização do código já usado e o link "Entrar na Nina".
