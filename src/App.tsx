@@ -13,6 +13,7 @@ import { Mostrar } from './pages/Mostrar'
 import { Salvos } from './pages/Salvos'
 import { Conta } from './pages/Conta'
 import { Seguranca } from './pages/Seguranca'
+import { ApoioAdulto } from './pages/ApoioAdulto'
 import { Entrar } from './pages/Entrar'
 import { Documento } from './pages/Documento'
 import { DemonstracaoAcesso } from './pages/DemonstracaoAcesso'
@@ -64,6 +65,7 @@ export function Rotas() {
       <Route path="/preparar/:combinadoId/mostrar" element={<Mostrar />} />
       <Route path="/conta" element={<Conta />} />
       <Route path="/seguranca" element={<Seguranca />} />
+      <Route path="/apoio-adulto" element={<ApoioAdulto />} />
       <Route path="/entrar" element={<Entrar />} />
       <Route path="/termos" element={<Documento doc={termos} />} />
       <Route path="/privacidade" element={<Documento doc={privacidade} />} />

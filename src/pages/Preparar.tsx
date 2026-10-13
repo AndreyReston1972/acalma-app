@@ -3,7 +3,7 @@ import { Faixa } from '../components/Miniatura'
 import { linhaLista, margem } from '../components/ui'
 import { IconeAvancar, IconeMais } from '../ilustracoes/icones'
 import { Cena } from '../ilustracoes/Cena'
-import { buscarAcao, modelos } from '../content/combinados'
+import { buscarAcao, dicaModelos, modelos } from '../content/combinados'
 import { useEstado } from '../armazenamento/useEstado'
 import { nomeDoCombinado } from '../util/combinados'
 
@@ -53,7 +53,7 @@ export function Preparar() {
           <h2 id="modelos" className="font-display text-[1.25rem] font-semibold text-verde-profundo">
             {meus.length > 0 ? 'Montar outro' : 'Comece de um modelo'}
           </h2>
-          <p className="mt-1 text-[0.9375rem] text-texto-2">Você escolhe os passos, a ordem e o nome.</p>
+          <p className="mt-1 text-[0.9375rem] text-texto-2">{dicaModelos}</p>
           <ul className="mt-4 grid grid-cols-1 gap-3">
             {modelos.map((m) => (
               <li key={m.id}>

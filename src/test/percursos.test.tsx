@@ -27,6 +27,7 @@ describe('ajuda na hora da birra', () => {
     expect(screen.getByRole('heading', { name: 'Agora' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Você pode dizer' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Depois' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Para a próxima vez' })).toBeInTheDocument()
     expect(screen.queryByText(/respir[ae] fundo|qual emoção/i)).not.toBeInTheDocument()
   })
 
@@ -39,12 +40,25 @@ describe('ajuda na hora da birra', () => {
     await u.click(screen.getByRole('link', { name: /não quer andar/i }))
     expect(screen.getByRole('heading', { level: 1, name: 'Não quer andar' })).toBeInTheDocument()
     expect(screen.getByText('Ir embora')).toBeInTheDocument()
-    expect(screen.getByText(/de mão dada ou no colo\?/i)).toBeInTheDocument()
+    expect(screen.getByText(/nunca puxe nem levante pelas mãos/i)).toBeInTheDocument()
     // um nível só: nenhum novo caminho aqui
     expect(screen.queryByRole('region', { name: /se precisar de mais/i })).not.toBeInTheDocument()
 
     await u.click(screen.getAllByRole('link', { name: /voltar à primeira orientação/i })[0])
     expect(screen.getByRole('heading', { level: 1, name: 'Ir embora' })).toBeInTheDocument()
+  })
+
+  it('"Eu também perdi a paciência" é entrada secundária: fora da Home, volta à mesma orientação e leva à segurança', async () => {
+    const u = userEvent.setup()
+    const { unmount } = abrir('/')
+    expect(screen.queryByRole('link', { name: /perdi a paciência/i })).not.toBeInTheDocument()
+    unmount()
+    abrir('/agora/ouvir-nao')
+    await u.click(screen.getByRole('link', { name: /eu também perdi a paciência/i }))
+    expect(screen.getByRole('heading', { level: 1, name: /eu também perdi a paciência/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /alguém pode se machucar/i })).toHaveAttribute('href', '/seguranca')
+    await u.click(screen.getByRole('button', { name: 'Voltar' }))
+    expect(screen.getByRole('heading', { level: 1, name: /ouvir um “não”/i })).toBeInTheDocument()
   })
 
   it('favorita uma variação específica, distinta da orientação base', async () => {
@@ -117,8 +131,21 @@ describe('combinados', () => {
     const rotulos = within(screen.getByRole('region', { name: /passos, na ordem/i }))
       .getAllByRole('listitem')
       .map((li) => li.textContent)
-    expect(rotulos[1]).toMatch(/Brincar/)
-    expect(rotulos[2]).toMatch(/Lavar as mãos/)
+    expect(rotulos[0]).toMatch(/Brincar/)
+    expect(rotulos[1]).toMatch(/Guardar o aparelho/)
+  })
+
+  it('mudar um modelo pronto não altera combinados já salvos', async () => {
+    // Combinado criado com o modelo antigo de "Encerrar a tela" (3 passos), como estaria num aparelho.
+    const antigo = { id: 'c-tela-antigo', nome: '', modeloId: 'encerrar-tela', passos: ['guardar-aparelho', 'lavar-maos', 'brincar'], criadoEm: 'x', atualizadoEm: 'x' }
+    localStorage.setItem(CHAVE, JSON.stringify({ versao: 2, favoritos: [], registros: [], combinados: [antigo] }))
+    const u = userEvent.setup()
+    abrir('/preparar/c-tela-antigo')
+    expect(screen.getByText('Lavar as mãos')).toBeInTheDocument()
+    await u.click(screen.getByRole('link', { name: /editar/i }))
+    const rotulos = within(screen.getByRole('region', { name: /passos, na ordem/i })).getAllByRole('listitem').map((li) => li.textContent)
+    expect(rotulos).toHaveLength(3)
+    expect(salvo().combinados[0].passos).toEqual(antigo.passos)
   })
 
   it('impede salvar com menos de 2 passos e explica o que falta', async () => {

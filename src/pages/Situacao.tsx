@@ -5,6 +5,7 @@ import { linhaLista, margem } from '../components/ui'
 import { IconeAvancar } from '../ilustracoes/icones'
 import { situacoes } from '../content/situacoes'
 import { LinkSeguranca } from '../components/LinkSeguranca'
+import { LinkApoioAdulto } from '../components/LinkApoioAdulto'
 
 /* Tocar na situação já abre a orientação: sem "Continuar". */
 export function Situacao() {
@@ -26,7 +27,10 @@ export function Situacao() {
             </li>
           ))}
         </ul>
-        <LinkSeguranca className="mt-5" />
+        <div className="mt-5 flex flex-col items-start gap-1">
+          <LinkSeguranca />
+          <LinkApoioAdulto className="-ml-3" />
+        </div>
       </main>
     </div>
   )

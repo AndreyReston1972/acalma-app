@@ -18,10 +18,18 @@ export const acoes: Acao[] = [
   { id: 'ler-historia', rotulo: 'Ler uma história', cena: 'ler-historia' },
 ]
 
-/* Modelos: pontos de partida editáveis, não regras universais. */
+/*
+ * Modelos: pontos de partida editáveis, não regras universais. Servem para antecipar o que vem
+ * depois; não são prova de obediência, não precisam ser concluídos durante uma crise e não geram
+ * pontos, sequência ou recompensa. Um combinado salvo guarda os próprios passos: mudar um modelo
+ * aqui NÃO altera combinados já criados (o modelo só preenche o editor de um combinado novo).
+ */
+export const dicaModelos = 'Mostre antes de começar. Escolha passos que cabem na rotina de vocês.'
+
 export const modelos: Modelo[] = [
   { id: 'sair-de-casa', titulo: 'Sair de casa', passos: ['guardar-brinquedos', 'calcar', 'sair'], estado: 'rascunho' },
-  { id: 'encerrar-tela', titulo: 'Encerrar a tela', passos: ['guardar-aparelho', 'lavar-maos', 'brincar'], estado: 'rascunho' },
+  // 13/10: sem "Lavar as mãos" (continua no catálogo, mas não é etapa necessária para encerrar a tela).
+  { id: 'encerrar-tela', titulo: 'Encerrar a tela', passos: ['guardar-aparelho', 'brincar'], estado: 'rascunho' },
   { id: 'hora-do-banho', titulo: 'Hora do banho', passos: ['separar-roupa', 'tomar-banho', 'vestir', 'ler-historia'], estado: 'rascunho' },
 ]
 

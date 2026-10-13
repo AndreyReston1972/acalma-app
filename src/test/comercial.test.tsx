@@ -248,7 +248,9 @@ describe('conteúdo', () => {
     expect(situacoes.find((s) => s.id === 'desligar-tela')!.modeloParaProximaVez).toBe('encerrar-tela')
     abrir(undefined, '/agora/ir-embora')
     await screen.findByRole('heading', { name: 'Ir embora' })
-    expect(screen.queryByText(/para a próxima vez/i)).not.toBeInTheDocument()
+    // A preparação para a próxima vez aparece em todas as situações; o atalho de combinado, não.
+    expect(screen.getByRole('heading', { name: /para a próxima vez/i })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /montar o combinado/i })).not.toBeInTheDocument()
   })
 })
 

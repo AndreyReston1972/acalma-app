@@ -3,6 +3,7 @@ import { BarraTopo } from '../components/BarraTopo'
 import { useAviso } from '../components/Aviso'
 import { Faixa, Miniatura } from '../components/Miniatura'
 import { LinkSeguranca } from '../components/LinkSeguranca'
+import { LinkApoioAdulto } from '../components/LinkApoioAdulto'
 import { botaoIcone, botaoSecundario, margem } from '../components/ui'
 import { IconeAvancar, IconeMarcador, IconeVoltar } from '../ilustracoes/icones'
 import { buscarCaminho, buscarSituacao } from '../content/situacoes'
@@ -76,6 +77,7 @@ export function Orientacao() {
           <p className="mt-2 text-[1.375rem] font-medium leading-[1.35] tracking-[-0.005em] text-verde-profundo">
             {caminho ? caminho.frase : situacao.frase}
           </p>
+          <p className="mt-2 text-[0.875rem] text-texto-2">Use as palavras que combinam com vocês.</p>
         </section>
 
         {!caminho && (
@@ -120,26 +122,28 @@ export function Orientacao() {
           </Link>
         )}
 
-        {!caminho && modelo && (
-          <Link
-            to={`/preparar/novo?modelo=${modelo.id}&de=${situacao.id}`}
-            className="tocavel mt-5 block rounded-[var(--radius-cartao)] bg-verde-claro px-4 pb-4 pt-3.5 hover:bg-bege active:bg-bege-forte"
-          >
-            <span className="flex items-center justify-between gap-3">
-              <span className="rotulo">Para a próxima vez</span>
-              <span className="text-texto-2"><IconeAvancar /></span>
-            </span>
-            <span className="mt-2 flex items-center gap-3">
-              <Faixa compacta cenas={modelo.passos.slice(0, 3).map((p) => buscarAcao(p)!.cena)} />
-              <span className="min-w-0 flex-1 font-semibold leading-snug text-verde-profundo">Montar o combinado “{modelo.titulo}”</span>
-            </span>
-          </Link>
+        {!caminho && (
+          <section aria-labelledby="o-proxima" className="mt-5 rounded-[var(--radius-cartao)] bg-verde-claro px-4 pb-4 pt-3.5">
+            <h2 id="o-proxima" className="rotulo">Para a próxima vez</h2>
+            <p className="mt-1.5 text-[1rem] leading-relaxed text-texto">{situacao.proximaVez}</p>
+            {modelo && (
+              <Link
+                to={`/preparar/novo?modelo=${modelo.id}&de=${situacao.id}`}
+                className="tocavel -mx-2 mt-2 flex min-h-12 items-center gap-3 rounded-[var(--radius-controle)] px-2 py-2 hover:bg-bege active:bg-bege-forte"
+              >
+                <Faixa compacta cenas={modelo.passos.slice(0, 3).map((p) => buscarAcao(p)!.cena)} />
+                <span className="min-w-0 flex-1 font-semibold leading-snug text-verde-profundo">Montar o combinado “{modelo.titulo}”</span>
+                <span className="text-texto-2"><IconeAvancar /></span>
+              </Link>
+            )}
+          </section>
         )}
 
         <div className="mt-6 flex flex-col items-center gap-1">
           <Link to={registrar} className={botaoSecundario}>
             Depois, quero registrar
           </Link>
+          <LinkApoioAdulto />
           <LinkSeguranca />
         </div>
       </main>

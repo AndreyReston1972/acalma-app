@@ -52,6 +52,8 @@ export interface Situacao {
   depois: string
   /** Dois ou três caminhos específicos desta situação. */
   caminhos: Caminho[]
+  /** 4. Preparação simples para a próxima vez (fora da crise). */
+  proximaVez: string
   /** Modelo de combinado que combina com o contexto, se houver. */
   modeloParaProximaVez?: ModeloId
   estado: EstadoEditorial

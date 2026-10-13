@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { situacoes } from '../content/situacoes'
-import { acoes, modelos, buscarAcao, PASSOS_MAX, PASSOS_MIN } from '../content/combinados'
+import { acoes, dicaModelos, modelos, buscarAcao, PASSOS_MAX, PASSOS_MIN } from '../content/combinados'
 import { seguranca } from '../content/seguranca'
+import { apoioAdulto } from '../content/adulto'
 
 const textosSituacoes = situacoes.flatMap((s) => [
   s.titulo,
@@ -12,6 +13,9 @@ const textosSituacoes = situacoes.flatMap((s) => [
 ])
 const todosOsTextos = [
   ...textosSituacoes,
+  ...situacoes.map((s) => s.proximaVez),
+  ...Object.values(apoioAdulto),
+  dicaModelos,
   ...acoes.map((a) => a.rotulo),
   ...modelos.map((m) => m.titulo),
   seguranca.titulo,
@@ -64,8 +68,28 @@ describe('situações', () => {
     expect(tudo).not.toMatch(/mantenha o “?não”?\./i)
     const irEmbora = situacoes.find((s) => s.id === 'ir-embora')!
     expect(irEmbora.modeloParaProximaVez).toBeUndefined()
-    expect(irEmbora.frase).toMatch(/está difícil ir embora/i)
+    expect(irEmbora.frase).toMatch(/você queria ficar/i)
     expect(situacoes.find((s) => s.id === 'ouvir-nao')!.caminhos.some((c) => c.id === 'quero-rever')).toBe(true)
+  })
+})
+
+describe('revisão de 13/10: limites que não podem voltar', () => {
+  it('cada situação tem preparação para a próxima vez, e o aviso de não puxar pelos braços fica', () => {
+    for (const s of situacoes) expect(s.proximaVez.trim().length, s.id).toBeGreaterThan(20)
+    const andar = situacoes.find((s) => s.id === 'ir-embora')!.caminhos.find((c) => c.id === 'nao-quer-andar')!
+    expect(andar.orientacao).toMatch(/nunca puxe nem levante pelas mãos, punhos ou braços/i)
+  })
+
+  it('não exige olhar, abraço ou respiração da criança e não traz de volta trechos retirados', () => {
+    const tudo = [...textosSituacoes, ...situacoes.map((s) => s.proximaVez), ...Object.values(apoioAdulto)].join('\n')
+    expect(tudo).not.toMatch(/olh[ae] (para|pra) mim|respire|me d[áa] um abraço/i)
+    expect(tudo).not.toMatch(/pode demorar|para não parecer que o choro decidiu|quando a cesta encher|não tem mais um/i)
+  })
+
+  it('apoio ao adulto: leva ao risco, não cobra nada da criança e não oferece a Nina', () => {
+    expect(apoioAdulto.risco).toMatch(/medo de machucar/i)
+    expect(apoioAdulto.semExigir).toMatch(/não precisa aceitar/i)
+    expect(Object.values(apoioAdulto).join(' ')).not.toMatch(/nina/i)
   })
 })
 
@@ -78,6 +102,8 @@ describe('combinados', () => {
 
   it('modelos: sair de casa, encerrar a tela e hora do banho, com passos válidos', () => {
     expect(modelos.map((m) => m.id)).toEqual(['sair-de-casa', 'encerrar-tela', 'hora-do-banho'])
+    expect(modelos.find((m) => m.id === 'encerrar-tela')!.passos).toEqual(['guardar-aparelho', 'brincar'])
+    expect(buscarAcao('lavar-maos')).toBeDefined() // continua no catálogo
     for (const m of modelos) {
       expect(m.passos.length).toBeGreaterThanOrEqual(PASSOS_MIN)
       expect(m.passos.length).toBeLessThanOrEqual(PASSOS_MAX)
