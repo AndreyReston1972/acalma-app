@@ -109,7 +109,7 @@ export const privacidade: Documento = {
       titulo: 'Para que e com qual base',
       paragrafos: [
         'Conta, acesso, sincronização e atendimento: para prestar o serviço que você contratou (execução de contrato, art. 7º, V, da LGPD).',
-        'Registros de compra: para comprovar a compra, atender contestações e cumprir obrigações legais e fiscais (art. 7º, II e VI, e art. 16, I, da LGPD).',
+        'Registros de compra: para comprovar a compra, atender pedidos e contestações e exercer direitos em eventual processo (art. 7º, V e VI, da LGPD) e, quando houver, cumprir obrigações legais (art. 7º, II).',
         'Novidades por e-mail: só com o seu consentimento (art. 7º, I, da LGPD), que pode ser retirado a qualquer momento.',
       ],
     },
@@ -132,7 +132,8 @@ export const privacidade: Documento = {
       titulo: 'Por quanto tempo',
       paragrafos: [
         'Combinados, orientações salvas e registros: enquanto você mantiver a conta, ou até você excluí-los pela tela Conta.',
-        'Registros de compra (transação, situação, e-mail da compra e avisos da Hotmart): por 5 anos contados do último evento da compra, prazo usado para eventuais pedidos de reparação do consumidor (art. 27 do Código de Defesa do Consumidor) e para obrigações fiscais (arts. 173 e 195 do Código Tributário Nacional). Esses registros ficam separados dos dados do app e, se você excluir a conta, deixam de estar ligados a ela.',
+        'Aviso completo da Hotmart (pode conter nome, documento, telefone e outros dados do comprador): até 180 dias depois do último evento da compra, para conferir pagamentos, reembolsos e contestações. Depois disso, só o registro mínimo fica.',
+        'Registro mínimo da compra (código da transação, produto, situação, datas dos eventos e e-mail da compra): até 5 anos depois do último evento da compra, para comprovar a compra, atender pedidos e contestações e permitir recuperar o acesso. Esses prazos são a nossa política; não dizemos que uma lei os exige. Os registros ficam separados dos dados do app e, se você excluir a conta, deixam de estar ligados a ela.',
         'Registros de aceite dos termos e de consentimento de marketing: enquanto a conta existir e pelo prazo necessário para comprovar o aceite ou a retirada.',
       ],
     },
