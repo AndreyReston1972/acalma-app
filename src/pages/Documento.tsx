@@ -9,10 +9,12 @@ export function Documento({ doc }: { doc: Doc }) {
     <div className="entrada min-h-dvh">
       <BarraTopo fecharPara="/" rotuloFechar="Fechar" acoes={null} />
       <main className={`${margem} pb-[calc(env(safe-area-inset-bottom)+2rem)]`}>
-        <p className="rounded-[var(--radius-controle)] bg-bege px-4 py-2.5 text-[0.875rem] font-semibold text-texto">
-          Rascunho em revisão jurídica. Trechos entre colchetes ainda serão definidos.
-        </p>
-        <h1 className="mt-5 font-display text-[1.75rem] font-semibold leading-tight text-verde-profundo">{doc.titulo}</h1>
+        {doc.versao.includes('rascunho') && (
+          <p className="mb-5 rounded-[var(--radius-controle)] bg-bege px-4 py-2.5 text-[0.875rem] font-semibold text-texto">
+            Rascunho. Trechos entre colchetes ainda serão definidos.
+          </p>
+        )}
+        <h1 className="font-display text-[1.75rem] font-semibold leading-tight text-verde-profundo">{doc.titulo}</h1>
         <p className="mt-1 text-[0.875rem] text-texto-2">Versão {doc.versao}</p>
         {doc.secoes.map((s) => (
           <section key={s.titulo} className="mt-6">

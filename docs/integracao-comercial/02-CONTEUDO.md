@@ -36,9 +36,9 @@ O inventário anterior listava por engano "Ir embora → Sair de casa". **No có
 
 Preservado: ajuda em até dois toques (Início → situação), orientação curta e concreta, modelos prontos e editáveis antes de salvar. Nada de pontuação, culpa ou sequência obrigatória.
 
-## Faixa etária (DECISÃO FINAL PENDENTE)
+## Faixa etária (decidida em 13/10/2026: público inicial de 2 a 6 anos)
 
-Proposta, não decidida: **2 a 6 anos** (pré-escola). Justificativa: as situações (tela, sair, banho, brinquedos, ouvir
+**2 a 6 anos** (pré-escola), adotado pela responsável. Justificativa: as situações (tela, sair, banho, brinquedos, ouvir
 "não") e o formato visual do combinado (figuras, até 5 passos) servem a crianças que ainda não
 leem. Acima de 7 anos o combinado ilustrado tende a soar infantil; abaixo de 2, a frase pronta
 e a escolha entre duas opções têm pouco efeito.
@@ -47,7 +47,7 @@ só na comunicação comercial e nos termos. **Decisão de negócio + revisão p
 
 ## Pontos para revisão profissional (psicologia infantil / pediatria)
 
-**Nenhum destes pontos foi revisado ou validado ainda.** O app não diz que foi.
+Revisão editorial e de evidências feita em 13/10/2026, com fontes institucionais: ver `06-REVISAO-CONTEUDO.md`. **Validação profissional NÃO realizada**; o app não diz que houve.
 
 1. **"Parece que algo incomoda" (banho):** sugere ajustes sensoriais. Precisa de orientação de
    quando procurar avaliação, sem rotular (nada de "isso é sensorial/TEA").

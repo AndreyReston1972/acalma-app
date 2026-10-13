@@ -2,18 +2,26 @@
 // é o comercial (VITE_ACALMA_MODO=integrado): falha se os termos/privacidade ainda tiverem
 // trechos pendentes [entre colchetes] ou versão "rascunho". O preview de demonstração
 // continua publicando os rascunhos, rotulados como tal.
-import { readFileSync } from 'node:fs'
-
+// Confere os TEXTOS FINAIS (o módulo é importado), não o código-fonte: um array do
+// TypeScript não é confundido com um trecho pendente.
 if (process.env.VITE_ACALMA_MODO !== 'integrado') process.exit(0)
 
-const texto = readFileSync(new URL('../src/content/documentos.ts', import.meta.url), 'utf8')
-const semComentarios = texto.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')
-const pendentes = [...semComentarios.matchAll(/\[[^\]'"]{3,}\]/g)].map((m) => m[0])
-const rascunho = /versao:\s*'[^']*rascunho[^']*'/.test(semComentarios)
-
-if (pendentes.length || rascunho) {
+// ACALMA_DOCUMENTOS_TESTE: só para o teste da própria barreira (arquivo de rascunho de exemplo).
+const { pathToFileURL } = await import('node:url')
+const alvo = process.env.ACALMA_DOCUMENTOS_TESTE
+  ? pathToFileURL(process.env.ACALMA_DOCUMENTOS_TESTE)
+  : new URL('../src/content/documentos.ts', import.meta.url)
+const { termos, privacidade } = await import(alvo)
+const problemas = []
+for (const doc of [termos, privacidade]) {
+  if (!doc?.versao || /rascunho/i.test(doc.versao)) problemas.push(`${doc?.titulo}: versão "${doc?.versao}"`)
+  for (const s of doc.secoes)
+    for (const p of [s.titulo, ...s.paragrafos])
+      for (const m of p.matchAll(/\[[^\]]{2,}\]/g)) problemas.push(`${doc.titulo} › ${s.titulo}: ${m[0]}`)
+}
+if (problemas.length) {
   console.error('Publicação comercial bloqueada: termos/privacidade ainda são rascunho.')
-  if (rascunho) console.error('  - versão marcada como "rascunho"')
-  for (const p of pendentes) console.error(`  - pendente: ${p}`)
+  for (const p of problemas) console.error(`  - ${p}`)
   process.exit(1)
 }
+console.log(`Termos ${termos.versao} e privacidade ${privacidade.versao}: sem pendências.`)

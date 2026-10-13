@@ -1,8 +1,9 @@
 import type { Caminho, Situacao, SituacaoId } from './tipos'
 
 /*
- * Conteúdo v2 do protótipo: CANDIDATO À REVISÃO EDITORIAL E PROFISSIONAL.
- * Não é conteúdo validado. "desligar-tela" e "ir-embora" são as referências
+ * Conteúdo v2. Revisão EDITORIAL e de EVIDÊNCIAS em 13/10/2026 (fontes institucionais em
+ * docs/integracao-comercial/06-REVISAO-CONTEUDO.md). NÃO houve validação por psicólogo,
+ * pediatra ou outro profissional: os pontos que exigem esse julgamento estão listados lá. "desligar-tela" e "ir-embora" são as referências
  * mais trabalhadas; as demais são breves e específicas.
  *
  * Correções editoriais desta versão (ver docs/prototipo/LEIA-ME.md):
@@ -64,7 +65,7 @@ export const situacoes: Situacao[] = [
         id: 'quero-rever',
         rotulo: 'Quero rever o não',
         orientacao:
-          'Mudar de ideia é possível. Faça isso com calma e conte o motivo, para ficar claro que foi uma decisão sua, pensada de novo.',
+          'Se você percebeu que o não foi apressado, pode mudar de ideia. Prefira fazer isso quando a criança já estiver mais calma e conte o motivo em uma frase, para não parecer que o choro decidiu.',
         frase: 'Eu pensei de novo e mudei de ideia.',
       },
     ],
@@ -89,7 +90,7 @@ export const situacoes: Situacao[] = [
         id: 'nao-quer-andar',
         rotulo: 'Não quer andar',
         orientacao:
-          'Ofereça duas formas de ir, se as duas forem possíveis para você: de mão dada ou no colo. Se precisar carregar, diga antes o que vai fazer.',
+          'Ofereça duas formas de ir, se as duas forem possíveis para você: de mão dada ou no colo. Se precisar carregar, diga antes o que vai fazer e segure pelo corpo, não pelos braços: puxar ou levantar pela mão pode machucar o cotovelo.',
         frase: 'A gente vai agora. Você vai de mão dada ou no colo?',
       },
       {
@@ -120,7 +121,7 @@ export const situacoes: Situacao[] = [
         id: 'algo-incomoda',
         rotulo: 'Parece que algo incomoda',
         orientacao:
-          'Pergunte o que está ruim e ajuste o que der: a água mais morna, um pano para os olhos, uma roupa mais macia.',
+          'Pergunte o que está ruim e ajuste o que der: a água mais morna, um pano para os olhos, uma roupa mais macia. Se o incômodo aparece quase sempre e atrapalha a rotina, vale conversar com o pediatra.',
         frase: 'Tem alguma coisa incomodando? Me mostra onde.',
       },
     ],
@@ -156,7 +157,7 @@ export const situacoes: Situacao[] = [
     titulo: 'Outra situação',
     cena: 'cantinho',
     agora: 'Primeiro a segurança: afaste o que pode machucar e fique por perto.',
-    frase: 'Está difícil agora. Eu estou aqui e não vou deixar ninguém se machucar.',
+    frase: 'Está difícil agora. Eu estou aqui e vou ajudar a manter todo mundo seguro.',
     depois: 'Fale pouco até o choro baixar. Depois, diga em uma frase o que vai acontecer agora.',
     caminhos: [
       {

@@ -3,6 +3,9 @@ import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { execFileSync } from 'node:child_process'
+import { mkdtempSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { ProvedorAviso } from '../components/Aviso'
 import { ProvedorConta } from '../conta/Conta'
 import { guardarAcesso, lerAcessoGuardado } from '../conta/acesso'
@@ -234,7 +237,7 @@ describe('conteúdo', () => {
 })
 
 describe('barreira de publicação', () => {
-  it('build comercial falha com termos em rascunho; demonstração passa', () => {
+  it('build comercial: documentos finais passam; rascunho com pendência bloqueia; demonstração não é barrada', () => {
     const rodar = (env: Record<string, string>) => {
       try {
         execFileSync(process.execPath, ['scripts/verificar-publicacao.mjs'], { env: { ...process.env, ...env }, stdio: 'pipe' })
@@ -243,8 +246,16 @@ describe('barreira de publicação', () => {
         return (e as { status: number }).status
       }
     }
-    expect(rodar({ VITE_ACALMA_MODO: 'integrado' })).toBe(1)
-    expect(rodar({ VITE_ACALMA_MODO: '' })).toBe(0)
+    // documentos atuais (finais): passa
+    expect(rodar({ VITE_ACALMA_MODO: 'integrado' })).toBe(0)
+    // um rascunho com pendência: bloqueia
+    const dir = mkdtempSync(join(tmpdir(), 'acalma-docs-'))
+    const rascunho = join(dir, 'documentos.ts')
+    writeFileSync(rascunho, `export const termos = { titulo: 'T', versao: '2026-10-rascunho', secoes: [{ titulo: 'Conta', paragrafos: ['Responsável: [pendente].'] }] }
+export const privacidade = { titulo: 'P', versao: '2026-10-13', secoes: [{ titulo: 'Canal', paragrafos: ['Fale com [canal a definir].'] }] }
+`)
+    expect(rodar({ VITE_ACALMA_MODO: 'integrado', ACALMA_DOCUMENTOS_TESTE: rascunho })).toBe(1)
+    expect(rodar({ VITE_ACALMA_MODO: '', ACALMA_DOCUMENTOS_TESTE: rascunho })).toBe(0)
   })
 })
 
