@@ -3,11 +3,11 @@ import { Marca } from '../components/Marca'
 import { Miniatura } from '../components/Miniatura'
 import { botaoIcone, margem } from '../components/ui'
 import { IconeAvancar, IconeConta, IconeSeta } from '../ilustracoes/icones'
-import { Cena } from '../ilustracoes/Cena'
 import { useEstado } from '../armazenamento/useEstado'
 import { buscarCaminho, buscarSituacao } from '../content/situacoes'
 import { buscarAcao, buscarModelo } from '../content/combinados'
 import { nomeDoCombinado } from '../util/combinados'
+import { FOTO_INICIO, GUIA_PDF } from '../content/cenas'
 
 /*
  * Hierarquia da Home:
@@ -52,8 +52,11 @@ export function Inicio() {
             </span>
           </span>
           <span aria-hidden="true" className="relative w-[42%] max-w-[10.5rem] shrink-0">
-            <span className="absolute inset-y-4 right-0 left-1 rounded-l-[999px] bg-[#477764]" />
-            <Cena id="ajuda" className="absolute bottom-3 right-1 h-auto w-[118%] max-w-none" />
+            <img
+              src={FOTO_INICIO}
+              alt=""
+              className="absolute inset-y-3 right-0 left-1 h-[calc(100%-1.5rem)] w-[calc(100%-0.25rem)] rounded-l-[999px] object-cover object-[50%_28%]"
+            />
           </span>
         </Link>
 
@@ -78,6 +81,20 @@ export function Inicio() {
             ))}
           </span>
         </Link>
+
+        {/* 2b. Guia completo em PDF (o mesmo da compra), para imprimir os combinados */}
+        <a
+          href={GUIA_PDF}
+          download="Acalma - Guia completo.pdf"
+          className="tocavel mt-3 flex items-center gap-3.5 rounded-[24px] border border-linha bg-creme px-5 py-4 hover:border-verde/50 active:bg-bege"
+        >
+          <Miniatura id="ler-historia" className="border border-linha bg-bege" />
+          <span className="min-w-0 flex-1">
+            <span className="block text-[1.0625rem] font-semibold leading-tight text-verde-profundo">Guia completo em PDF</span>
+            <span className="mt-0.5 block text-[0.875rem] text-texto-2">As 6 situações e os combinados para imprimir.</span>
+          </span>
+          <span className="text-texto-2"><IconeAvancar /></span>
+        </a>
 
         {/* 3. O que já está salvo (só se houver) */}
         {(ultimo || favSituacao) && (

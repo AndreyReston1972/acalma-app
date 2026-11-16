@@ -32,7 +32,7 @@ export default defineConfig({
       filename: 'sw.ts',
       injectRegister: false,
       registerType: 'autoUpdate',
-      injectManifest: { globPatterns: ['**/*.{js,css,html,svg,woff2,png,ico,webmanifest}'] },
+      injectManifest: { globPatterns: ['**/*.{js,css,html,svg,woff2,png,ico,webmanifest,webp}'] },
       manifest: {
         name: 'Acalma',
         short_name: 'Acalma',

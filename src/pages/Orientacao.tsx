@@ -10,6 +10,7 @@ import { buscarCaminho, buscarSituacao } from '../content/situacoes'
 import { buscarAcao, buscarModelo } from '../content/combinados'
 import { alternarFavorito } from '../armazenamento/armazenamento'
 import { useEstado } from '../armazenamento/useEstado'
+import { fotoDaSituacao } from '../content/cenas'
 
 /*
  * Orientação. Sem :caminhoId, mostra a primeira ajuda (ação, frase, próximo
@@ -54,6 +55,15 @@ export function Orientacao() {
       />
 
       <main className={`${margem} flex-1 pb-[calc(env(safe-area-inset-bottom)+2rem)]`}>
+        {!caminho && (
+          <img
+            src={fotoDaSituacao[situacao.id]}
+            alt=""
+            width={960}
+            height={536}
+            className="mb-5 h-auto w-full rounded-[20px] object-cover shadow-[var(--shadow-acao)]"
+          />
+        )}
         <div className="flex items-center gap-3.5">
           <Miniatura id={situacao.cena} />
           <div className="min-w-0">

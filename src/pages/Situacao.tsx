@@ -21,7 +21,10 @@ export function Situacao() {
             <li key={s.id}>
               <Link to={`/agora/${s.id}`} className={linhaLista}>
                 <Miniatura id={s.cena} />
-                <span className="flex-1 text-[1.125rem] font-semibold leading-tight text-texto">{s.titulo}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[1.125rem] font-semibold leading-tight text-texto">{s.titulo}</span>
+                  <span className="mt-0.5 block truncate text-[0.875rem] italic text-texto-2">“{s.frase}”</span>
+                </span>
                 <span className="text-texto-2"><IconeAvancar /></span>
               </Link>
             </li>
