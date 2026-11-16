@@ -85,7 +85,8 @@ export const servicoSupabase: ServicoConta = {
   async enviarCodigo(email) {
     const { error } = await (await cliente()).auth.signInWithOtp({
       email,
-      options: { shouldCreateUser: true, data: { produto_entrada: 'acalma' } },
+      // emailRedirectTo identifica o app no template do e-mail (o mesmo Supabase Auth serve Nina, Acalma e Raízes).
+      options: { shouldCreateUser: true, data: { produto_entrada: 'acalma' }, emailRedirectTo: 'https://acalma.nexo-edu.com' },
     })
     if (error) {
       if (ehErroDeRede(error)) throw new ErroDeRede(error.message)

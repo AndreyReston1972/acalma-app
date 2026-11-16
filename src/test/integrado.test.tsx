@@ -204,7 +204,7 @@ describe('cliente Supabase', () => {
     vi.resetModules()
     const { servicoSupabase } = await import('../conta/servico')
     await servicoSupabase.enviarCodigo('mae@teste.dev')
-    expect(signInWithOtp).toHaveBeenCalledWith({ email: 'mae@teste.dev', options: { shouldCreateUser: true, data: { produto_entrada: 'acalma' } } })
+    expect(signInWithOtp).toHaveBeenCalledWith({ email: 'mae@teste.dev', options: { shouldCreateUser: true, data: { produto_entrada: 'acalma' }, emailRedirectTo: 'https://acalma.nexo-edu.com' } })
     const opcoes = (createClient.mock.calls[0] as unknown[])[2] as { auth: { storageKey: string; detectSessionInUrl: boolean } }
     expect(opcoes.auth).toMatchObject({ storageKey: 'acalma.auth', detectSessionInUrl: false })
     vi.doUnmock('@supabase/supabase-js')
