@@ -21,7 +21,9 @@ declare let self: ServiceWorkerGlobalScope
 
 precacheAndRoute(self.__WB_MANIFEST)
 cleanupOutdatedCaches()
-registerRoute(new NavigationRoute(createHandlerBoundToURL('index.html')))
+// Arquivos (o guia em PDF aberto por um link de e-mail, por exemplo) vão direto à rede:
+// sem esta exceção, o service worker devolvia o app no lugar do PDF.
+registerRoute(new NavigationRoute(createHandlerBoundToURL('index.html'), { denylist: [/^\/guia\//, /\.pdf$/i] }))
 
 self.addEventListener('install', () => {
   void self.skipWaiting()
